@@ -14,7 +14,7 @@
             --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             --glass-bg: rgba(255, 255, 255, 0.9);
             --glass-border: rgba(255, 255, 255, 0.3);
-            --success-color: #4caf50;
+            --ecg-color: #e53935;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -27,9 +27,9 @@
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            user-select: none; 
         }
 
+        /* Ambient Background Shapes */
         .shape {
             position: absolute;
             border-radius: 50%;
@@ -41,6 +41,7 @@
         .shape-1 { width: 300px; height: 300px; background: #bbdefb; top: -50px; left: -50px; }
         .shape-2 { width: 400px; height: 400px; background: #e1bee7; bottom: -100px; right: -100px; animation-delay: -5s; }
 
+        /* Main Card */
         .card {
             position: relative;
             z-index: 1;
@@ -48,238 +49,185 @@
             backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
             border-radius: 24px;
-            padding: 2.5rem 2rem;
+            padding: 2rem 2rem 1.5rem;
             width: 90%;
-            max-width: 480px;
+            max-width: 420px;
             text-align: center;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
             display: flex;
             flex-direction: column;
             align-items: center;
             animation: slideUp 0.8s ease forwards;
         }
 
-        /* Photo Area */
-        .photo-wrapper {
-            position: relative;
-            margin-bottom: 0.5rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
+        /* Photo Styles - Compact, No Crop */
         .photo-frame {
-            width: 150px;
-            height: 150px;
-            position: relative;
-            border-radius: 50%;
-            border: 4px solid #fff;
-            background: rgba(255,255,255,0.5);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            width: auto;
+            height: auto;
+            max-width: 140px;
+            margin-bottom: 0.8rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(13, 71, 161, 0.15);
             overflow: hidden;
-            cursor: pointer;
-            transition: border-color 0.3s ease, transform 0.3s ease;
-        }
-
-        .photo-frame:hover {
-            border-color: var(--secondary-color);
+            border: 3px solid #fff;
+            background: white;
+            line-height: 0; /* Removes extra space below image */
         }
 
         .profile-photo {
             width: 100%;
-            height: 100%;
-            object-fit: cover;
-            position: absolute;
-            top: 0; left: 0;
-            transform-origin: center;
-            will-change: transform;
-            pointer-events: none; /* Pointer events handled by frame for drag */
+            height: auto;
+            display: block;
         }
 
-        /* Overlay for "Change Photo" */
-        .edit-overlay {
-            position: absolute;
-            inset: 0;
-            background: rgba(0,0,0,0.4);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            transition: opacity 0.3s;
-            border-radius: 50%;
-            color: white;
-            font-size: 0.8rem;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-
-        .photo-frame.saved:hover .edit-overlay {
-            opacity: 1;
-        }
-
-        /* Controls Section */
-        .controls-panel {
-            margin-top: 15px;
-            width: 100%;
-            max-height: 0;
-            overflow: hidden;
-            opacity: 0;
-            transition: all 0.4s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .controls-panel.active {
-            max-height: 120px;
-            opacity: 1;
-            margin-bottom: 10px;
-        }
-
-        .slider-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            width: 100%;
-            justify-content: center;
-        }
-
-        input[type=range] {
-            -webkit-appearance: none;
-            width: 100px;
-            height: 4px;
-            background: #cbd5e1;
-            border-radius: 2px;
-            outline: none;
-        }
-
-        input[type=range]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            background: var(--primary-color);
-            cursor: pointer;
-            border: 2px solid #fff;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-
-        .btn-save {
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(13, 71, 161, 0.2);
-            transition: transform 0.2s, background 0.2s;
-        }
-
-        .btn-save:hover {
-            transform: translateY(-1px);
-            background: var(--secondary-color);
-        }
-
-        .btn-save:active {
-            transform: translateY(0);
-        }
-
-        .instruction {
-            font-size: 0.7rem;
-            color: var(--text-light);
-        }
-
-        /* Typography & Layout */
+        /* Icon */
         .stethoscope-icon {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
+            font-size: 1.8rem;
+            margin-bottom: 0.4rem;
             animation: heartbeat 2s infinite;
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
-            z-index: 2;
+            color: var(--primary-color);
         }
 
+        /* Typography */
         h1 {
             color: var(--text-dark);
-            font-size: 1.8rem;
+            font-size: 1.7rem;
             font-weight: 700;
-            margin-bottom: 1.2rem;
+            margin-bottom: 1rem;
+            letter-spacing: -0.5px;
             line-height: 1.2;
         }
 
         .degrees {
             display: flex;
             flex-direction: column;
-            gap: 0.6rem;
-            margin-bottom: 2rem;
+            gap: 0.5rem;
+            margin-bottom: 1.2rem;
             width: 100%;
         }
 
         .degree-item {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: var(--text-light);
             font-weight: 500;
-            padding: 0.7rem;
-            border-radius: 12px;
+            padding: 0.6rem;
+            border-radius: 10px;
             background: rgba(255, 255, 255, 0.5);
             border: 1px solid rgba(255,255,255,0.6);
-            transition: transform 0.2s;
+            transition: transform 0.2s, background 0.2s;
         }
-        
-        .degree-item:hover { transform: scale(1.02); background: rgba(255,255,255,0.8); }
 
-        .divider {
-            height: 1px; width: 40px; background: var(--secondary-color);
-            margin: 0 auto 1.5rem auto; opacity: 0.3;
+        .degree-item:hover {
+            background: rgba(255, 255, 255, 0.8);
+            transform: scale(1.02);
+            border-color: #fff;
+        }
+
+        /* ECG Section */
+        .ecg-container {
+            width: 100%;
+            height: 40px;
+            margin-bottom: 0.5rem;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .ecg-line {
+            position: absolute;
+            width: 200%;
+            height: 100%;
+            animation: ecgMove 2s linear infinite;
+        }
+
+        .ecg-line svg {
+            width: 50%;
+            height: 100%;
+            display: inline-block;
+        }
+
+        .ecg-path {
+            fill: none;
+            stroke: var(--ecg-color);
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            filter: drop-shadow(0 0 3px rgba(229, 57, 53, 0.5));
+        }
+
+        .ecg-glow {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--ecg-color);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 10px var(--ecg-color), 0 0 20px var(--ecg-color);
+            animation: pulse 1s ease-in-out infinite;
         }
 
         .footer {
-            color: var(--primary-color); font-size: 1rem; font-weight: 600;
-            letter-spacing: 1px; text-transform: uppercase;
+            color: var(--primary-color);
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
         }
 
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes heartbeat { 0% { transform: scale(1); } 14% { transform: scale(1.15); } 28% { transform: scale(1); } 42% { transform: scale(1.15); } 70% { transform: scale(1); } }
-        @keyframes float { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(20px, 40px); } }
+        /* Animations */
+        @keyframes slideUp { 
+            from { opacity: 0; transform: translateY(30px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+        
+        @keyframes heartbeat { 
+            0% { transform: scale(1); } 
+            14% { transform: scale(1.15); } 
+            28% { transform: scale(1); } 
+            42% { transform: scale(1.15); } 
+            70% { transform: scale(1); } 
+        }
+        
+        @keyframes float { 
+            0%, 100% { transform: translate(0, 0); } 
+            50% { transform: translate(20px, 40px); } 
+        }
 
+        @keyframes ecgMove {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.5); }
+        }
+
+        /* Mobile Responsiveness */
         @media (max-width: 480px) {
-            .card { padding: 2rem 1.5rem; }
-            h1 { font-size: 1.5rem; }
+            .card { padding: 1.5rem 1.2rem 1.2rem; }
+            h1 { font-size: 1.4rem; }
+            .photo-frame { max-width: 120px; }
+            .degree-item { font-size: 0.8rem; padding: 0.5rem; }
         }
     </style>
 </head>
 <body>
 
+    <!-- Background Elements -->
     <div class="shape shape-1"></div>
     <div class="shape shape-2"></div>
 
+    <!-- Profile Card -->
     <div class="card">
         
         <!-- Photo Section -->
-        <div class="photo-wrapper">
-            <div class="photo-frame" id="photoFrame" title="Click to upload or change">
-                <img src="https://via.placeholder.com/150/e3f2fd/1a237e?text=Upload+Photo" 
-                     class="profile-photo" 
-                     id="userPhoto">
-                
-                <!-- Overlay shown when hovering over a saved photo -->
-                <div class="edit-overlay" id="editOverlay">
-                    <span>Change</span>
-                </div>
-            </div>
-
-            <!-- Controls: Visible only during Editing -->
-            <div class="controls-panel" id="controlsPanel">
-                <span class="instruction">Drag to position • Zoom below</span>
-                <div class="slider-container">
-                    <span style="font-size:0.8rem">−</span>
-                    <input type="range" id="zoomSlider" min="1" max="3" step="0.1" value="1">
-                    <span style="font-size:0.8rem">+</span>
-                </div>
-                <button class="btn-save" id="saveBtn">Save Photo</button>
-            </div>
+        <div class="photo-frame">
+            <img src="https://github.com/user-attachments/assets/922bf099-b031-44a7-b861-3580840690d0" 
+                 class="profile-photo" 
+                 alt="Dr. Upendra Poudel">
         </div>
 
         <div class="stethoscope-icon">🩺</div>
@@ -291,142 +239,45 @@
                 Masters In Internal Medicine<br>
                 <span style="font-size: 0.85em; opacity: 0.8;">Dali University, China</span>
             </div>
+            
             <div class="degree-item">
                 Doctor Of Medicine<br>
                 <span style="font-size: 0.85em; opacity: 0.8;">Angeles University Foundation, Philippines</span>
             </div>
         </div>
 
-        <div class="divider"></div>
-        <div class="footer">Healing With Compassion..</div>
+        <!-- Animated ECG Line -->
+        <div class="ecg-container">
+            <div class="ecg-line">
+                <svg viewBox="0 0 300 40" preserveAspectRatio="none">
+                    <path class="ecg-path" d="M0,20 L30,20 L35,20 L40,15 L45,20 L55,20 L60,20 L65,-5 L70,35 L75,20 L80,20 L110,20 L115,20 L120,15 L125,20 L135,20 L140,20 L145,-5 L150,35 L155,20 L160,20 L190,20 L195,20 L200,15 L205,20 L215,20 L220,20 L225,-5 L230,35 L235,20 L240,20 L270,20 L275,20 L280,15 L285,20 L295,20 L300,20"/>
+                </svg>
+                <svg viewBox="0 0 300 40" preserveAspectRatio="none">
+                    <path class="ecg-path" d="M0,20 L30,20 L35,20 L40,15 L45,20 L55,20 L60,20 L65,-5 L70,35 L75,20 L80,20 L110,20 L115,20 L120,15 L125,20 L135,20 L140,20 L145,-5 L150,35 L155,20 L160,20 L190,20 L195,20 L200,15 L205,20 L215,20 L220,20 L225,-5 L230,35 L235,20 L240,20 L270,20 L275,20 L280,15 L285,20 L295,20 L300,20"/>
+                </svg>
+            </div>
+            <div class="ecg-glow"></div>
+        </div>
+
+        <div class="footer">
+            Healing With Compassion..
+        </div>
     </div>
 
-    <!-- Hidden File Input -->
-    <input type="file" id="fileInput" accept="image/*" style="display: none;">
-
     <script>
-        // DOM Elements
-        const photoFrame = document.getElementById('photoFrame');
-        const userPhoto = document.getElementById('userPhoto');
-        const fileInput = document.getElementById('fileInput');
-        const controlsPanel = document.getElementById('controlsPanel');
-        const zoomSlider = document.getElementById('zoomSlider');
-        const saveBtn = document.getElementById('saveBtn');
-        const editOverlay = document.getElementById('editOverlay');
+        // 3D Tilt Effect
         const card = document.querySelector('.card');
+        const body = document.querySelector('body');
 
-        // State
-        let state = {
-            isUploaded: false,
-            isEditing: false, // True when controls are visible
-            isDragging: false,
-            startX: 0, startY: 0,
-            translateX: 0, translateY: 0,
-            scale: 1
-        };
-
-        // 1. Click Frame -> Trigger Upload (if not editing) or Change
-        photoFrame.addEventListener('click', () => {
-            if (!state.isEditing) {
-                fileInput.click();
-            }
+        body.addEventListener('mousemove', (e) => {
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 40;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 40;
+            card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
         });
 
-        // 2. Handle File Select
-        fileInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    userPhoto.src = event.target.result;
-                    startEditing();
-                };
-                reader.readAsDataURL(file);
-            }
-            // Reset input so same file can be selected again if needed
-            e.target.value = '';
-        });
-
-        function startEditing() {
-            state.isUploaded = true;
-            state.isEditing = true;
-            
-            // Reset transforms for new photo
-            state.translateX = 0;
-            state.translateY = 0;
-            state.scale = 1;
-            zoomSlider.value = 1;
-            updateTransform();
-
-            // UI Updates
-            controlsPanel.classList.add('active');
-            photoFrame.classList.remove('saved');
-            photoFrame.style.cursor = 'move';
-            editOverlay.style.display = 'none';
-        }
-
-        function saveEditing() {
-            state.isEditing = false;
-            
-            // UI Updates
-            controlsPanel.classList.remove('active');
-            photoFrame.classList.add('saved');
-            photoFrame.style.cursor = 'pointer'; // Ready to click-to-change
-            editOverlay.style.display = 'flex'; // Enable overlay logic
-        }
-
-        // 3. Save Button
-        saveBtn.addEventListener('click', saveEditing);
-
-        // 4. Zoom Logic
-        zoomSlider.addEventListener('input', (e) => {
-            if (!state.isEditing) return;
-            state.scale = parseFloat(e.target.value);
-            updateTransform();
-        });
-
-        // 5. Drag Logic (Only active when isEditing is true)
-        photoFrame.addEventListener('mousedown', (e) => {
-            if (!state.isEditing) return;
-            e.preventDefault();
-            state.isDragging = true;
-            state.startX = e.clientX - state.translateX;
-            state.startY = e.clientY - state.translateY;
-            photoFrame.style.cursor = 'grabbing';
-        });
-
-        document.addEventListener('mousemove', (e) => {
-            if (state.isDragging && state.isEditing) {
-                e.preventDefault();
-                state.translateX = e.clientX - state.startX;
-                state.translateY = e.clientY - state.startY;
-                updateTransform();
-            }
-            
-            // Tilt Effect (Disable during drag)
-            if (!state.isDragging) {
-                const xAxis = (window.innerWidth / 2 - e.pageX) / 40;
-                const yAxis = (window.innerHeight / 2 - e.pageY) / 40;
-                card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
-            }
-        });
-
-        document.addEventListener('mouseup', () => {
-            if (state.isDragging) {
-                state.isDragging = false;
-                if (state.isEditing) photoFrame.style.cursor = 'move';
-            }
-        });
-
-        function updateTransform() {
-            userPhoto.style.transform = `translate(${state.translateX}px, ${state.translateY}px) scale(${state.scale})`;
-        }
-        
-        // Reset tilt on leave
-        document.body.addEventListener('mouseleave', () => {
+        body.addEventListener('mouseleave', () => {
             card.style.transform = `rotateY(0deg) rotateX(0deg)`;
         });
-
     </script>
 </body>
 </html>
