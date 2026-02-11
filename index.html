@@ -1,254 +1,265 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dr. Upendra Poudel</title>
-    <style>
-        :root {
-            --primary-color: #0d47a1;
-            --secondary-color: #1976d2;
-            --accent-color: #e3f2fd;
-            --text-dark: #1a237e;
-            --text-light: #546e7a;
-            --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            --glass-bg: rgba(255, 255, 255, 0.9);
-            --glass-border: rgba(255, 255, 255, 0.3);
-            --ecg-color: #e53935;
-        }
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Dr. Upendra Poudel</title>
+   <style>
+       :root {
+           --primary-color: #0d47a1;
+           --secondary-color: #1976d2;
+           --accent-color: #e3f2fd;
+           --text-dark: #1a237e;
+           --text-light: #546e7a;
+           --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+           --glass-bg: rgba(255, 255, 255, 0.9);
+           --glass-border: rgba(255, 255, 255, 0.3);
+           --ecg-color: #e53935;
+       }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+       * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: var(--bg-gradient);
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-        }
+       body {
+           font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+           background: var(--bg-gradient);
+           height: 100vh;
+           display: flex;
+           justify-content: center;
+           align-items: center;
+           overflow: hidden;
+       }
 
-        .shape {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            z-index: 0;
-            opacity: 0.6;
-            animation: float 10s infinite ease-in-out;
-        }
-        .shape-1 { width: 300px; height: 300px; background: #bbdefb; top: -50px; left: -50px; }
-        .shape-2 { width: 400px; height: 400px; background: #e1bee7; bottom: -100px; right: -100px; animation-delay: -5s; }
+       .shape {
+           position: absolute;
+           border-radius: 50%;
+           filter: blur(80px);
+           z-index: 0;
+           opacity: 0.6;
+           animation: float 10s infinite ease-in-out;
+       }
+       .shape-1 { width: 300px; height: 300px; background: #bbdefb; top: -50px; left: -50px; }
+       .shape-2 { width: 400px; height: 400px; background: #e1bee7; bottom: -100px; right: -100px; animation-delay: -5s; }
 
-        .card {
-            position: relative;
-            z-index: 1;
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 2rem 2rem 1.5rem;
-            width: 90%;
-            max-width: 420px;
-            text-align: center;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            animation: slideUp 0.8s ease forwards;
-        }
+       .card {
+           position: relative;
+           z-index: 1;
+           background: var(--glass-bg);
+           backdrop-filter: blur(20px);
+           border: 1px solid var(--glass-border);
+           border-radius: 24px;
+           padding: 2.2rem 2rem 1.6rem;
+           width: 92%;
+           max-width: 480px;
+           text-align: center;
+           box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+           display: flex;
+           flex-direction: column;
+           align-items: center;
+           animation: slideUp 0.8s ease forwards;
+       }
 
-        .photo-frame {
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            padding: 4px;
-            max-width: 140px;
-            margin-bottom: 0.8rem;
-            border-radius: 12px;
-            box-shadow: 0 8px 20px rgba(13, 71, 161, 0.15);
-            border: 3px solid #fff;
-            background: white;
-        }
+       .photo-frame {
+           display: inline-flex;
+           justify-content: center;
+           align-items: center;
+           padding: 4px;
+           max-width: 160px;
+           margin-bottom: 0.8rem;
+           border-radius: 12px;
+           box-shadow: 0 8px 20px rgba(13, 71, 161, 0.15);
+           border: 3px solid #fff;
+           background: white;
+       }
 
-        .profile-photo {
-            display: block;
-            width: auto;
-            height: auto;
-            max-width: 132px;
-            max-height: 180px;
-        }
+       .profile-photo {
+           display: block;
+           width: auto;
+           height: auto;
+           max-width: 152px;
+           max-height: 200px;
+       }
 
-        .stethoscope-icon {
-            font-size: 1.8rem;
-            margin-bottom: 0.4rem;
-            animation: heartbeat 2s infinite;
-            color: var(--primary-color);
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
-        }
+       h1 {
+           color: var(--text-dark);
+           font-size: 1.9rem;
+           font-weight: 700;
+           margin-bottom: 0.2rem;
+           letter-spacing: -0.5px;
+           line-height: 1.2;
+       }
 
-        h1 {
-            color: var(--text-dark);
-            font-size: 1.7rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            letter-spacing: -0.5px;
-            line-height: 1.2;
-        }
+       .nmc-number {
+           color: var(--text-light);
+           font-size: 0.85rem;
+           font-weight: 600;
+           margin-bottom: 0.5rem;
+           opacity: 0.85;
+       }
 
-        .degrees {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            margin-bottom: 1.2rem;
-            width: 100%;
-        }
+       .stethoscope-icon {
+           font-size: 2rem;
+           margin-bottom: 0.5rem;
+           animation: heartbeat 2s infinite;
+           color: var(--primary-color);
+           filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+       }
 
-        .degree-item {
-            font-size: 0.85rem;
-            color: var(--text-light);
-            font-weight: 500;
-            padding: 0.6rem;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.5);
-            border: 1px solid rgba(255,255,255,0.6);
-        }
+       .degrees {
+           display: flex;
+           flex-direction: column;
+           gap: 0.6rem;
+           margin-bottom: 1.4rem;
+           width: 100%;
+       }
 
-        .ecg-container {
-            position: relative;
-            width: 140px;
-            height: 22px;
-            margin-bottom: 0.5rem;
-            overflow: hidden;
-        }
+       .degree-item {
+           font-size: 0.9rem;
+           color: var(--text-light);
+           font-weight: 500;
+           padding: 0.7rem;
+           border-radius: 10px;
+           background: rgba(255, 255, 255, 0.5);
+           border: 1px solid rgba(255,255,255,0.6);
+       }
 
-        .ecg-line {
-            position: absolute;
-            top: 50%;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: rgba(229, 57, 53, 0.25);
-            transform: translateY(-50%);
-        }
+       .ecg-container {
+           position: relative;
+           width: 150px;
+           height: 24px;
+           margin-bottom: 0.6rem;
+           overflow: hidden;
+       }
 
-        .ecg-pulse {
-            position: absolute;
-            top: 50%;
-            left: -30%;
-            width: 44px;
-            height: 18px;
-            transform: translateY(-50%);
-            animation: ecgMove 2s linear infinite;
-            filter: drop-shadow(0 0 4px rgba(229, 57, 53, 0.6));
-        }
+       .ecg-line {
+           position: absolute;
+           top: 50%;
+           left: 0;
+           width: 100%;
+           height: 2px;
+           background: rgba(229, 57, 53, 0.25);
+           transform: translateY(-50%);
+       }
 
-        .ecg-pulse svg {
-            width: 100%;
-            height: 100%;
-            fill: none;
-            stroke: var(--ecg-color);
-            stroke-width: 2.2;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
+       .ecg-pulse {
+           position: absolute;
+           top: 50%;
+           left: -30%;
+           width: 48px;
+           height: 20px;
+           transform: translateY(-50%);
+           animation: ecgMove 2s linear infinite;
+           filter: drop-shadow(0 0 4px rgba(229, 57, 53, 0.6));
+       }
 
-        .footer {
-            color: var(--primary-color);
-            font-size: 0.95rem;
-            font-weight: 700;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-        }
+       .ecg-pulse svg {
+           width: 100%;
+           height: 100%;
+           fill: none;
+           stroke: var(--ecg-color);
+           stroke-width: 2.2;
+           stroke-linecap: round;
+           stroke-linejoin: round;
+       }
 
-        @keyframes slideUp { 
-            from { opacity: 0; transform: translateY(30px); } 
-            to { opacity: 1; transform: translateY(0); } 
-        }
-        
-        @keyframes heartbeat { 
-            0% { transform: scale(1); } 
-            14% { transform: scale(1.15); } 
-            28% { transform: scale(1); } 
-            42% { transform: scale(1.15); } 
-            70% { transform: scale(1); } 
-        }
-        
-        @keyframes float { 
-            0%, 100% { transform: translate(0, 0); } 
-            50% { transform: translate(20px, 40px); } 
-        }
+       .footer {
+           color: var(--primary-color);
+           font-size: 1rem;
+           font-weight: 700;
+           letter-spacing: 1.5px;
+           text-transform: uppercase;
+       }
 
-        @keyframes ecgMove {
-            0% { left: -30%; }
-            100% { left: 100%; }
-        }
+       @keyframes slideUp { 
+           from { opacity: 0; transform: translateY(30px); } 
+           to { opacity: 1; transform: translateY(0); } 
+       }
+       
+       @keyframes heartbeat { 
+           0% { transform: scale(1); } 
+           14% { transform: scale(1.15); } 
+           28% { transform: scale(1); } 
+           42% { transform: scale(1.15); } 
+           70% { transform: scale(1); } 
+       }
+       
+       @keyframes float { 
+           0%, 100% { transform: translate(0, 0); } 
+           50% { transform: translate(20px, 40px); } 
+       }
 
-        @media (max-width: 480px) {
-            .card { padding: 1.5rem 1.2rem 1.2rem; }
-            h1 { font-size: 1.4rem; }
-            .photo-frame { max-width: 120px; }
-            .profile-photo { max-width: 112px; }
-            .degree-item { font-size: 0.8rem; padding: 0.5rem; }
-            .ecg-container { width: 110px; height: 18px; }
-        }
-    </style>
+       @keyframes ecgMove {
+           0% { left: -30%; }
+           100% { left: 100%; }
+       }
+
+       @media (max-width: 480px) {
+           .card { padding: 1.8rem 1.4rem 1.4rem; max-width: 400px; }
+           h1 { font-size: 1.6rem; }
+           .nmc-number { font-size: 0.8rem; }
+           .photo-frame { max-width: 140px; }
+           .profile-photo { max-width: 132px; }
+           .degree-item { font-size: 0.85rem; padding: 0.6rem; }
+           .ecg-container { width: 130px; height: 22px; }
+           .footer { font-size: 0.95rem; }
+       }
+   </style>
 </head>
 <body>
 
-    <div class="shape shape-1"></div>
-    <div class="shape shape-2"></div>
+   <div class="shape shape-1"></div>
+   <div class="shape shape-2"></div>
 
-    <div class="card">
-        <div class="photo-frame">
-            <img src="https://github.com/user-attachments/assets/922bf099-b031-44a7-b861-3580840690d0" 
-                 class="profile-photo" 
-                 alt="Dr. Upendra Poudel">
-        </div>
+   <div class="card">
+       <div class="photo-frame">
+           <img src="https://github.com/user-attachments/assets/922bf099-b031-44a7-b861-3580840690d0" 
+                class="profile-photo" 
+                alt="Dr. Upendra Poudel">
+       </div>
 
-        <div class="stethoscope-icon">🩺</div>
-        
-        <h1>Dr. Upendra Poudel</h1>
-        
-        <div class="degrees">
-            <div class="degree-item">
-                Masters In Internal Medicine<br>
-                <span style="font-size: 0.85em; opacity: 0.8;">Dali University, China</span>
-            </div>
-            
-            <div class="degree-item">
-                Doctor Of Medicine<br>
-                <span style="font-size: 0.85em; opacity: 0.8;">Angeles University Foundation, Philippines</span>
-            </div>
-        </div>
+       <h1>Dr. Upendra Poudel</h1>
+       <div class="nmc-number">NMC: 20138</div>
 
-        <div class="ecg-container">
-            <div class="ecg-line"></div>
-            <div class="ecg-pulse">
-                <svg viewBox="0 0 100 40" preserveAspectRatio="none">
-                    <polyline points="0,20 18,20 26,18 32,12 38,26 44,10 52,28 62,20 72,20 100,20"/>
-                </svg>
-            </div>
-        </div>
+       <div class="stethoscope-icon">🩺</div>
+       
+       <div class="degrees">
+           <div class="degree-item">
+               Masters In Internal Medicine<br>
+               <span style="font-size: 0.85em; opacity: 0.8;">Dali University, China</span>
+           </div>
+           
+           <div class="degree-item">
+               Doctor Of Medicine<br>
+               <span style="font-size: 0.85em; opacity: 0.8;">Angeles University Foundation, Philippines</span>
+           </div>
+       </div>
 
-        <div class="footer">
-            Healing With Compassion..
-        </div>
-    </div>
+       <div class="ecg-container">
+           <div class="ecg-line"></div>
+           <div class="ecg-pulse">
+               <svg viewBox="0 0 100 40" preserveAspectRatio="none">
+                   <polyline points="0,20 18,20 26,18 32,12 38,26 44,10 52,28 62,20 72,20 100,20"/>
+               </svg>
+           </div>
+       </div>
 
-    <script>
-        const card = document.querySelector('.card');
-        const body = document.querySelector('body');
+       <div class="footer">
+           Healing With Compassion..
+       </div>
+   </div>
 
-        body.addEventListener('mousemove', (e) => {
-            const xAxis = (window.innerWidth / 2 - e.pageX) / 40;
-            const yAxis = (window.innerHeight / 2 - e.pageY) / 40;
-            card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
-        });
+   <script>
+       const card = document.querySelector('.card');
+       const body = document.querySelector('body');
 
-        body.addEventListener('mouseleave', () => {
-            card.style.transform = `rotateY(0deg) rotateX(0deg)`;
-        });
-    </script>
+       body.addEventListener('mousemove', (e) => {
+           const xAxis = (window.innerWidth / 2 - e.pageX) / 40;
+           const yAxis = (window.innerHeight / 2 - e.pageY) / 40;
+           card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+       });
+
+       body.addEventListener('mouseleave', () => {
+           card.style.transform = `rotateY(0deg) rotateX(0deg)`;
+       });
+   </script>
 </body>
 </html>
