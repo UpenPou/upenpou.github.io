@@ -280,9 +280,9 @@
     .exp-title em { font-style: italic; color: var(--green); }
 
     .exp-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2.5rem 3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
     }
 
     .cv-block { display: flex; flex-direction: column; gap: 0.55rem; }
@@ -322,8 +322,6 @@
       transform: translateX(3px);
       box-shadow: 0 3px 16px rgba(0,0,0,0.07);
     }
-    .cv-entry.dim { border-left-color: #dde3ea; }
-    .cv-entry.dim:hover { border-left-color: var(--text-light); transform: none; box-shadow: none; }
 
     .cv-dot {
       width: 7px; height: 7px;
@@ -332,13 +330,13 @@
       flex-shrink: 0;
       margin-top: 0.33rem;
     }
-    .cv-entry.dim .cv-dot { background: var(--text-light); }
+
 
     .cv-t  { font-size: 0.8rem; font-weight: 600; color: var(--text); line-height: 1.3; }
     .cv-s  { font-size: 0.7rem; color: var(--text-sub); margin-top: 0.08rem; line-height: 1.3; }
     .cv-i  { font-size: 0.74rem; color: var(--text-light); font-style: italic; line-height: 1.4; }
 
-    .lang-block { grid-column: 1 / -1; }
+    .lang-block {}
     .lang-pills { display: flex; flex-wrap: wrap; gap: 0.4rem; }
     .lang-pill {
       font-size: 0.71rem; font-weight: 500;
@@ -389,8 +387,8 @@
       .feat:nth-child(odd) { border-right: 1px solid var(--border); }
       .feat:nth-child(even) { border-right: none; }
       #experience { padding: 3rem 1.5rem; }
-      .exp-grid { grid-template-columns: 1fr; gap: 1.8rem; }
-      .lang-block { grid-column: 1; }
+      .exp-grid { gap: 1.8rem; }
+
       footer { padding: 1.2rem 1.5rem; gap: 0.6rem; }
       .fsep { display: none; }
     }
@@ -532,7 +530,7 @@
             <div class="cv-s">Deepjyoti Hospital, Ghorahi, Dang</div>
           </div>
         </div>
-        <div class="cv-entry dim">
+        <div class="cv-entry">
           <div class="cv-dot"></div>
           <div><div class="cv-t">Participated in various community health campaigns</div></div>
         </div>
@@ -548,14 +546,14 @@
             <div class="cv-s">AUF Medical Center, Philippines</div>
           </div>
         </div>
-        <div class="cv-entry dim">
+        <div class="cv-entry">
           <div class="cv-dot"></div>
           <div><div class="cv-t">Attended and organized numerous seminars and conferences</div></div>
         </div>
       </div>
 
       <!-- Languages -->
-      <div class="cv-block lang-block">
+      <div class="cv-block">
         <div class="cv-label">🌐 Languages</div>
         <div class="lang-pills">
           <span class="lang-pill">Nepali</span>
