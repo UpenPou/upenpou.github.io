@@ -102,7 +102,7 @@
     .hero {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 2rem;
+      gap: 3rem;
       padding: 3rem 2rem 2rem;
       max-width: 1100px;
       margin: 0 auto;
@@ -248,32 +248,7 @@
       font-size: 0.8rem;
     }
 
-    /* floating stat chips */
-    .stat-chips {
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-      position: absolute;
-      top: 1rem;
-      left: -120px;
-    }
 
-    .stat-chip {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 0.4rem 0.75rem;
-      font-size: 0.72rem;
-      font-weight: 600;
-      color: var(--green);
-      white-space: nowrap;
-      box-shadow: var(--card-shadow);
-      display: flex;
-      align-items: center;
-      gap: 0.35rem;
-    }
-
-    .stat-chip span { color: var(--text-sub); font-weight: 400; }
 
       100% { left: 110%; }
     }
@@ -559,11 +534,6 @@
 
     <div class="hero-right">
       <div class="photo-card" style="position:relative;">
-        <div class="stat-chips">
-          <div class="stat-chip">✅ <span>Emergency Medicine</span></div>
-          <div class="stat-chip">✅ <span>Internal Medicine</span></div>
-          <div class="stat-chip">✅ <span>CCU Specialist</span></div>
-        </div>
         <img src="https://github.com/user-attachments/assets/922bf099-b031-44a7-b861-3580840690d0"
              alt="Dr. Upendra Poudel">
         <div class="photo-card-label">
