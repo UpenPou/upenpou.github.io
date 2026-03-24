@@ -365,16 +365,6 @@
     border-radius: 6px;
   }
 
-  .q-domain-tag {
-    font-size: 0.7rem;
-    color: var(--text-dim);
-    background: var(--surface);
-    border: 1px solid var(--border);
-    padding: 0.18rem 0.55rem;
-    border-radius: 6px;
-    letter-spacing: 0.05em;
-  }
-
   .q-status-dot {
     margin-left: auto;
     width: 8px;
@@ -396,15 +386,6 @@
     color: var(--text);
     line-height: 1.65;
     margin-bottom: 1.4rem;
-  }
-
-  .q-type-badge {
-    font-size: 0.68rem;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    margin-bottom: 0.5rem;
-    font-family: 'IBM Plex Mono', monospace;
   }
 
   /* ── OPTIONS ── */
@@ -502,13 +483,6 @@
   .option-label.correct-opt .opt-text,
   .option-label.incorrect-opt .opt-text {
     color: var(--text);
-  }
-
-  .opt-icon {
-    margin-left: auto;
-    flex-shrink: 0;
-    font-size: 1rem;
-    padding-top: 0.05rem;
   }
 
   /* ── EXPLANATION ── */
@@ -878,7 +852,7 @@
 <header id="exam-header" style="display:none">
   <div class="header-left">
     <div>
-      <div class="header-title">Nepal MD Special Exam</div>
+      <div class="header-title">Nepal DM Special Exam</div>
       <small>Internal Medicine · 120 Questions</small>
     </div>
   </div>
@@ -1966,24 +1940,21 @@ function startExam() {
 }
 
 /* ══════════════════════════════════════════════════════════
-   BUILD EXAM — NOW SERIAL ORDER Q1–Q120 (only change)
+   BUILD EXAM — Serial Q1–Q120 (domain tag removed as requested)
    ══════════════════════════════════════════════════════════ */
 function buildExam() {
   const body = document.getElementById('exam-body');
   body.innerHTML = '';
 
-  // Part 1 header
   body.innerHTML += `<div class="domain-header">Part 1 — Standalone MCQs (Q1–Q80)</div>`;
 
   for (let i = 0; i < QUESTIONS.length; i++) {
     const q = QUESTIONS[i];
 
-    // Part 2 header exactly before Q81
     if (i === 80) {
       body.innerHTML += `<div class="domain-header" style="margin-top:2.5rem">Part 2 — Case-Based MCQs (Q81–Q120)</div>`;
     }
 
-    // Insert clinical case stem exactly once before its first question
     if (q.isCase === true) {
       body.innerHTML += `
         <div class="case-block" id="case-block-${q.caseNum}">
@@ -1992,7 +1963,6 @@ function buildExam() {
         </div>`;
     }
 
-    // Add the question card (now strictly serial 1–120)
     body.innerHTML += buildCard(q);
   }
 }
@@ -2011,7 +1981,6 @@ function buildCard(q) {
     <div class="q-card" id="qcard-${q.id}">
       <div class="q-meta">
         <span class="q-num">Q${q.id}</span>
-        <span class="q-domain-tag">${q.domain}</span>
         <span class="q-status-dot" id="dot-${q.id}"></span>
       </div>
       <div class="q-text">${q.text}</div>
@@ -2036,13 +2005,11 @@ function selectAnswer(qIndex, optIndex) {
   const card = document.getElementById(`qcard-${q.id}`);
   const dot = document.getElementById(`dot-${q.id}`);
 
-  // Remove previous selection styling
   for (let i = 0; i < 4; i++) {
     const label = document.getElementById(`opt-${q.id}-${i}`);
     if (label) label.classList.remove('selected');
   }
 
-  // Apply new selection
   const selectedLabel = document.getElementById(`opt-${q.id}-${optIndex}`);
   if (selectedLabel) selectedLabel.classList.add('selected');
 
@@ -2111,7 +2078,6 @@ function handleSubmit() {
 
   const unanswered = userAnswers.filter(a => a === null).length;
   if (unanswered > 0) {
-    // Flash unanswered cards
     QUESTIONS.forEach((q, i) => {
       if (userAnswers[i] === null) {
         const card = document.getElementById(`qcard-${q.id}`);
@@ -2139,7 +2105,6 @@ function submitExam() {
   document.getElementById('exam-header').style.display = 'none';
   document.getElementById('exam-body').style.display = 'none';
 
-  // Mark answers on question cards
   QUESTIONS.forEach((q, i) => {
     const card = document.getElementById(`qcard-${q.id}`);
     const dot = document.getElementById(`dot-${q.id}`);
@@ -2149,7 +2114,6 @@ function submitExam() {
 
     card.classList.remove('answered');
 
-    // Style options
     for (let j = 0; j < q.opts.length; j++) {
       const label = document.getElementById(`opt-${q.id}-${j}`);
       if (!label) continue;
@@ -2195,11 +2159,10 @@ function buildResults() {
   else if (pct >= 50) { grade = 'BORDERLINE'; gradeClass = 'grade-C'; gradeMsg = 'Review weak areas carefully.'; }
   else { grade = 'FAIL'; gradeClass = 'grade-D'; gradeMsg = 'Significant revision required.'; }
 
-  // Domain breakdown
   const domains = [...new Set(QUESTIONS.map(q => q.domain))];
   const domainStats = domains.map(d => {
     const dqs = QUESTIONS.filter(q => q.domain === d);
-    const dc = dqs.filter((q, _) => {
+    const dc = dqs.filter((q) => {
       const idx = QUESTIONS.indexOf(q);
       return userAnswers[idx] === q.ans;
     }).length;
@@ -2248,7 +2211,6 @@ function buildResults() {
   document.getElementById('results-screen').innerHTML = resultsHTML;
   document.getElementById('exam-body').style.display = 'block';
 
-  // Animate domain bars after render
   setTimeout(() => {
     document.querySelectorAll('.mini-bar-fill').forEach(el => {
       const w = el.style.width;
