@@ -257,7 +257,7 @@
     width: 0%;
   }
 
-  /* ── SUBMIT BUTTON ── */
+  /* ── HEADER BUTTONS ── */
   #btn-submit {
     background: var(--card);
     border: 1.5px solid var(--border);
@@ -283,6 +283,26 @@
   #btn-submit.ready:hover {
     transform: translateY(-1px);
     box-shadow: 0 4px 30px rgba(34,197,94,0.5);
+  }
+
+  #btn-stop {
+    background: linear-gradient(135deg, #ef4444, #b91c1c);
+    color: white;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 0.55rem 1.6rem;
+    border-radius: 100px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    box-shadow: 0 0 24px rgba(239,68,68,0.3);
+  }
+
+  #btn-stop:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 30px rgba(239,68,68,0.5);
   }
 
   /* ── MAIN LAYOUT ── */
@@ -852,7 +872,7 @@
 <header id="exam-header" style="display:none">
   <div class="header-left">
     <div>
-      <div class="header-title">Nepal DM Special Exam</div>
+      <div class="header-title">Nepal MD Special Exam</div>
       <small>Internal Medicine · 120 Questions</small>
     </div>
   </div>
@@ -869,6 +889,7 @@
       <div id="timer">2:00:00</div>
     </div>
   </div>
+  <button id="btn-stop" onclick="stopExam()">⏹ Stop Exam</button>
   <button id="btn-submit" onclick="handleSubmit()">Submit Exam</button>
 </header>
 
@@ -1923,6 +1944,7 @@ let timerInterval = null;
 let secondsLeft = 7200; // 2 hours
 let examStarted = false;
 let examSubmitted = false;
+let examStopped = false;   // ← NEW FLAG FOR STOP BUTTON
 
 /* ══════════════════════════════════════════════════════════
    START EXAM
@@ -1940,7 +1962,7 @@ function startExam() {
 }
 
 /* ══════════════════════════════════════════════════════════
-   BUILD EXAM — Serial Q1–Q120 (domain tag removed as requested)
+   BUILD EXAM — Serial Q1–Q120 (no domain tag in meta)
    ══════════════════════════════════════════════════════════ */
 function buildExam() {
   const body = document.getElementById('exam-body');
@@ -1995,10 +2017,10 @@ function buildCard(q) {
 }
 
 /* ══════════════════════════════════════════════════════════
-   ANSWER SELECTION
+   ANSWER SELECTION — Prevent after stop/submit
    ══════════════════════════════════════════════════════════ */
 function selectAnswer(qIndex, optIndex) {
-  if (examSubmitted) return;
+  if (examSubmitted || examStopped) return;
   userAnswers[qIndex] = optIndex;
 
   const q = QUESTIONS[qIndex];
@@ -2071,10 +2093,25 @@ function updateTimerDisplay() {
 }
 
 /* ══════════════════════════════════════════════════════════
-   SUBMIT
+   STOP EXAM — NEW FUNCTION
+   ══════════════════════════════════════════════════════════ */
+function stopExam() {
+  if (examSubmitted || examStopped) return;
+
+  if (!confirm('Are you sure you want to STOP the exam now?\n\nYou will NOT be able to answer any more questions.\nYour current answers will be evaluated immediately.')) {
+    return;
+  }
+
+  examStopped = true;
+  clearInterval(timerInterval);               // Halt timer
+  submitExam();                               // Reuse existing logic to show results (partial is fine)
+}
+
+/* ══════════════════════════════════════════════════════════
+   SUBMIT / FORCE SUBMIT
    ══════════════════════════════════════════════════════════ */
 function handleSubmit() {
-  if (examSubmitted) return;
+  if (examSubmitted || examStopped) return;
 
   const unanswered = userAnswers.filter(a => a === null).length;
   if (unanswered > 0) {
@@ -2105,6 +2142,7 @@ function submitExam() {
   document.getElementById('exam-header').style.display = 'none';
   document.getElementById('exam-body').style.display = 'none';
 
+  // Mark all answered cards + show explanations
   QUESTIONS.forEach((q, i) => {
     const card = document.getElementById(`qcard-${q.id}`);
     const dot = document.getElementById(`dot-${q.id}`);
@@ -2192,7 +2230,7 @@ function buildResults() {
         </div>
       </div>
       <div class="grade-badge ${gradeClass}">${grade}</div>
-      <h2 class="results-title">Exam Complete</h2>
+      <h2 class="results-title">${examStopped ? 'Exam Stopped' : 'Exam Complete'}</h2>
       <p class="results-subtitle">${correct} of ${QUESTIONS.length} correct · ${gradeMsg}</p>
       <div class="results-stats">
         <div class="stat-pill correct-p">✓ ${correct} Correct</div>
