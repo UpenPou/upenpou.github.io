@@ -43,7 +43,6 @@
     overflow-x: hidden;
   }
 
-  /* ── NOISE TEXTURE OVERLAY ── */
   body::before {
     content: '';
     position: fixed;
@@ -53,7 +52,7 @@
     z-index: 0;
   }
 
-  /* ── LANDING SCREEN ── */
+  /* LANDING + PASSWORD */
   #landing {
     position: fixed;
     inset: 0;
@@ -65,32 +64,15 @@
     background: radial-gradient(ellipse 80% 60% at 50% 40%, #1d2844 0%, var(--bg) 70%);
     padding: 2rem;
     text-align: center;
-    transition: opacity 0.6s ease, transform 0.6s ease;
   }
 
-  #landing.hidden {
-    opacity: 0;
-    transform: translateY(-30px);
-    pointer-events: none;
-  }
-
-  .landing-cross {
-    font-size: 3rem;
-    margin-bottom: 1.5rem;
-    filter: drop-shadow(0 0 24px var(--gold));
-    animation: pulse-glow 3s ease-in-out infinite;
-  }
-
-  @keyframes pulse-glow {
-    0%,100% { filter: drop-shadow(0 0 16px var(--gold)); }
-    50% { filter: drop-shadow(0 0 32px var(--gold)); }
-  }
+  .landing-cross { font-size: 3rem; margin-bottom: 1.5rem; filter: drop-shadow(0 0 24px var(--gold)); animation: pulse-glow 3s ease-in-out infinite; }
+  @keyframes pulse-glow { 0%,100% { filter: drop-shadow(0 0 16px var(--gold)); } 50% { filter: drop-shadow(0 0 32px var(--gold)); } }
 
   .landing-title {
     font-family: 'Crimson Pro', Georgia, serif;
     font-size: clamp(2.2rem, 5vw, 3.5rem);
     font-weight: 700;
-    color: var(--text);
     letter-spacing: -0.02em;
     line-height: 1.1;
     margin-bottom: 0.5rem;
@@ -127,6 +109,52 @@
 
   .meta-pill span:first-child { color: var(--gold); }
 
+  #password-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2rem;
+    max-width: 380px;
+    width: 100%;
+    margin-bottom: 2rem;
+  }
+
+  #exam-password {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 1rem;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  #verify-btn {
+    background: linear-gradient(135deg, #e8a820 0%, #c87d10 100%);
+    color: #0f1219;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 100px;
+    padding: 1rem 3rem;
+    cursor: pointer;
+    width: 100%;
+  }
+
+  #verify-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 50px rgba(232,168,32,0.5); }
+
+  #password-error {
+    color: #ef4444;
+    display: none;
+    margin-top: 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  #start-button-section { display: none; }
+
   .btn-start {
     background: linear-gradient(135deg, #e8a820 0%, #c87d10 100%);
     color: #0f1219;
@@ -139,13 +167,9 @@
     padding: 1rem 3rem;
     cursor: pointer;
     transition: all 0.25s ease;
-    box-shadow: 0 0 40px rgba(232,168,32,0.3);
   }
 
-  .btn-start:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 50px rgba(232,168,32,0.5);
-  }
+  .btn-start:hover { transform: translateY(-2px); box-shadow: 0 8px 50px rgba(232,168,32,0.5); }
 
   .landing-warning {
     margin-top: 1.5rem;
@@ -154,14 +178,13 @@
     max-width: 480px;
   }
 
-  /* ── STICKY HEADER ── */
+  /* HEADER */
   #exam-header {
     position: sticky;
     top: 0;
     z-index: 50;
     background: rgba(15,18,25,0.95);
     backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--border);
     padding: 0.8rem 2rem;
     display: flex;
@@ -171,18 +194,9 @@
     flex-wrap: wrap;
   }
 
-  .header-left {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
+  .header-left { display: flex; align-items: center; gap: 1rem; }
 
-  .header-title {
-    font-family: 'Crimson Pro', serif;
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--text);
-  }
+  .header-title { font-family: 'Crimson Pro', serif; font-size: 1.1rem; font-weight: 600; color: var(--text); }
 
   .header-title small {
     font-family: 'IBM Plex Mono', monospace;
@@ -191,15 +205,9 @@
     letter-spacing: 0.1em;
     text-transform: uppercase;
     display: block;
-    font-weight: 400;
   }
 
-  /* ── TIMER ── */
-  #timer-wrap {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
+  #timer-wrap { display: flex; align-items: center; gap: 0.75rem; }
 
   #timer {
     font-family: 'IBM Plex Mono', monospace;
@@ -209,30 +217,16 @@
     letter-spacing: 0.05em;
     min-width: 5.5ch;
     text-align: center;
-    transition: color 0.3s;
   }
 
   #timer.warning { color: var(--amber); animation: blink-warn 1s step-end infinite; }
   #timer.critical { color: var(--red); animation: blink-warn 0.5s step-end infinite; }
 
-  @keyframes blink-warn {
-    0%,100% { opacity: 1; }
-    50% { opacity: 0.4; }
-  }
+  @keyframes blink-warn { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
 
-  .timer-label {
-    font-size: 0.7rem;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-  }
+  .timer-label { font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.1em; }
 
-  /* ── PROGRESS BAR ── */
-  .progress-section {
-    flex: 1;
-    min-width: 200px;
-    max-width: 320px;
-  }
+  .progress-section { flex: 1; min-width: 200px; max-width: 320px; }
 
   .progress-info {
     display: flex;
@@ -257,7 +251,18 @@
     width: 0%;
   }
 
-  /* ── HEADER BUTTONS ── */
+  #btn-stop {
+    background: linear-gradient(135deg, #ef4444, #b91c1c);
+    color: white;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 0.55rem 1.6rem;
+    border-radius: 100px;
+    border: none;
+    cursor: pointer;
+  }
+
   #btn-submit {
     background: var(--card);
     border: 1.5px solid var(--border);
@@ -269,7 +274,6 @@
     border-radius: 100px;
     cursor: not-allowed;
     transition: all 0.3s ease;
-    white-space: nowrap;
   }
 
   #btn-submit.ready {
@@ -277,35 +281,9 @@
     border-color: #22c55e;
     color: white;
     cursor: pointer;
-    box-shadow: 0 0 24px rgba(34,197,94,0.3);
   }
 
-  #btn-submit.ready:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 30px rgba(34,197,94,0.5);
-  }
-
-  #btn-stop {
-    background: linear-gradient(135deg, #ef4444, #b91c1c);
-    color: white;
-    font-family: 'Outfit', sans-serif;
-    font-weight: 600;
-    font-size: 0.9rem;
-    padding: 0.55rem 1.6rem;
-    border-radius: 100px;
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    white-space: nowrap;
-    box-shadow: 0 0 24px rgba(239,68,68,0.3);
-  }
-
-  #btn-stop:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 30px rgba(239,68,68,0.5);
-  }
-
-  /* ── MAIN LAYOUT ── */
+  /* EXAM BODY */
   #exam-body {
     max-width: 860px;
     margin: 0 auto;
@@ -313,7 +291,6 @@
     display: none;
   }
 
-  /* ── DOMAIN GROUPS ── */
   .domain-header {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 0.7rem;
@@ -335,7 +312,6 @@
     background: linear-gradient(90deg, var(--border), transparent);
   }
 
-  /* ── QUESTION CARD ── */
   .q-card {
     background: var(--card);
     border: 1px solid var(--border);
@@ -346,24 +322,9 @@
     scroll-margin-top: 80px;
   }
 
-  .q-card.answered {
-    border-color: var(--border-light);
-  }
-
-  .q-card.correct-card {
-    border-color: var(--green);
-    background: rgba(34,197,94,0.06);
-  }
-
-  .q-card.incorrect-card {
-    border-color: var(--red);
-    background: rgba(239,68,68,0.06);
-  }
-
-  .q-card:hover:not(.correct-card):not(.incorrect-card) {
-    background: var(--card-hover);
-    box-shadow: 0 4px 24px rgba(0,0,0,0.3);
-  }
+  .q-card.answered { border-color: var(--border-light); }
+  .q-card.correct-card { border-color: var(--green); background: rgba(34,197,94,0.06); }
+  .q-card.incorrect-card { border-color: var(--red); background: rgba(239,68,68,0.06); }
 
   .q-meta {
     display: flex;
@@ -392,7 +353,6 @@
     border-radius: 50%;
     background: var(--border);
     transition: background 0.3s;
-    flex-shrink: 0;
   }
 
   .q-status-dot.answered { background: var(--gold); }
@@ -408,7 +368,6 @@
     margin-bottom: 1.4rem;
   }
 
-  /* ── OPTIONS ── */
   .options-grid {
     display: flex;
     flex-direction: column;
@@ -425,33 +384,12 @@
     background: var(--surface);
     cursor: pointer;
     transition: all 0.2s ease;
-    position: relative;
-    overflow: hidden;
   }
 
-  .option-label:hover:not(.disabled) {
-    border-color: var(--border-light);
-    background: var(--card);
-    transform: translateX(2px);
-  }
-
-  .option-label.selected {
-    border-color: var(--gold);
-    background: var(--gold-glow);
-  }
-
-  .option-label.correct-opt {
-    border-color: var(--green);
-    background: var(--green-bg);
-    cursor: default;
-  }
-
-  .option-label.incorrect-opt {
-    border-color: var(--red);
-    background: var(--red-bg);
-    cursor: default;
-  }
-
+  .option-label:hover:not(.disabled) { border-color: var(--border-light); background: var(--card); transform: translateX(2px); }
+  .option-label.selected { border-color: var(--gold); background: var(--gold-glow); }
+  .option-label.correct-opt { border-color: var(--green); background: var(--green-bg); cursor: default; }
+  .option-label.incorrect-opt { border-color: var(--red); background: var(--red-bg); cursor: default; }
   .option-label.disabled { cursor: default; }
 
   input[type="radio"] { display: none; }
@@ -469,43 +407,22 @@
     border: 1.5px solid var(--border-light);
     color: var(--text-muted);
     background: var(--card);
-    transition: all 0.2s;
-    flex-shrink: 0;
-    margin-top: 0.05rem;
   }
 
-  .option-label.selected .opt-letter {
-    border-color: var(--gold);
-    color: var(--gold);
-    background: var(--gold-glow);
-  }
-
-  .option-label.correct-opt .opt-letter {
-    border-color: var(--green);
-    color: #0f1219;
-    background: var(--green);
-  }
-
-  .option-label.incorrect-opt .opt-letter {
-    border-color: var(--red);
-    color: #0f1219;
-    background: var(--red);
-  }
+  .option-label.selected .opt-letter { border-color: var(--gold); color: var(--gold); background: var(--gold-glow); }
+  .option-label.correct-opt .opt-letter { border-color: var(--green); color: #0f1219; background: var(--green); }
+  .option-label.incorrect-opt .opt-letter { border-color: var(--red); color: #0f1219; background: var(--red); }
 
   .opt-text {
     font-size: 0.95rem;
     color: var(--text-muted);
     line-height: 1.5;
-    transition: color 0.2s;
   }
 
   .option-label.selected .opt-text,
   .option-label.correct-opt .opt-text,
-  .option-label.incorrect-opt .opt-text {
-    color: var(--text);
-  }
+  .option-label.incorrect-opt .opt-text { color: var(--text); }
 
-  /* ── EXPLANATION ── */
   .explanation-box {
     display: none;
     margin-top: 1.2rem;
@@ -552,7 +469,6 @@
     padding-left: 0.2rem;
   }
 
-  /* ── CASE BLOCK ── */
   .case-block {
     background: linear-gradient(135deg, rgba(59,130,246,0.08) 0%, rgba(59,130,246,0.03) 100%);
     border: 1px solid rgba(59,130,246,0.25);
@@ -591,7 +507,7 @@
     line-height: 1.7;
   }
 
-  /* ── RESULTS SCREEN ── */
+  /* RESULTS */
   #results-screen {
     display: none;
     max-width: 900px;
@@ -680,98 +596,21 @@
   .stat-pill.incorrect-p { background: var(--red-bg); color: var(--red); border: 1px solid rgba(239,68,68,0.3); }
   .stat-pill.skipped-p { background: var(--amber-bg); color: var(--amber); border: 1px solid rgba(245,158,11,0.3); }
 
-  /* ── DOMAIN BREAKDOWN ── */
-  .breakdown-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 1rem;
-    margin-bottom: 2.5rem;
-  }
-
-  .breakdown-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 1.2rem;
-  }
-
-  .breakdown-domain {
-    font-size: 0.85rem;
-    font-weight: 500;
-    color: var(--text);
-    margin-bottom: 0.7rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .breakdown-score {
+  .grade-badge {
+    display: inline-block;
+    padding: 0.35rem 1rem;
+    border-radius: 100px;
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.78rem;
-    color: var(--gold);
-  }
-
-  .mini-bar {
-    height: 6px;
-    background: var(--border);
-    border-radius: 100px;
-    overflow: hidden;
-  }
-
-  .mini-bar-fill {
-    height: 100%;
-    border-radius: 100px;
-    transition: width 1s ease;
-  }
-
-  /* ── SECTION HEADER ── */
-  .section-head {
-    font-family: 'Crimson Pro', serif;
-    font-size: 1.5rem;
+    font-size: 0.9rem;
     font-weight: 600;
-    color: var(--text);
-    margin-bottom: 1.2rem;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
+    margin-bottom: 1rem;
   }
 
-  .section-head::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(90deg, var(--border), transparent);
-  }
+  .grade-A { background: var(--green-bg); color: var(--green); border: 1px solid rgba(34,197,94,0.4); }
+  .grade-B { background: var(--blue-bg); color: var(--blue); border: 1px solid rgba(59,130,246,0.4); }
+  .grade-C { background: var(--amber-bg); color: var(--amber); border: 1px solid rgba(245,158,11,0.4); }
+  .grade-D { background: var(--red-bg); color: var(--red); border: 1px solid rgba(239,68,68,0.4); }
 
-  /* ── SCROLL TO TOP ── */
-  #scroll-top {
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
-    background: var(--card);
-    border: 1px solid var(--border);
-    color: var(--text-muted);
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    font-size: 1.2rem;
-    transition: all 0.2s;
-    z-index: 40;
-  }
-
-  #scroll-top:hover {
-    background: var(--card-hover);
-    color: var(--gold);
-    border-color: var(--gold-dim);
-  }
-
-  #scroll-top.show { display: flex; }
-
-  /* ── TIME-UP OVERLAY ── */
   #timeup-overlay {
     display: none;
     position: fixed;
@@ -801,8 +640,6 @@
     margin-bottom: 0.75rem;
   }
 
-  .timeup-box p { color: var(--text-muted); margin-bottom: 1.5rem; }
-
   .btn-secondary {
     background: transparent;
     border: 1.5px solid var(--border);
@@ -812,48 +649,36 @@
     padding: 0.65rem 1.6rem;
     border-radius: 100px;
     cursor: pointer;
-    transition: all 0.2s;
   }
 
-  .btn-secondary:hover { border-color: var(--text-dim); color: var(--text); }
-
-  /* ── RESPONSIVE ── */
-  @media (max-width: 640px) {
-    #exam-header { padding: 0.6rem 1rem; }
-    #exam-body, #results-screen { padding: 1.5rem 1rem 4rem; }
-    .q-card { padding: 1.3rem; }
-    .q-text { font-size: 1.05rem; }
-    .results-score-circle { width: 130px; height: 130px; }
-    .results-score-inner { width: 105px; height: 105px; }
-    .results-pct { font-size: 2rem; }
+  #scroll-top {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.2rem;
+    z-index: 40;
   }
 
   .unanswered-highlight { animation: flash-unanswered 0.4s ease 3; }
-
   @keyframes flash-unanswered {
     0%,100% { border-color: var(--border); }
     50% { border-color: var(--amber); box-shadow: 0 0 16px var(--amber-bg); }
   }
-
-  .grade-badge {
-    display: inline-block;
-    padding: 0.35rem 1rem;
-    border-radius: 100px;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.9rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-  }
-
-  .grade-A { background: var(--green-bg); color: var(--green); border: 1px solid rgba(34,197,94,0.4); }
-  .grade-B { background: var(--blue-bg); color: var(--blue); border: 1px solid rgba(59,130,246,0.4); }
-  .grade-C { background: var(--amber-bg); color: var(--amber); border: 1px solid rgba(245,158,11,0.4); }
-  .grade-D { background: var(--red-bg); color: var(--red); border: 1px solid rgba(239,68,68,0.4); }
 </style>
 </head>
 <body>
 
-<!-- ══════════ LANDING ══════════ -->
+<!-- LANDING PAGE WITH PASSWORD -->
 <div id="landing">
   <div class="landing-cross">✚</div>
   <h1 class="landing-title">Nepal MD Special Exam</h1>
@@ -864,11 +689,21 @@
     <div class="meta-pill"><span>🏥</span> 9 Clinical Domains</div>
     <div class="meta-pill"><span>📖</span> Mudit Khanna + Nepal DM Guide</div>
   </div>
-  <button class="btn-start" onclick="startExam()">Begin Examination</button>
-  <p class="landing-warning">⚠️ Once you begin, the 2-hour timer starts immediately and cannot be paused. Complete all 120 questions before submitting.</p>
+
+  <div id="password-section">
+    <p style="margin-bottom:1rem; color:var(--text-muted);">Enter password to access the examination</p>
+    <input type="password" id="exam-password" placeholder="Password" autocomplete="off">
+    <button id="verify-btn" onclick="verifyPassword()">Verify & Begin Examination</button>
+    <p id="password-error">❌ Incorrect password. Please try again.</p>
+  </div>
+
+  <div id="start-button-section">
+    <button class="btn-start" onclick="startExam()">Begin Examination</button>
+    <p class="landing-warning">⚠️ Once you begin, the 2-hour timer starts immediately and cannot be paused.</p>
+  </div>
 </div>
 
-<!-- ══════════ EXAM HEADER ══════════ -->
+<!-- EXAM HEADER -->
 <header id="exam-header" style="display:none">
   <div class="header-left">
     <div>
@@ -893,13 +728,13 @@
   <button id="btn-submit" onclick="handleSubmit()">Submit Exam</button>
 </header>
 
-<!-- ══════════ EXAM BODY ══════════ -->
+<!-- EXAM BODY -->
 <main id="exam-body"></main>
 
-<!-- ══════════ RESULTS ══════════ -->
+<!-- RESULTS SCREEN -->
 <div id="results-screen"></div>
 
-<!-- ══════════ TIME UP ══════════ -->
+<!-- TIME UP OVERLAY -->
 <div id="timeup-overlay">
   <div class="timeup-box">
     <h2>⏰ Time's Up</h2>
@@ -908,8 +743,9 @@
   </div>
 </div>
 
-<!-- ══════════ SCROLL TO TOP ══════════ -->
+<!-- SCROLL TO TOP -->
 <div id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</div>
+
 
 <script>
 /* ══════════════════════════════════════════════════════════
@@ -1936,19 +1772,28 @@ const QUESTIONS = [
   }
 ];
 
-/* ══════════════════════════════════════════════════════════
-   STATE
-   ══════════════════════════════════════════════════════════ */
+/* ====================== STATE ====================== */
 let userAnswers = new Array(QUESTIONS.length).fill(null);
 let timerInterval = null;
-let secondsLeft = 7200; // 2 hours
+let secondsLeft = 7200;
 let examStarted = false;
 let examSubmitted = false;
-let examStopped = false;   // ← NEW FLAG FOR STOP BUTTON
+let examStopped = false;
 
-/* ══════════════════════════════════════════════════════════
-   START EXAM
-   ══════════════════════════════════════════════════════════ */
+/* ====================== PASSWORD ====================== */
+function verifyPassword() {
+  const entered = document.getElementById('exam-password').value.trim();
+  if (entered === "Dr.UpendraPoudel") {
+    document.getElementById('password-section').style.display = 'none';
+    document.getElementById('start-button-section').style.display = 'block';
+  } else {
+    const err = document.getElementById('password-error');
+    err.style.display = 'block';
+    setTimeout(() => err.style.display = 'none', 3000);
+  }
+}
+
+/* ====================== START EXAM ====================== */
 function startExam() {
   document.getElementById('landing').classList.add('hidden');
   setTimeout(() => {
@@ -1961,9 +1806,7 @@ function startExam() {
   }, 600);
 }
 
-/* ══════════════════════════════════════════════════════════
-   BUILD EXAM — Serial Q1–Q120 (no domain tag in meta)
-   ══════════════════════════════════════════════════════════ */
+/* ====================== BUILD EXAM ====================== */
 function buildExam() {
   const body = document.getElementById('exam-body');
   body.innerHTML = '';
@@ -1972,11 +1815,9 @@ function buildExam() {
 
   for (let i = 0; i < QUESTIONS.length; i++) {
     const q = QUESTIONS[i];
-
     if (i === 80) {
       body.innerHTML += `<div class="domain-header" style="margin-top:2.5rem">Part 2 — Case-Based MCQs (Q81–Q120)</div>`;
     }
-
     if (q.isCase === true) {
       body.innerHTML += `
         <div class="case-block" id="case-block-${q.caseNum}">
@@ -1984,17 +1825,16 @@ function buildExam() {
           <div class="case-text">${q.caseText}</div>
         </div>`;
     }
-
     body.innerHTML += buildCard(q);
   }
 }
 
 function buildCard(q) {
-  const optLetters = ['A', 'B', 'C', 'D'];
+  const letters = ['A','B','C','D'];
   const optsHTML = q.opts.map((opt, i) => `
     <label class="option-label" id="opt-${q.id}-${i}" for="q${q.id}_opt${i}">
       <input type="radio" name="q${q.id}" id="q${q.id}_opt${i}" value="${i}" onchange="selectAnswer(${q.id-1}, ${i})">
-      <span class="opt-letter">${optLetters[i]}</span>
+      <span class="opt-letter">${letters[i]}</span>
       <span class="opt-text">${opt}</span>
     </label>
   `).join('');
@@ -2016,9 +1856,7 @@ function buildCard(q) {
   `;
 }
 
-/* ══════════════════════════════════════════════════════════
-   ANSWER SELECTION — Prevent after stop/submit
-   ══════════════════════════════════════════════════════════ */
+/* ====================== ANSWER SELECTION ====================== */
 function selectAnswer(qIndex, optIndex) {
   if (examSubmitted || examStopped) return;
   userAnswers[qIndex] = optIndex;
@@ -2031,43 +1869,26 @@ function selectAnswer(qIndex, optIndex) {
     const label = document.getElementById(`opt-${q.id}-${i}`);
     if (label) label.classList.remove('selected');
   }
-
-  const selectedLabel = document.getElementById(`opt-${q.id}-${optIndex}`);
-  if (selectedLabel) selectedLabel.classList.add('selected');
+  const selected = document.getElementById(`opt-${q.id}-${optIndex}`);
+  if (selected) selected.classList.add('selected');
 
   card.classList.add('answered');
   dot.classList.add('answered');
-
   updateProgress();
 }
 
-/* ══════════════════════════════════════════════════════════
-   PROGRESS
-   ══════════════════════════════════════════════════════════ */
 function updateProgress() {
   const answered = userAnswers.filter(a => a !== null).length;
   const pct = (answered / QUESTIONS.length) * 100;
   document.getElementById('progress-fill').style.width = pct + '%';
   document.getElementById('progress-text').textContent = `${answered} / ${QUESTIONS.length}`;
-
-  const submitBtn = document.getElementById('btn-submit');
-  if (answered === QUESTIONS.length) {
-    submitBtn.classList.add('ready');
-    submitBtn.textContent = '✓ Submit Exam';
-  } else {
-    submitBtn.classList.remove('ready');
-    submitBtn.textContent = `Submit (${answered}/${QUESTIONS.length})`;
-  }
 }
 
-/* ══════════════════════════════════════════════════════════
-   TIMER
-   ══════════════════════════════════════════════════════════ */
+/* ====================== TIMER ====================== */
 function startTimer() {
   timerInterval = setInterval(() => {
     secondsLeft--;
     updateTimerDisplay();
-
     if (secondsLeft <= 0) {
       clearInterval(timerInterval);
       document.getElementById('timeup-overlay').classList.add('show');
@@ -2079,54 +1900,23 @@ function updateTimerDisplay() {
   const h = Math.floor(secondsLeft / 3600);
   const m = Math.floor((secondsLeft % 3600) / 60);
   const s = secondsLeft % 60;
-
-  const display = h > 0
-    ? `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`
-    : `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-
-  const timerEl = document.getElementById('timer');
-  timerEl.textContent = display;
-
-  timerEl.classList.remove('warning', 'critical');
-  if (secondsLeft <= 60) timerEl.classList.add('critical');
-  else if (secondsLeft <= 300) timerEl.classList.add('warning');
+  const display = h > 0 ? `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}` : `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  document.getElementById('timer').textContent = display;
 }
 
-/* ══════════════════════════════════════════════════════════
-   STOP EXAM — NEW FUNCTION
-   ══════════════════════════════════════════════════════════ */
+/* ====================== STOP & SUBMIT ====================== */
 function stopExam() {
   if (examSubmitted || examStopped) return;
-
-  if (!confirm('Are you sure you want to STOP the exam now?\n\nYou will NOT be able to answer any more questions.\nYour current answers will be evaluated immediately.')) {
-    return;
-  }
-
+  if (!confirm('Are you sure you want to STOP the exam now?')) return;
   examStopped = true;
-  clearInterval(timerInterval);               // Halt timer
-  submitExam();                               // Reuse existing logic to show results (partial is fine)
+  clearInterval(timerInterval);
+  submitExam();
 }
 
-/* ══════════════════════════════════════════════════════════
-   SUBMIT / FORCE SUBMIT
-   ══════════════════════════════════════════════════════════ */
 function handleSubmit() {
   if (examSubmitted || examStopped) return;
-
   const unanswered = userAnswers.filter(a => a === null).length;
-  if (unanswered > 0) {
-    QUESTIONS.forEach((q, i) => {
-      if (userAnswers[i] === null) {
-        const card = document.getElementById(`qcard-${q.id}`);
-        card.classList.add('unanswered-highlight');
-        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        setTimeout(() => card.classList.remove('unanswered-highlight'), 1200);
-      }
-    });
-
-    if (!confirm(`You have ${unanswered} unanswered question(s). Submit anyway?`)) return;
-  }
-
+  if (unanswered > 0 && !confirm(`You have ${unanswered} unanswered question(s). Submit anyway?`)) return;
   clearInterval(timerInterval);
   submitExam();
 }
@@ -2142,7 +1932,6 @@ function submitExam() {
   document.getElementById('exam-header').style.display = 'none';
   document.getElementById('exam-body').style.display = 'none';
 
-  // Mark all answered cards + show explanations
   QUESTIONS.forEach((q, i) => {
     const card = document.getElementById(`qcard-${q.id}`);
     const dot = document.getElementById(`dot-${q.id}`);
@@ -2150,20 +1939,16 @@ function submitExam() {
     const userAns = userAnswers[i];
     const isCorrect = userAns === q.ans;
 
-    card.classList.remove('answered');
-
     for (let j = 0; j < q.opts.length; j++) {
       const label = document.getElementById(`opt-${q.id}-${j}`);
       if (!label) continue;
       label.classList.add('disabled');
-      label.classList.remove('selected');
       if (j === q.ans) label.classList.add('correct-opt');
       else if (j === userAns && !isCorrect) label.classList.add('incorrect-opt');
     }
 
     if (userAns === null) {
       card.style.borderColor = 'var(--amber)';
-      dot.classList.remove('answered');
     } else if (isCorrect) {
       card.classList.add('correct-card');
       dot.classList.add('correct');
@@ -2171,55 +1956,22 @@ function submitExam() {
       card.classList.add('incorrect-card');
       dot.classList.add('incorrect');
     }
-
     expBox.classList.add('show');
   });
 
   buildResults();
-
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  window.scrollTo({top:0, behavior:'smooth'});
   document.getElementById('results-screen').style.display = 'block';
-  document.getElementById('scroll-top').classList.add('show');
 }
 
-/* ══════════════════════════════════════════════════════════
-   RESULTS
-   ══════════════════════════════════════════════════════════ */
 function buildResults() {
-  const correct = QUESTIONS.filter((q, i) => userAnswers[i] === q.ans).length;
-  const incorrect = QUESTIONS.filter((q, i) => userAnswers[i] !== null && userAnswers[i] !== q.ans).length;
-  const skipped = QUESTIONS.filter((q, i) => userAnswers[i] === null).length;
+  const correct = QUESTIONS.filter((q,i) => userAnswers[i] === q.ans).length;
+  const incorrect = QUESTIONS.filter((q,i) => userAnswers[i] !== null && userAnswers[i] !== q.ans).length;
+  const skipped = QUESTIONS.filter((q,i) => userAnswers[i] === null).length;
   const pct = Math.round((correct / QUESTIONS.length) * 100);
 
-  let grade, gradeClass, gradeMsg;
-  if (pct >= 80) { grade = 'DISTINCTION'; gradeClass = 'grade-A'; gradeMsg = 'Outstanding performance.'; }
-  else if (pct >= 65) { grade = 'PASS'; gradeClass = 'grade-B'; gradeMsg = 'Well done.'; }
-  else if (pct >= 50) { grade = 'BORDERLINE'; gradeClass = 'grade-C'; gradeMsg = 'Review weak areas carefully.'; }
-  else { grade = 'FAIL'; gradeClass = 'grade-D'; gradeMsg = 'Significant revision required.'; }
-
-  const domains = [...new Set(QUESTIONS.map(q => q.domain))];
-  const domainStats = domains.map(d => {
-    const dqs = QUESTIONS.filter(q => q.domain === d);
-    const dc = dqs.filter((q) => {
-      const idx = QUESTIONS.indexOf(q);
-      return userAnswers[idx] === q.ans;
-    }).length;
-    return { domain: d, correct: dc, total: dqs.length, pct: Math.round((dc / dqs.length) * 100) };
-  }).sort((a, b) => b.pct - a.pct);
-
-  const domainCardsHTML = domainStats.map(d => {
-    const color = d.pct >= 75 ? 'var(--green)' : d.pct >= 50 ? 'var(--amber)' : 'var(--red)';
-    return `
-      <div class="breakdown-card">
-        <div class="breakdown-domain">
-          <span>${d.domain}</span>
-          <span class="breakdown-score">${d.correct}/${d.total}</span>
-        </div>
-        <div class="mini-bar">
-          <div class="mini-bar-fill" style="width:${d.pct}%; background:${color}"></div>
-        </div>
-      </div>`;
-  }).join('');
+  let grade = pct >= 80 ? 'DISTINCTION' : pct >= 65 ? 'PASS' : pct >= 50 ? 'BORDERLINE' : 'FAIL';
+  let gradeClass = pct >= 80 ? 'grade-A' : pct >= 65 ? 'grade-B' : pct >= 50 ? 'grade-C' : 'grade-D';
 
   const resultsHTML = `
     <div class="results-hero">
@@ -2231,36 +1983,20 @@ function buildResults() {
       </div>
       <div class="grade-badge ${gradeClass}">${grade}</div>
       <h2 class="results-title">${examStopped ? 'Exam Stopped' : 'Exam Complete'}</h2>
-      <p class="results-subtitle">${correct} of ${QUESTIONS.length} correct · ${gradeMsg}</p>
+      <p class="results-subtitle">${correct} of ${QUESTIONS.length} correct</p>
       <div class="results-stats">
         <div class="stat-pill correct-p">✓ ${correct} Correct</div>
         <div class="stat-pill incorrect-p">✗ ${incorrect} Incorrect</div>
         <div class="stat-pill skipped-p">– ${skipped} Skipped</div>
       </div>
     </div>
-
-    <h3 class="section-head">Performance by Domain</h3>
-    <div class="breakdown-grid">${domainCardsHTML}</div>
-
     <h3 class="section-head">Review All Questions</h3>
-    <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:1.5rem">Scroll down to review each question with your answer, the correct answer, and full explanations.</p>
   `;
 
   document.getElementById('results-screen').innerHTML = resultsHTML;
-  document.getElementById('exam-body').style.display = 'block';
-
-  setTimeout(() => {
-    document.querySelectorAll('.mini-bar-fill').forEach(el => {
-      const w = el.style.width;
-      el.style.width = '0';
-      setTimeout(() => el.style.width = w, 100);
-    });
-  }, 200);
 }
 
-/* ══════════════════════════════════════════════════════════
-   SCROLL TO TOP BUTTON
-   ══════════════════════════════════════════════════════════ */
+/* Scroll to top */
 window.addEventListener('scroll', () => {
   const el = document.getElementById('scroll-top');
   if (window.scrollY > 400 && examStarted) el.classList.add('show');
