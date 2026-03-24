@@ -3,2123 +3,713 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nepal MD Special Exam — Internal Medicine</title>
+<title>Nepal DM Exam · AI MCQ Generator</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0f1219;
-    --surface: #161c27;
-    --card: #1e2738;
-    --card-hover: #232f42;
-    --border: #2a3547;
-    --border-light: #374560;
-    --gold: #e8a820;
-    --gold-dim: #a87620;
-    --gold-glow: rgba(232,168,32,0.15);
-    --text: #e8eaf0;
-    --text-muted: #8a96b0;
-    --text-dim: #5a6480;
-    --green: #22c55e;
-    --green-bg: rgba(34,197,94,0.12);
-    --red: #ef4444;
-    --red-bg: rgba(239,68,68,0.12);
+    --bg: #07090f;
+    --surface: #0e1220;
+    --card: #131926;
+    --card-hover: #192233;
+    --border: #1e2d44;
+    --border-light: #263c5a;
+    --gold: #f0b429;
+    --gold-dim: #b8891f;
+    --gold-glow: rgba(240,180,41,0.12);
+    --gold-text: #fcd470;
+    --text: #dce4f0;
+    --text-muted: #7a8aaa;
+    --text-dim: #3d4d65;
+    --green: #10d97a;
+    --green-bg: rgba(16,217,122,0.1);
+    --red: #ff4d6a;
+    --red-bg: rgba(255,77,106,0.1);
+    --blue: #4d9eff;
+    --blue-bg: rgba(77,158,255,0.1);
     --amber: #f59e0b;
-    --amber-bg: rgba(245,158,11,0.12);
-    --blue: #3b82f6;
-    --blue-bg: rgba(59,130,246,0.12);
-    --radius: 12px;
+    --r: 10px;
   }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  * { margin:0; padding:0; box-sizing:border-box; }
 
   body {
     background: var(--bg);
     color: var(--text);
-    font-family: 'Outfit', sans-serif;
-    font-weight: 400;
-    line-height: 1.6;
+    font-family: 'Sora', sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
     min-height: 100vh;
     overflow-x: hidden;
   }
 
+  /* Ambient background */
   body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 0;
+    content:'';
+    position:fixed;
+    inset:0;
+    background:
+      radial-gradient(ellipse 80% 50% at 10% 10%, rgba(240,180,41,0.04) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 90% 80%, rgba(77,158,255,0.04) 0%, transparent 60%);
+    pointer-events:none;
+    z-index:0;
   }
 
-  /* LANDING + PASSWORD */
-  #landing {
-    position: fixed;
-    inset: 0;
-    z-index: 100;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: radial-gradient(ellipse 80% 60% at 50% 40%, #1d2844 0%, var(--bg) 70%);
-    padding: 2rem;
-    text-align: center;
+  .wrap { position:relative; z-index:1; max-width:860px; margin:0 auto; padding:28px 20px 80px; }
+
+  /* ── Header ── */
+  header { text-align:center; padding:48px 0 40px; }
+  .header-badge {
+    display:inline-flex; align-items:center; gap:8px;
+    background:var(--gold-glow); border:1px solid var(--gold-dim);
+    border-radius:100px; padding:5px 16px; margin-bottom:22px;
+    font-size:11px; font-weight:600; letter-spacing:.08em;
+    color:var(--gold-text); text-transform:uppercase;
   }
-
-  .landing-cross { font-size: 3rem; margin-bottom: 1.5rem; filter: drop-shadow(0 0 24px var(--gold)); animation: pulse-glow 3s ease-in-out infinite; }
-  @keyframes pulse-glow { 0%,100% { filter: drop-shadow(0 0 16px var(--gold)); } 50% { filter: drop-shadow(0 0 32px var(--gold)); } }
-
-  .landing-title {
-    font-family: 'Crimson Pro', Georgia, serif;
-    font-size: clamp(2.2rem, 5vw, 3.5rem);
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    line-height: 1.1;
-    margin-bottom: 0.5rem;
+  .header-badge svg { width:12px; height:12px; fill:var(--gold); }
+  h1 {
+    font-family:'Lora', serif; font-size:clamp(1.8rem, 5vw, 2.6rem);
+    font-weight:600; color:var(--text); letter-spacing:-.02em;
+    line-height:1.2; margin-bottom:12px;
   }
+  h1 span { color:var(--gold-text); font-style:italic; }
+  .subtitle { color:var(--text-muted); font-size:14px; max-width:520px; margin:0 auto; }
 
-  .landing-subtitle {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.78rem;
-    letter-spacing: 0.18em;
-    color: var(--gold);
-    text-transform: uppercase;
-    margin-bottom: 2.5rem;
+  /* ── Config Panel ── */
+  .config-panel {
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:14px; padding:28px 28px 24px; margin-bottom:28px;
   }
-
-  .landing-meta {
-    display: flex;
-    gap: 2rem;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-bottom: 3rem;
+  .config-title {
+    font-size:11px; font-weight:600; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--text-dim); margin-bottom:20px;
   }
+  .config-grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+  @media(max-width:560px){ .config-grid{ grid-template-columns:1fr; } }
 
-  .meta-pill {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 100px;
-    padding: 0.5rem 1.2rem;
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+  .field label {
+    display:block; font-size:12px; font-weight:600;
+    color:var(--text-muted); margin-bottom:8px; letter-spacing:.04em;
   }
-
-  .meta-pill span:first-child { color: var(--gold); }
-
-  #password-section {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 2rem;
-    max-width: 380px;
-    width: 100%;
-    margin-bottom: 2rem;
+  .field select, .field input {
+    width:100%; background:var(--card); border:1px solid var(--border);
+    color:var(--text); font-family:'Sora',sans-serif; font-size:13px;
+    padding:10px 14px; border-radius:8px; outline:none;
+    appearance:none; cursor:pointer; transition:border-color .2s;
   }
+  .field select:focus, .field input:focus { border-color:var(--gold-dim); }
+  .field select option { background:var(--card); }
 
-  #exam-password {
-    width: 100%;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    color: var(--text);
-    padding: 1rem;
-    border-radius: 8px;
-    font-size: 1.1rem;
-    text-align: center;
-    margin-bottom: 1rem;
+  .chip-group { display:flex; flex-wrap:wrap; gap:8px; }
+  .chip {
+    padding:6px 14px; border-radius:100px; font-size:12px; font-weight:500;
+    border:1px solid var(--border); background:var(--card); color:var(--text-muted);
+    cursor:pointer; transition:all .18s; user-select:none;
   }
+  .chip.active { border-color:var(--gold); background:var(--gold-glow); color:var(--gold-text); }
+  .chip:hover:not(.active) { border-color:var(--border-light); color:var(--text); }
 
-  #verify-btn {
-    background: linear-gradient(135deg, #e8a820 0%, #c87d10 100%);
-    color: #0f1219;
-    font-family: 'Outfit', sans-serif;
-    font-weight: 600;
-    font-size: 1.1rem;
-    border: none;
-    border-radius: 100px;
-    padding: 1rem 3rem;
-    cursor: pointer;
-    width: 100%;
+  .generate-btn {
+    width:100%; margin-top:22px; padding:14px; border-radius:10px;
+    background:var(--gold); color:#07090f; font-family:'Sora',sans-serif;
+    font-size:14px; font-weight:700; letter-spacing:.02em;
+    border:none; cursor:pointer; transition:all .2s;
+    display:flex; align-items:center; justify-content:center; gap:10px;
   }
+  .generate-btn:hover:not(:disabled) { background:#fcd470; transform:translateY(-1px); box-shadow:0 8px 24px rgba(240,180,41,0.3); }
+  .generate-btn:disabled { opacity:.5; cursor:not-allowed; transform:none; box-shadow:none; }
 
-  #verify-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 50px rgba(232,168,32,0.5); }
-
-  #password-error {
-    color: #ef4444;
-    display: none;
-    margin-top: 0.75rem;
-    font-size: 0.9rem;
+  /* ── Loading ── */
+  .loader {
+    text-align:center; padding:60px 20px;
+    display:none;
   }
-
-  #start-button-section { display: none; }
-
-  .btn-start {
-    background: linear-gradient(135deg, #e8a820 0%, #c87d10 100%);
-    color: #0f1219;
-    font-family: 'Outfit', sans-serif;
-    font-weight: 600;
-    font-size: 1.1rem;
-    letter-spacing: 0.04em;
-    border: none;
-    border-radius: 100px;
-    padding: 1rem 3rem;
-    cursor: pointer;
-    transition: all 0.25s ease;
+  .loader.active { display:block; }
+  .spinner {
+    width:44px; height:44px; border:3px solid var(--border);
+    border-top-color:var(--gold); border-radius:50%;
+    animation:spin .8s linear infinite; margin:0 auto 20px;
   }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  .loader-text { color:var(--text-muted); font-size:14px; }
+  .loader-sub { color:var(--text-dim); font-size:12px; margin-top:6px; }
 
-  .btn-start:hover { transform: translateY(-2px); box-shadow: 0 8px 50px rgba(232,168,32,0.5); }
-
-  .landing-warning {
-    margin-top: 1.5rem;
-    font-size: 0.8rem;
-    color: var(--text-dim);
-    max-width: 480px;
+  /* ── Stats bar ── */
+  .stats-bar {
+    display:flex; gap:12px; margin-bottom:20px; flex-wrap:wrap;
   }
-
-  /* HEADER */
-  #exam-header {
-    position: sticky;
-    top: 0;
-    z-index: 50;
-    background: rgba(15,18,25,0.95);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border);
-    padding: 0.8rem 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    flex-wrap: wrap;
+  .stat {
+    background:var(--card); border:1px solid var(--border);
+    border-radius:8px; padding:10px 18px; font-size:12px;
+    display:flex; align-items:center; gap:8px;
   }
+  .stat-val { font-family:'JetBrains Mono',monospace; font-size:18px; font-weight:600; color:var(--gold-text); }
+  .stat-lbl { color:var(--text-muted); }
 
-  .header-left { display: flex; align-items: center; gap: 1rem; }
-
-  .header-title { font-family: 'Crimson Pro', serif; font-size: 1.1rem; font-weight: 600; color: var(--text); }
-
-  .header-title small {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.65rem;
-    color: var(--gold);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    display: block;
+  /* ── Question Card ── */
+  .question-card {
+    background:var(--card); border:1px solid var(--border);
+    border-radius:14px; padding:24px 26px; margin-bottom:16px;
+    transition:border-color .2s;
+    animation:fadeUp .3s ease both;
   }
+  @keyframes fadeUp{ from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)} }
+  .question-card:hover { border-color:var(--border-light); }
 
-  #timer-wrap { display: flex; align-items: center; gap: 0.75rem; }
-
-  #timer {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 1.6rem;
-    font-weight: 600;
-    color: var(--gold);
-    letter-spacing: 0.05em;
-    min-width: 5.5ch;
-    text-align: center;
+  .q-header {
+    display:flex; align-items:flex-start; gap:14px; margin-bottom:16px;
   }
-
-  #timer.warning { color: var(--amber); animation: blink-warn 1s step-end infinite; }
-  #timer.critical { color: var(--red); animation: blink-warn 0.5s step-end infinite; }
-
-  @keyframes blink-warn { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
-
-  .timer-label { font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.1em; }
-
-  .progress-section { flex: 1; min-width: 200px; max-width: 320px; }
-
-  .progress-info {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.75rem;
-    color: var(--text-muted);
-    margin-bottom: 0.3rem;
-  }
-
-  .progress-bar {
-    height: 4px;
-    background: var(--border);
-    border-radius: 100px;
-    overflow: hidden;
-  }
-
-  .progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--gold-dim), var(--gold));
-    border-radius: 100px;
-    transition: width 0.4s ease;
-    width: 0%;
-  }
-
-  #btn-stop {
-    background: linear-gradient(135deg, #ef4444, #b91c1c);
-    color: white;
-    font-family: 'Outfit', sans-serif;
-    font-weight: 600;
-    font-size: 0.9rem;
-    padding: 0.55rem 1.6rem;
-    border-radius: 100px;
-    border: none;
-    cursor: pointer;
-  }
-
-  #btn-submit {
-    background: var(--card);
-    border: 1.5px solid var(--border);
-    color: var(--text-dim);
-    font-family: 'Outfit', sans-serif;
-    font-weight: 500;
-    font-size: 0.9rem;
-    padding: 0.55rem 1.4rem;
-    border-radius: 100px;
-    cursor: not-allowed;
-    transition: all 0.3s ease;
-  }
-
-  #btn-submit.ready {
-    background: linear-gradient(135deg, #22c55e, #16a34a);
-    border-color: #22c55e;
-    color: white;
-    cursor: pointer;
-  }
-
-  /* EXAM BODY */
-  #exam-body {
-    max-width: 860px;
-    margin: 0 auto;
-    padding: 2.5rem 1.5rem 5rem;
-    display: none;
-  }
-
-  .domain-header {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.2em;
-    color: var(--gold);
-    text-transform: uppercase;
-    padding: 2rem 0 1rem;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-
-  .domain-header::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(90deg, var(--border), transparent);
-  }
-
-  .q-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 1.8rem;
-    margin-bottom: 1.2rem;
-    transition: border-color 0.25s, background 0.25s, box-shadow 0.25s;
-    scroll-margin-top: 80px;
-  }
-
-  .q-card.answered { border-color: var(--border-light); }
-  .q-card.correct-card { border-color: var(--green); background: rgba(34,197,94,0.06); }
-  .q-card.incorrect-card { border-color: var(--red); background: rgba(239,68,68,0.06); }
-
-  .q-meta {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    margin-bottom: 1rem;
-    flex-wrap: wrap;
-  }
-
   .q-num {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.72rem;
-    font-weight: 600;
-    color: var(--gold);
-    letter-spacing: 0.08em;
-    background: var(--gold-glow);
-    border: 1px solid rgba(232,168,32,0.25);
-    padding: 0.2rem 0.6rem;
-    border-radius: 6px;
+    min-width:32px; height:32px; background:var(--surface);
+    border:1px solid var(--border); border-radius:6px;
+    font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:600;
+    color:var(--text-dim); display:flex; align-items:center; justify-content:center;
   }
-
-  .q-status-dot {
-    margin-left: auto;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--border);
-    transition: background 0.3s;
+  .q-meta { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px; }
+  .tag {
+    font-size:10px; font-weight:600; letter-spacing:.06em;
+    text-transform:uppercase; padding:3px 10px; border-radius:100px;
+    border:1px solid; 
   }
-
-  .q-status-dot.answered { background: var(--gold); }
-  .q-status-dot.correct { background: var(--green); }
-  .q-status-dot.incorrect { background: var(--red); }
+  .tag-domain { border-color:var(--border-light); color:var(--text-muted); background:var(--surface); }
+  .tag-recall { border-color:#4d9eff55; color:#4d9eff; background:rgba(77,158,255,.08); }
+  .tag-application { border-color:#f59e0b55; color:#f59e0b; background:rgba(245,158,11,.08); }
+  .tag-analysis { border-color:#ff4d6a55; color:#ff4d6a; background:rgba(255,77,106,.08); }
 
   .q-text {
-    font-family: 'Crimson Pro', Georgia, serif;
-    font-size: 1.2rem;
-    font-weight: 400;
-    color: var(--text);
-    line-height: 1.65;
-    margin-bottom: 1.4rem;
+    font-family:'Lora',serif; font-size:15px; line-height:1.7;
+    color:var(--text); margin-bottom:18px;
   }
 
-  .options-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
+  .options { display:flex; flex-direction:column; gap:9px; }
+  .option {
+    display:flex; align-items:flex-start; gap:12px;
+    padding:11px 14px; border-radius:8px;
+    border:1px solid var(--border); background:var(--surface);
+    cursor:pointer; transition:all .18s; user-select:none;
+    font-size:14px; color:var(--text-muted);
   }
-
-  .option-label {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.9rem;
-    padding: 0.9rem 1.1rem;
-    border-radius: 8px;
-    border: 1.5px solid var(--border);
-    background: var(--surface);
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-
-  .option-label:hover:not(.disabled) { border-color: var(--border-light); background: var(--card); transform: translateX(2px); }
-  .option-label.selected { border-color: var(--gold); background: var(--gold-glow); }
-  .option-label.correct-opt { border-color: var(--green); background: var(--green-bg); cursor: default; }
-  .option-label.incorrect-opt { border-color: var(--red); background: var(--red-bg); cursor: default; }
-  .option-label.disabled { cursor: default; }
-
-  input[type="radio"] { display: none; }
-
+  .option:hover:not(.disabled) { border-color:var(--border-light); color:var(--text); background:var(--card-hover); }
+  .option.selected { border-color:var(--gold-dim); background:var(--gold-glow); color:var(--text); }
+  .option.correct { border-color:var(--green); background:var(--green-bg); color:var(--text); }
+  .option.wrong { border-color:var(--red); background:var(--red-bg); color:var(--text); }
+  .option.disabled { cursor:default; }
   .opt-letter {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.78rem;
-    font-weight: 600;
-    min-width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    border: 1.5px solid var(--border-light);
-    color: var(--text-muted);
-    background: var(--card);
+    min-width:22px; height:22px; border-radius:4px;
+    background:var(--border); color:var(--text-dim);
+    font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600;
+    display:flex; align-items:center; justify-content:center; margin-top:1px;
+    transition:all .18s;
+  }
+  .option.selected .opt-letter { background:var(--gold); color:#07090f; }
+  .option.correct .opt-letter { background:var(--green); color:#07090f; }
+  .option.wrong .opt-letter { background:var(--red); color:#fff; }
+
+  .explanation {
+    margin-top:14px; padding:14px 16px;
+    background:var(--surface); border:1px solid var(--border);
+    border-left:3px solid var(--gold); border-radius:8px;
+    font-size:13px; color:var(--text-muted); line-height:1.7;
+    display:none;
+  }
+  .explanation.show { display:block; animation:fadeUp .2s ease; }
+  .explanation strong { color:var(--gold-text); }
+
+  /* ── Results ── */
+  .results {
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:14px; padding:32px; text-align:center;
+    display:none; margin-top:24px;
+  }
+  .results.show { display:block; animation:fadeUp .3s ease; }
+  .score-circle {
+    width:100px; height:100px; border-radius:50%;
+    border:3px solid var(--gold); margin:0 auto 20px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    background:var(--gold-glow);
+  }
+  .score-val { font-family:'JetBrains Mono',monospace; font-size:28px; font-weight:600; color:var(--gold-text); line-height:1; }
+  .score-pct { font-size:11px; color:var(--gold-dim); }
+  .results h3 { font-family:'Lora',serif; font-size:1.4rem; margin-bottom:8px; }
+  .results p { color:var(--text-muted); font-size:14px; }
+  .results-grid { display:flex; gap:16px; justify-content:center; margin:24px 0 0; flex-wrap:wrap; }
+  .res-stat { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:16px 22px; min-width:100px; }
+  .res-stat .val { font-family:'JetBrains Mono',monospace; font-size:22px; font-weight:600; }
+  .res-stat .lbl { font-size:11px; color:var(--text-muted); margin-top:2px; }
+  .res-stat.green .val { color:var(--green); }
+  .res-stat.red .val { color:var(--red); }
+  .res-stat.amber .val { color:var(--amber); }
+
+  .submit-btn {
+    margin-top:24px; padding:13px 32px; border-radius:10px;
+    background:var(--card); border:1px solid var(--border-light);
+    color:var(--text); font-family:'Sora',sans-serif; font-size:14px; font-weight:600;
+    cursor:pointer; transition:all .2s;
+  }
+  .submit-btn:hover { background:var(--card-hover); border-color:var(--gold-dim); color:var(--gold-text); }
+
+  .error-box {
+    background:rgba(255,77,106,.08); border:1px solid rgba(255,77,106,.3);
+    border-radius:10px; padding:16px 18px; color:#ff8a9e;
+    font-size:13px; margin-top:16px; display:none;
+  }
+  .error-box.show { display:block; }
+
+  /* scrollbar */
+  ::-webkit-scrollbar{ width:6px; } ::-webkit-scrollbar-track{ background:var(--bg); }
+  ::-webkit-scrollbar-thumb{ background:var(--border); border-radius:3px; }
+
+  .section-divider {
+    display:flex; align-items:center; gap:14px; margin:28px 0 20px;
+  }
+  .section-divider span {
+    font-size:11px; font-weight:600; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--text-dim); white-space:nowrap;
+  }
+  .section-divider::before, .section-divider::after {
+    content:''; flex:1; height:1px; background:var(--border);
   }
 
-  .option-label.selected .opt-letter { border-color: var(--gold); color: var(--gold); background: var(--gold-glow); }
-  .option-label.correct-opt .opt-letter { border-color: var(--green); color: #0f1219; background: var(--green); }
-  .option-label.incorrect-opt .opt-letter { border-color: var(--red); color: #0f1219; background: var(--red); }
-
-  .opt-text {
-    font-size: 0.95rem;
-    color: var(--text-muted);
-    line-height: 1.5;
+  .domain-tags { display:flex; flex-wrap:wrap; gap:7px; }
+  .domain-tag {
+    padding:5px 12px; border-radius:100px; font-size:11px; font-weight:600;
+    border:1px solid var(--border); background:var(--card); color:var(--text-muted);
+    cursor:pointer; transition:all .18s; user-select:none;
+    letter-spacing:.02em;
   }
-
-  .option-label.selected .opt-text,
-  .option-label.correct-opt .opt-text,
-  .option-label.incorrect-opt .opt-text { color: var(--text); }
-
-  .explanation-box {
-    display: none;
-    margin-top: 1.2rem;
-    border-top: 1px solid var(--border);
-    padding-top: 1.2rem;
-  }
-
-  .explanation-box.show { display: block; }
-
-  .exp-header {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.12em;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    margin-bottom: 0.6rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .exp-header::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-
-  .exp-text {
-    font-size: 0.9rem;
-    color: var(--text-muted);
-    line-height: 1.7;
-    background: var(--surface);
-    border-left: 3px solid var(--gold-dim);
-    padding: 0.9rem 1.1rem;
-    border-radius: 0 8px 8px 0;
-  }
-
-  .exp-source {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.68rem;
-    color: var(--text-dim);
-    margin-top: 0.6rem;
-    padding-left: 0.2rem;
-  }
-
-  .case-block {
-    background: linear-gradient(135deg, rgba(59,130,246,0.08) 0%, rgba(59,130,246,0.03) 100%);
-    border: 1px solid rgba(59,130,246,0.25);
-    border-radius: var(--radius);
-    padding: 1.5rem 1.8rem;
-    margin-bottom: 1.2rem;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .case-block::before {
-    content: 'CLINICAL CASE';
-    position: absolute;
-    top: 0.8rem;
-    right: 1rem;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.2em;
-    color: var(--blue);
-    opacity: 0.7;
-  }
-
-  .case-num {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.7rem;
-    color: var(--blue);
-    letter-spacing: 0.1em;
-    margin-bottom: 0.7rem;
-    text-transform: uppercase;
-  }
-
-  .case-text {
-    font-family: 'Crimson Pro', serif;
-    font-size: 1.08rem;
-    color: var(--text);
-    line-height: 1.7;
-  }
-
-  /* RESULTS */
-  #results-screen {
-    display: none;
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 2rem 1.5rem 5rem;
-  }
-
-  .results-hero {
-    text-align: center;
-    padding: 3rem 2rem;
-    background: radial-gradient(ellipse 80% 70% at 50% 50%, rgba(232,168,32,0.1) 0%, transparent 70%);
-    border-radius: 20px;
-    margin-bottom: 2.5rem;
-  }
-
-  .results-score-circle {
-    width: 160px;
-    height: 160px;
-    border-radius: 50%;
-    background: conic-gradient(var(--gold) var(--pct), var(--border) 0deg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 1.5rem;
-    position: relative;
-  }
-
-  .results-score-inner {
-    width: 130px;
-    height: 130px;
-    border-radius: 50%;
-    background: var(--bg);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .results-pct {
-    font-family: 'Crimson Pro', serif;
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: var(--gold);
-    line-height: 1;
-  }
-
-  .results-pct-label {
-    font-size: 0.7rem;
-    color: var(--text-dim);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    font-family: 'IBM Plex Mono', monospace;
-  }
-
-  .results-title {
-    font-family: 'Crimson Pro', serif;
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-  }
-
-  .results-subtitle {
-    color: var(--text-muted);
-    font-size: 0.95rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .results-stats {
-    display: flex;
-    gap: 1.5rem;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-
-  .stat-pill {
-    padding: 0.5rem 1.2rem;
-    border-radius: 100px;
-    font-size: 0.85rem;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-  }
-
-  .stat-pill.correct-p { background: var(--green-bg); color: var(--green); border: 1px solid rgba(34,197,94,0.3); }
-  .stat-pill.incorrect-p { background: var(--red-bg); color: var(--red); border: 1px solid rgba(239,68,68,0.3); }
-  .stat-pill.skipped-p { background: var(--amber-bg); color: var(--amber); border: 1px solid rgba(245,158,11,0.3); }
-
-  .grade-badge {
-    display: inline-block;
-    padding: 0.35rem 1rem;
-    border-radius: 100px;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.9rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-  }
-
-  .grade-A { background: var(--green-bg); color: var(--green); border: 1px solid rgba(34,197,94,0.4); }
-  .grade-B { background: var(--blue-bg); color: var(--blue); border: 1px solid rgba(59,130,246,0.4); }
-  .grade-C { background: var(--amber-bg); color: var(--amber); border: 1px solid rgba(245,158,11,0.4); }
-  .grade-D { background: var(--red-bg); color: var(--red); border: 1px solid rgba(239,68,68,0.4); }
-
-  #timeup-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.8);
-    z-index: 200;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-  }
-
-  #timeup-overlay.show { display: flex; }
-
-  .timeup-box {
-    background: var(--card);
-    border: 1px solid var(--red);
-    border-radius: 20px;
-    padding: 3rem;
-    max-width: 480px;
-    box-shadow: 0 0 60px rgba(239,68,68,0.3);
-  }
-
-  .timeup-box h2 {
-    font-family: 'Crimson Pro', serif;
-    font-size: 2rem;
-    color: var(--red);
-    margin-bottom: 0.75rem;
-  }
-
-  .btn-secondary {
-    background: transparent;
-    border: 1.5px solid var(--border);
-    color: var(--text-muted);
-    font-family: 'Outfit', sans-serif;
-    font-size: 0.9rem;
-    padding: 0.65rem 1.6rem;
-    border-radius: 100px;
-    cursor: pointer;
-  }
-
-  #scroll-top {
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
-    background: var(--card);
-    border: 1px solid var(--border);
-    color: var(--text-muted);
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    font-size: 1.2rem;
-    z-index: 40;
-  }
-
-  .unanswered-highlight { animation: flash-unanswered 0.4s ease 3; }
-  @keyframes flash-unanswered {
-    0%,100% { border-color: var(--border); }
-    50% { border-color: var(--amber); box-shadow: 0 0 16px var(--amber-bg); }
-  }
+  .domain-tag.active { color:var(--text); }
+  .domain-tag[data-d="Cardiology"].active { border-color:#ff6b6b; background:rgba(255,107,107,.1); color:#ff8a8a; }
+  .domain-tag[data-d="Respiratory"].active { border-color:#4ecdc4; background:rgba(78,205,196,.1); color:#6eddd5; }
+  .domain-tag[data-d="Nervous System"].active { border-color:#a78bfa; background:rgba(167,139,250,.1); color:#b89dfc; }
+  .domain-tag[data-d="Endocrine"].active { border-color:#fb923c; background:rgba(251,146,60,.1); color:#fc9f50; }
+  .domain-tag[data-d="Gastrointestinal"].active { border-color:#34d399; background:rgba(52,211,153,.1); color:#50dba5; }
+  .domain-tag[data-d="Hematology"].active { border-color:#f472b6; background:rgba(244,114,182,.1); color:#f690c4; }
+  .domain-tag[data-d="All Domains"].active { border-color:var(--gold); background:var(--gold-glow); color:var(--gold-text); }
 </style>
 </head>
 <body>
+<div class="wrap">
 
-<!-- LANDING PAGE WITH PASSWORD -->
-<div id="landing">
-  <div class="landing-cross">✚</div>
-  <h1 class="landing-title">Nepal MD Special Exam</h1>
-  <div class="landing-subtitle">April 2, 2026 · Internal Medicine · 120 Questions</div>
-  <div class="landing-meta">
-    <div class="meta-pill"><span>⏱</span> 2-Hour Time Limit</div>
-    <div class="meta-pill"><span>📋</span> 120 MCQs</div>
-    <div class="meta-pill"><span>🏥</span> 9 Clinical Domains</div>
-    <div class="meta-pill"><span>📖</span> Mudit Khanna + Nepal DM Guide</div>
+  <!-- Header -->
+  <header>
+    <div class="header-badge">
+      <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      Nepal DM / Internal Medicine Exit Exam
+    </div>
+    <h1>AI-Powered <span>MCQ Generator</span></h1>
+    <p class="subtitle">Generate fresh, clinically authentic questions based on Mudit Khanna topics — never the same set twice.</p>
+  </header>
+
+  <!-- Config -->
+  <div class="config-panel" id="configPanel">
+    <div class="config-title">Exam Configuration</div>
+
+    <div class="field" style="margin-bottom:18px;">
+      <label>Domain</label>
+      <div class="domain-tags">
+        <div class="domain-tag active" data-d="All Domains">All Domains</div>
+        <div class="domain-tag" data-d="Cardiology">Cardiology</div>
+        <div class="domain-tag" data-d="Respiratory">Respiratory</div>
+        <div class="domain-tag" data-d="Nervous System">Neurology</div>
+        <div class="domain-tag" data-d="Endocrine">Endocrine</div>
+        <div class="domain-tag" data-d="Gastrointestinal">Gastroenterology</div>
+        <div class="domain-tag" data-d="Hematology">Hematology</div>
+      </div>
+    </div>
+
+    <div class="config-grid">
+      <div class="field">
+        <label>Number of Questions</label>
+        <div class="chip-group" id="countChips">
+          <div class="chip" data-v="5">5</div>
+          <div class="chip active" data-v="10">10</div>
+          <div class="chip" data-v="20">20</div>
+          <div class="chip" data-v="30">30</div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Cognitive Level</label>
+        <div class="chip-group" id="levelChips">
+          <div class="chip active" data-v="Mixed">Mixed</div>
+          <div class="chip" data-v="Recall">Recall</div>
+          <div class="chip" data-v="Application">Application</div>
+          <div class="chip" data-v="Analysis">Analysis</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="config-grid" style="margin-top:18px;">
+      <div class="field">
+        <label>Question Style</label>
+        <div class="chip-group" id="styleChips">
+          <div class="chip active" data-v="Mixed">Mixed</div>
+          <div class="chip" data-v="Next Best Step">Next Best Step</div>
+          <div class="chip" data-v="Diagnosis">Diagnosis</div>
+          <div class="chip" data-v="Drug Selection">Drug Selection</div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Nepal Context</label>
+        <div class="chip-group" id="nepalChips">
+          <div class="chip active" data-v="Yes">Include Nepal-specific</div>
+          <div class="chip" data-v="No">International only</div>
+        </div>
+      </div>
+    </div>
+
+    <button class="generate-btn" id="generateBtn" onclick="generateExam()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 3l14 9-14 9V3z"/></svg>
+      Generate Exam
+    </button>
+    <div class="error-box" id="errorBox"></div>
   </div>
 
-  <div id="password-section">
-    <p style="margin-bottom:1rem; color:var(--text-muted);">Enter password to access the examination</p>
-    <input type="password" id="exam-password" placeholder="Password" autocomplete="off">
-    <button id="verify-btn" onclick="verifyPassword()">Verify & Begin Examination</button>
-    <p id="password-error">❌ Incorrect password. Please try again.</p>
+  <!-- Loader -->
+  <div class="loader" id="loader">
+    <div class="spinner"></div>
+    <div class="loader-text" id="loaderText">Generating your exam…</div>
+    <div class="loader-sub" id="loaderSub">AI is writing clinical scenarios tailored to Nepal DM standards</div>
   </div>
 
-  <div id="start-button-section">
-    <button class="btn-start" onclick="startExam()">Begin Examination</button>
-    <p class="landing-warning">⚠️ Once you begin, the 2-hour timer starts immediately and cannot be paused.</p>
+  <!-- Exam area -->
+  <div id="examArea" style="display:none;">
+    <div class="stats-bar" id="statsBar"></div>
+    <div id="questionsContainer"></div>
+
+    <div style="text-align:center; margin-top:28px;">
+      <button class="submit-btn" id="submitBtn" onclick="submitExam()">Submit Exam & See Results</button>
+    </div>
+
+    <div class="results" id="results"></div>
   </div>
+
 </div>
-
-<!-- EXAM HEADER -->
-<header id="exam-header" style="display:none">
-  <div class="header-left">
-    <div>
-      <div class="header-title">Nepal MD Special Exam</div>
-      <small>Internal Medicine · 120 Questions</small>
-    </div>
-  </div>
-  <div class="progress-section">
-    <div class="progress-info">
-      <span>Progress</span>
-      <span id="progress-text">0 / 120</span>
-    </div>
-    <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
-  </div>
-  <div id="timer-wrap">
-    <div>
-      <div class="timer-label">Time Left</div>
-      <div id="timer">2:00:00</div>
-    </div>
-  </div>
-  <button id="btn-stop" onclick="stopExam()">⏹ Stop Exam</button>
-  <button id="btn-submit" onclick="handleSubmit()">Submit Exam</button>
-</header>
-
-<!-- EXAM BODY -->
-<main id="exam-body"></main>
-
-<!-- RESULTS SCREEN -->
-<div id="results-screen"></div>
-
-<!-- TIME UP OVERLAY -->
-<div id="timeup-overlay">
-  <div class="timeup-box">
-    <h2>⏰ Time's Up</h2>
-    <p>Your 2-hour examination period has ended. Your answers have been automatically submitted for marking.</p>
-    <button class="btn-secondary" onclick="forceSubmit()">View Results</button>
-  </div>
-</div>
-
-<!-- SCROLL TO TOP -->
-<div id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</div>
-
 
 <script>
-/* ══════════════════════════════════════════════════════════
-   QUESTION BANK — All 120 Questions + Answers + Explanations
-   ══════════════════════════════════════════════════════════ */
+// ── State ──
+let config = { domain:'All Domains', count:10, level:'Mixed', style:'Mixed', nepal:'Yes' };
+let questions = [];
+let answers = {};
 
-const QUESTIONS = [
-  /* Q1 */ {
-    id:1, domain:'Cardiology',
-    text:'Pulsus bisferiens (double-peaked systolic pulse) is seen in all of the following conditions EXCEPT:',
-    opts:["Aortic regurgitation alone", "Combined aortic stenosis and aortic regurgitation", "Hypertrophic obstructive cardiomyopathy (HOCM)", "Tetralogy of Fallot"],
-    ans:3,
-    exp:'Pulsus bisferiens requires a high stroke volume and wide pulse pressure — seen in AR, combined AS+AR, and HOCM (dynamic obstruction). In Tetralogy of Fallot, reduced pulmonary blood flow and right-to-left shunting produces a normal or diminished single-peak pulse, not bisferiens.',
-    cogLevel:'Recall',
-    src:'Mudit Khanna — Cardiology: Arterial Pulses; AIMS May 93, PGT Dec 05'
-  },
-  /* Q2 */ {
-    id:2, domain:'Cardiology',
-    text:'First heart sound (S1) is SOFT in all of the following conditions EXCEPT:',
-    opts:["Mitral regurgitation", "First-degree heart block (long PR interval)", "Short PR interval", "Severe calcific mitral stenosis"],
-    ans:2,
-    exp:'A short PR interval means systole begins while the mitral valve is still wide open — it then closes from a maximum-open position producing a LOUD (not soft) S1. Soft S1 is caused by: long PR interval (valve partially closed before systole), MR (poor leaflet coaptation), obesity, and heavily calcified MS (restricted leaflet excursion).',
-    cogLevel:'Recall',
-    src:'Mudit Khanna — Cardiology: First Heart Sound; AIIMS Dec 95'
-  },
-  /* Q3 */ {
-    id:3, domain:'Cardiology',
-    text:'Loud S1 in mitral stenosis is caused by:',
-    opts:["Calcification and immobility of the valve leaflets", "Prolonged anterograde flow across the mitral valve", "Mobile leaflets held in a wide-open position by elevated left atrial pressure, closing rapidly at onset of systole", "Shortened PR interval from reflex sinus tachycardia"],
-    ans:2,
-    exp:'In non-calcified MS, high left atrial pressure keeps leaflets in a widely bowed, open position throughout diastole. When LV systole begins they snap shut from a wide-open position — producing a loud S1. This requires mobile, non-calcified leaflets. Once calcified, S1 becomes soft.',
-    cogLevel:'Application',
-    src:'Mudit Khanna — Cardiology: Loud S1 in MS; PGI June 99'
-  },
-  /* Q4 */ {
-    id:4, domain:'Cardiology',
-    text:'The opening snap (OS) of mitral stenosis is CLOSEST to S2 (shortest S2–OS interval) when:',
-    opts:["Mitral stenosis is mild with low left atrial pressure", "The valve is heavily calcified and immobile", "Left atrial pressure is high — indicating severe mitral stenosis", "Patient is in sinus rhythm rather than atrial fibrillation"],
-    ans:2,
-    exp:'The S2–OS interval is inversely proportional to left atrial pressure. A high LA pressure (severe MS) rapidly overcomes the closed mitral valve in early diastole, producing an OS very close to S2 (<70 ms = severe). A long S2–OS interval (>100 ms) indicates mild MS with low LA pressure.',
-    cogLevel:'Application',
-    src:'Mudit Khanna — Cardiology: Opening Snap; AIIMS Nov 02'
-  },
-  /* Q5 */ {
-    id:5, domain:'Cardiology',
-    text:'Fixed splitting of the second heart sound (S2) — unchanged during both inspiration and expiration — is the hallmark of:',
-    opts:["Pulmonary stenosis", "Left bundle branch block (LBBB)", "Atrial septal defect (ASD)", "Ventricular septal defect (VSD)"],
-    ans:2,
-    exp:'In ASD, the left-to-right shunt equalises ventricular stroke volumes regardless of respiratory phase — so both P2 and A2 closure remain constantly separated (fixed). Pulmonary stenosis causes wide but variable (not fixed) splitting. LBBB causes reversed splitting.',
-    cogLevel:'Recall',
-    src:'Mudit Khanna — Cardiology: Second Heart Sound; AIIMS May 93'
-  },
-  /* Q6 */ {
-    id:6, domain:'Cardiology',
-    text:'Carey Coombs murmur is heard in:',
-    opts:["Chronic mitral stenosis", "Austin Flint murmur of aortic regurgitation", "Acute rheumatic carditis (active mitral valvulitis)", "Mitral valve prolapse"],
-    ans:2,
-    exp:'The Carey Coombs murmur is a soft, low-pitched mid-diastolic murmur at the apex during active rheumatic fever — caused by turbulent flow across an acutely inflamed (not yet stenotic) mitral valve. It is transient, disappearing as inflammation subsides, unlike the permanent murmur of established MS.',
-    cogLevel:'Recall',
-    src:'Mudit Khanna — Cardiology: Cardiac Murmurs / Rheumatic Fever; PGI Dec 97'
-  },
-  /* Q7 */ {
-    id:7, domain:'Cardiology',
-    text:'Midsystolic click is a characteristic finding of:',
-    opts:["Aortic stenosis", "Pulmonary arterial hypertension", "Mitral valve prolapse (MVP)", "Hypertrophic obstructive cardiomyopathy (HOCM)"],
-    ans:2,
-    exp:'The midsystolic click of MVP is produced when elongated chordae tendineae abruptly halt the prolapsing mitral leaflets. It is often followed by a late systolic murmur. The click moves earlier with reduced preload (standing, Valsalva) and later with increased preload (squatting). HOCM causes a systolic ejection murmur, not a click.',
-    cogLevel:'Recall',
-    src:'Mudit Khanna — Cardiology: Midsystolic Click; AIIMS Nov 02'
-  },
-  /* Q8 */ {
-    id:8, domain:'Cardiology',
-    text:'Water hammer (Corrigan\'s) pulse is characteristically seen in:',
-    opts:["Aortic stenosis", "Cardiac tamponade", "Aortic regurgitation", "Mitral stenosis"],
-    ans:2,
-    exp:'Water hammer pulse — forceful systolic upstroke with rapid diastolic collapse producing a bounding peripheral pulse — is the hallmark of significant aortic regurgitation. Wide pulse pressure from large stroke volume + rapid diastolic runoff causes the characteristic quality. AS produces the opposite: slow-rising plateau pulse (pulsus parvus et tardus).',
-    cogLevel:'Recall',
-    src:'Mudit Khanna — Cardiology: Miscellaneous Pulses; AIIMS May 07'
-  },
-  /* Q9 */ {
-    id:9, domain:'Cardiology',
-    text:'Giant \'a\' waves in the JVP occur in all of the following EXCEPT:',
-    opts:["Pulmonary hypertension", "Pulmonary stenosis", "Tricuspid regurgitation", "Tricuspid stenosis"],
-    ans:2,
-    exp:'Giant \'a\' waves result from forceful right atrial contraction against increased resistance — pulmonary hypertension, pulmonary stenosis, and tricuspid stenosis all cause this. In tricuspid REGURGITATION, the right atrium fills passively from the regurgitant jet during systole — the hallmark is giant \'v\' waves (systolic venous pulsation), NOT giant \'a\' waves.',
-    cogLevel:'Recall',
-    src:'Mudit Khanna — Cardiology: JVP; AI 2002'
-  },
-  /* Q10 */ {
-    id:10, domain:'Cardiology',
-    text:'The typical JVP finding in cardiac tamponade is:',
-    opts:["Prominent 'a' wave with steep 'x' descent", "Absent 'y' descent", "Giant 'v' waves", "Cannon 'a' waves"],
-    ans:1,
-    exp:'In cardiac tamponade, elevated intrapericardial pressure prevents right atrial emptying into the RV during diastole. The \'y\' descent (representing tricuspid opening and rapid RV filling) is blunted or absent. The \'x\' descent is preserved. Absent \'y\' descent is the hallmark — contrast with constrictive pericarditis where BOTH x and y are prominent.',
-    cogLevel:'Recall',
-    src:'Mudit Khanna — Cardiology: JVP Tamponade; PGI June 2000'
-  },
-  /* Q11 */ {
-    id:11, domain:'Cardiology',
-    text:'The \'C\' wave in the jugular venous pulse is caused by:',
-    opts:["Atrial contraction", "Bulging of the tricuspid valve backward into the right atrium during isovolumetric contraction", "Right atrial filling from the venae cavae", "Rapid ventricular filling after tricuspid valve opening"],
-    ans:1,
-    exp:'The \'c\' wave occurs early in ventricular systole when the tricuspid valve cusps bulge into the right atrium due to the rise in RV pressure during isovolumetric contraction. The \'a\' wave = atrial contraction; \'x\' descent = atrial relaxation; \'v\' wave = venous filling of RA against closed tricuspid; \'y\' descent = rapid RV filling after tricuspid opens.',
-    cogLevel:'Recall',
-    src:'Mudit Khanna — Cardiology: JVP; AI 2009, AIIMS Nov 07'
-  },
-  /* Q12 */ {
-    id:12, domain:'Cardiology',
-    text:'In HOCM, the systolic murmur INCREASES in intensity with which of the following manoeuvres?',
-    opts:["Squatting (increasing preload)", "Passive leg raise", "Valsalva manoeuvre (strain phase — decreasing preload)", "Isometric handgrip (increasing afterload)"],
-    ans:2,
-    exp:'HOCM murmur worsens when LV cavity is smaller. Valsalva strain reduces venous return → smaller LV → hypertrophied septum and anterior mitral leaflet approach closer → worsened outflow obstruction → louder murmur. Squatting, leg raise, and handgrip all INCREASE preload/afterload → REDUCE obstruction → softer murmur.',
-    cogLevel:'Application',
-    src:'Mudit Khanna — Cardiology: HOCM Murmur; AI 04'
-  },
-  /* Q13 */ {
-    id:13, domain:'Cardiology',
-    text:'Reverse splitting of the second heart sound (S2) is seen in all of the following EXCEPT:',
-    opts:["Left bundle branch block (LBBB)", "WPW Type A", "LV pacing", "Pulmonary stenosis"],
-    ans:3,
-    exp:'Reverse (paradoxical) splitting = A2 comes AFTER P2, caused by delayed aortic valve closure. Causes: LBBB (delayed LV depolarisation), WPW Type A (accessory pathway pre-excitation), LV pacing, systemic hypertension. Pulmonary stenosis delays P2 → causes WIDE NORMAL splitting (P2 after A2 on inspiration), NOT reverse splitting.',
-    cogLevel:'Recall',
-    src:'Mudit Khanna — Cardiology: Reverse Splitting S2; PGI Dec 05'
-  },
-  /* Q14 */ {
-    id:14, domain:'Cardiology',
-    text:'S4 (fourth heart sound) is characteristically ABSENT in:',
-    opts:["Hypertrophic cardiomyopathy", "Hypertension", "Acute myocardial infarction", "Atrial fibrillation"],
-    ans:3,
-    exp:'S4 (pre-systolic gallop) is generated by forceful atrial contraction against a stiff, non-compliant ventricle. It requires effective atrial contraction. In atrial fibrillation there is no organised atrial contraction — S4 therefore CANNOT occur in AF. It is found in HOCM, hypertension, acute MI, and any condition with impaired ventricular compliance.',
-    cogLevel:'Recall',
-    src:'Mudit Khanna — Cardiology: S4; AIIMS May 94'
-  },
-  /* Q15 */ {
-    id:15, domain:'Cardiology',
-    text:'Pulsus paradoxus is seen in all of the following conditions EXCEPT:',
-    opts:["Cardiac tamponade", "Severe bronchial asthma", "Constrictive pericarditis", "Severe chronic obstructive pulmonary disease"],
-    ans:2,
-    exp:'Pulsus paradoxus (>10 mmHg drop in systolic BP during inspiration) occurs in tamponade, severe asthma/COPD, and tension pneumothorax. In constrictive pericarditis, the rigid pericardial shell creates a fixed total cardiac volume — the normal inspiratory right-left ventricular interaction is abolished, so pulsus paradoxus is characteristically ABSENT in constrictive pericarditis.',
-    cogLevel:'Recall',
-    src:'Mudit Khanna — Cardiology: Pulsus Paradoxus; PGI June 05'
-  },
-  /* Q16 */ {
-    id:16, domain:'Cardiology',
-    text:'Wide pulse pressure is seen in all of the following EXCEPT:',
-    opts:["Aortic regurgitation", "Patent ductus arteriosus (PDA)", "Aortic stenosis", "Arteriovenous (AV) malformation"],
-    ans:2,
-    exp:'Wide pulse pressure occurs with high stroke volume or rapid diastolic runoff: AR (massive regurgitation), PDA (aorto-pulmonary shunt), AV malformation (rapid runoff), thyrotoxicosis, anaemia, fever. Aortic stenosis produces NARROW pulse pressure — reduced stroke volume and slow ejection produce pulsus parvus et tardus.',
-    cogLevel:'Recall',
-    src:'Mudit Khanna — Cardiology: Pulse Pressure; AL 1991'
-  },
-  /* Q17 */ {
-    id:17, domain:'Cardiology',
-    text:'Epsilon wave on 12-lead ECG is specifically associated with:',
-    opts:["Brugada syndrome", "Arrhythmogenic right ventricular dysplasia (ARVD)", "Ashman phenomenon in atrial fibrillation", "Long QT syndrome"],
-    ans:1,
-    exp:'The epsilon wave is a small positive deflection at the end of the QRS in V1–V3, representing delayed depolarisation of fibrofatty regions replacing RV myocardium — the pathological hallmark of ARVD. Present in ~30% of ARVD patients; it is a major diagnostic criterion. Brugada shows coved ST elevation in V1–V2, not epsilon waves.',
-    cogLevel:'Recall',
-    src:'Mudit Khanna — Cardiology: ECG; NBE'
-  },
-  /* Q18 */ {
-    id:18, domain:'Pulmonology',
-    text:'Arterial blood gas (ABG) analysis: pH 7.2, PaCO₂ 80 mmHg, PaO₂ 46 mmHg, HCO₃ 34 mmol/L. The MOST likely clinical diagnosis is:',
-    opts:["Acute severe asthma in a previously healthy patient", "Acute exacerbation of COPD (Type II respiratory failure)", "ARDS from community-acquired pneumonia", "Primary metabolic alkalosis"],
-    ans:1,
-    exp:'The combination of low pH (acidosis), very high PaCO₂ (CO₂ retention = respiratory cause), and elevated HCO₃ (compensatory metabolic alkalosis indicating chronicity) defines acute-on-chronic Type II respiratory failure — the ABG of COPD exacerbation. The pre-existing metabolic compensation (HCO₃ 34) distinguishes COPD from acute-onset Type II respiratory failure where HCO₃ would still be near-normal.',
-    cogLevel:'Application',
-    src:'Mudit Khanna — Pulmonology: ABG; AIIMS Nov 2000'
-  },
-  /* Q19 */ {
-    id:19, domain:'Pulmonology',
-    text:'Multidrug-resistant tuberculosis (MDR-TB) is specifically defined as resistance to:',
-    opts:["Isoniazid (INH) and pyrazinamide only", "Isoniazid (INH) AND rifampicin (the two most potent first-line drugs)", "Rifampicin and pyrazinamide", "All four first-line drugs"],
-    ans:1,
-    exp:'MDR-TB = TB resistant to at least INH AND rifampicin — the two most bactericidal first-line agents. XDR-TB additionally requires resistance to any fluoroquinolone plus at least one injectable second-line agent (bedaquiline or linezolid under WHO 2021 definition). Resistance to pyrazinamide or ethambutol alone does not constitute MDR-TB.',
-    cogLevel:'Recall',
-    src:'Mudit Khanna — Pulmonology/ID: MDR-TB Definition'
-  },
-  /* Q20 */ {
-    id:20, domain:'Pulmonology',
-    text:'Bilateral hilar lymphadenopathy with non-caseating epithelioid granulomas on biopsy is most characteristic of:',
-    opts:["Pulmonary tuberculosis", "Sarcoidosis", "Systemic lupus erythematosus", "Silicosis"],
-    ans:1,
-    exp:'Sarcoidosis is a systemic granulomatous disease of unknown aetiology characterised by NON-CASEATING granulomas. Bilateral hilar lymphadenopathy (BHL) is the most common CXR finding. Unlike TB (caseating granulomas), sarcoid granulomas are non-caseating and Kveim–Siltzbach test is positive. Mantoux test is often negative (cutaneous anergy).',
-    cogLevel:'Recall',
-    src:'Mudit Khanna — Pulmonology: Sarcoidosis; AI 1997'
-  },
-  /* Q21 */ {
-    id:21, domain:'Pulmonology',
-    text:'Type I (hypoxaemic) respiratory failure is characterised by all of the following EXCEPT:',
-    opts:["PaO₂ < 60 mmHg", "Normal or LOW PaCO₂ (due to compensatory hyperventilation)", "Widened alveolar–arterial (A–a) O₂ gradient", "Elevated PaCO₂ (hypercapnia)"],
-    ans:3,
-    exp:'Type I respiratory failure = PaO₂ <60 mmHg with NORMAL or LOW PaCO₂. Hypoxia triggers hyperventilation, driving PaCO₂ down. The widened A–a gradient reflects V/Q mismatch or diffusion defect. Elevated PaCO₂ (hypercapnia) defines Type II (ventilatory failure) — NOT Type I. In pure Type I, alveolar ventilation is normal or increased.',
-    cogLevel:'Recall',
-    src:'Mudit Khanna — Pulmonology: Respiratory Failure; AI 1996, 2001'
-  },
-  /* Q22 */ {
-    id:22, domain:'Pulmonology',
-    text:'Berlin 2012 criteria classify ARDS severity based on PaO₂/FiO₂ ratio. A patient with bilateral infiltrates and PaO₂/FiO₂ = 180 mmHg on PEEP ≥5 cmH₂O has:',
-    opts:["Mild ARDS (P/F 201–300)", "Moderate ARDS (P/F 101–200)", "Severe ARDS (P/F ≤100)", "Not ARDS — PCWP must be checked first"],
-    ans:1,
-    exp:'Berlin 2012: Mild = P/F 201–300 (with PEEP ≥5), Moderate = P/F 101–200, Severe = P/F ≤100. P/F 180 falls in moderate ARDS (101–200). Berlin 2012 removed the PCWP criterion from the old AECC definition and replaced it with clinical exclusion of hydrostatic oedema — making option D incorrect.',
-    cogLevel:'Application',
-    src:'Mudit Khanna — Pulmonology: ARDS Berlin Criteria; AI 2012'
-  },
-  /* Q23 */ {
-    id:23, domain:'Pulmonology',
-    text:'FEV₁/FVC ratio is REDUCED in all of the following conditions EXCEPT:',
-    opts:["Bronchial asthma", "Chronic obstructive pulmonary disease (COPD)", "Pulmonary fibrosis (interstitial lung disease)", "Emphysema"],
-    ans:2,
-    exp:'FEV₁/FVC is reduced in OBSTRUCTIVE patterns (asthma, COPD, emphysema, bronchiectasis) — airflow is limited. In RESTRICTIVE lung disease (pulmonary fibrosis, ILD, kyphoscoliosis, pleural effusion), BOTH FEV₁ and FVC fall proportionally, so FEV₁/FVC ratio is NORMAL or INCREASED. Fibrosis = restrictive pattern = normal or high ratio.',
-    cogLevel:'Recall',
-    src:'Mudit Khanna — Pulmonology: PFT; AIIMS May 95, PGI 09'
-  },
-  /* Q24 */ {
-    id:24, domain:'Pulmonology',
-    text:'Silent chest in acute severe bronchial asthma signifies:',
-    opts:["Good prognosis — airways are open", "Bad prognosis — indicates improving bronchospasm", "Grave prognosis — absent air entry means near-complete obstruction with respiratory fatigue", "Not a prognostic sign"],
-    ans:2,
-    exp:'Silent chest in acute asthma means virtually no air movement — airways are so severely obstructed that even wheezing (which requires some turbulent airflow) cannot be generated. This is a pre-arrest finding indicating impending respiratory failure. It demands immediate escalation to ICU and mechanical ventilation consideration. It is NOT reassuring.',
-    cogLevel:'Application',
-    src:'Mudit Khanna — Pulmonology: Asthma Severity; NBE'
-  },
-  /* Q25 */ {
-    id:25, domain:'Pulmonology',
-    text:'Normal pulmonary capillary wedge pressure (PCWP) with pulmonary oedema is most consistent with:',
-    opts:["Left ventricular systolic dysfunction", "Mitral stenosis", "High-altitude pulmonary oedema (HAPE)", "Left atrial myxoma"],
-    ans:2,
-    exp:'HAPE is non-cardiogenic permeability pulmonary oedema — increased capillary permeability at altitude drives fluid extravasation WITHOUT elevated hydrostatic pressure (normal PCWP). Causes of normal-PCWP pulmonary oedema: HAPE, ARDS, neurogenic oedema, re-expansion oedema, narcotic overdose. LV dysfunction, MS, and LA myxoma all cause hydrostatic (elevated PCWP) oedema.',
-    cogLevel:'Application',
-    src:'Mudit Khanna — Pulmonology: PCWP / Pulmonary Oedema; AIIMS June 98'
-  },
-  /* Q26 */ {
-    id:26, domain:'Pulmonology',
-    text:'Aspirin-sensitive asthma (Samter\'s triad) is associated with:',
-    opts:["Obesity", "Urticaria with food allergy", "Nasal polyps", "Extrinsic (allergic, IgE-mediated) asthma"],
-    ans:2,
-    exp:'Samter\'s triad (aspirin-exacerbated respiratory disease): (1) asthma, (2) aspirin/NSAID sensitivity, and (3) nasal polyps with sinusitis. It is an intrinsic (non-allergic, non-IgE-mediated) form of asthma caused by abnormal arachidonic acid metabolism — aspirin inhibits COX-1, shunting towards lipoxygenase pathway → excess cysteinyl leukotrienes → bronchoconstriction and nasal polyposis.',
-    cogLevel:'Recall',
-    src:'Mudit Khanna — Pulmonology: Aspirin-sensitive Asthma; AI 1995'
-  },
-  /* Q27 */ {
-    id:27, domain:'Pulmonology',
-    text:'In emphysema, all of the following are seen on pulmonary function tests EXCEPT:',
-    opts:["Decreased FEV₁", "Decreased FEV₁/FVC ratio", "Increased total lung capacity (TLC) and residual volume (RV)", "Increased diffusion capacity for carbon monoxide (DLCO)"],
-    ans:3,
-    exp:'Emphysema destroys alveolar walls and capillary beds — DLCO is markedly DECREASED (fewer gas exchange units). FEV₁ is low (obstruction), FEV₁/FVC is low (obstructive), TLC and RV are increased (air trapping and hyperinflation). Chronic bronchitis has normal or only modestly reduced DLCO — it is emphysema that most severely reduces DLCO.',
-    cogLevel:'Application',
-    src:'Mudit Khanna — Pulmonology: Emphysema PFT; PGI Dec 01'
-  },
-  /* Q28 */ {
-    id:28, domain:'Pulmonology',
-    text:'Lung-protective ventilation for ARDS (ARDSNet protocol) uses:',
-    opts:["Tidal volume 10–12 mL/kg IBW and high FiO₂", "High-frequency oscillatory ventilation (HFOV) as first-line choice", "Tidal volume 6 mL/kg IBW + PEEP titration, plateau pressure target <30 cmH₂O", "Spontaneous breathing trial on day 1 without sedation"],
-    ans:2,
-    exp:'The ARMA trial (NEJM 2000) proved low-tidal-volume ventilation (6 mL/kg IBW vs 12 mL/kg) reduces ARDS mortality by 22% by preventing volutrauma and barotrauma. Additional interventions: prone positioning >16 h/day (PROSEVA trial), conservative fluid strategy, PEEP >5 cmH₂O. HFOV (B) was shown to cause HARM in the OSCILLATE trial — not recommended as first-line.',
-    cogLevel:'Application',
-    src:'Mudit Khanna — Pulmonology: ARDS Ventilation; AIIMS May 95'
-  },
-  /* Q29 */ {
-    id:29, domain:'Pulmonology',
-    text:'Treatment of choice for symptomatic pulmonary sarcoidosis (Stage II–III with parenchymal infiltrates and dyspnoea) is:',
-    opts:["Methotrexate", "Oral prednisolone (0.5 mg/kg/day tapered over 6–24 months)", "IV cyclophosphamide", "IV immunoglobulins (IVIG)"],
-    ans:1,
-    exp:'Oral prednisolone is first-line for symptomatic pulmonary sarcoidosis, ocular involvement, hypercalcaemia, cardiac, and neurological sarcoid. Stage I (BHL alone, asymptomatic) often remits spontaneously without treatment. Methotrexate and azathioprine are steroid-sparing agents for refractory or steroid-intolerant disease.',
-    cogLevel:'Application',
-    src:'Mudit Khanna — Pulmonology: Sarcoidosis Treatment'
-  },
-  /* Q30 */ {
-    id:30, domain:'Pulmonology',
-    text:'Eggshell (peripheral rim) calcification of hilar lymph nodes on chest X-ray is pathognomonic of:',
-    opts:["Pulmonary tuberculosis", "Silicosis", "Sarcoidosis", "Histoplasmosis"],
-    ans:1,
-    exp:'Eggshell calcification — peripheral rim calcification of hilar and mediastinal lymph nodes — is the pathognomonic CXR finding of silicosis. It results from silica-induced fibrosis and dystrophic calcification at the periphery of lymph nodes. Silicosis also shows upper-lobe nodular opacities and progressive massive fibrosis (PMF). TB causes calcification but produces \'popcorn\' pattern, not eggshell.',
-    cogLevel:'Recall',
-    src:'Nepal DM Guide / Mudit Khanna — Pulmonology: Silicosis CXR'
-  },
-  /* Q31 */ {
-    id:31, domain:'Infectious Disease',
-    text:'Septic shock by Sepsis-3 (2016) definition requires:',
-    opts:["SIRS criteria (temp >38°C + HR >90 + RR >20 + WBC >12,000) plus a confirmed infection source", "Sepsis + systolic BP <90 mmHg not responding to 1 L fluid", "Sepsis + vasopressors required to maintain MAP ≥65 mmHg PLUS serum lactate >2 mmol/L despite adequate fluid resuscitation", "Sepsis + creatinine >2 mg/dL indicating organ failure"],
-    ans:2,
-    exp:'Sepsis-3 operational definition of septic shock: sepsis with BOTH (1) vasopressors required to maintain MAP ≥65 mmHg despite adequate resuscitation, AND (2) serum lactate >2 mmol/L. The lactate criterion identifies tissue hypoperfusion beyond simple hypotension. SIRS criteria were deliberately removed from Sepsis-3 as too non-specific.',
-    cogLevel:'Recall',
-    src:'Mudit Khanna / Nepal DM Guide — ID: Sepsis-3 Definition'
-  },
-  /* Q32 */ {
-    id:32, domain:'Infectious Disease',
-    text:'Empirical antibiotic regimen for severe community-acquired pneumonia (CAP) requiring ICU admission (IDSA/ATS 2019) is:',
-    opts:["Oral amoxicillin 500 mg TDS alone", "IV ceftriaxone alone", "IV beta-lactam (ceftriaxone) PLUS a macrolide (azithromycin) OR respiratory fluoroquinolone (levofloxacin) monotherapy", "Antifungals empirically"],
-    ans:2,
-    exp:'Severe CAP (CURB-65 ≥3 or ICU admission) requires combined coverage for typical organisms (S. pneumoniae, H. influenzae) AND atypical pathogens (Legionella, Mycoplasma — 20% of severe CAP). Treatment: IV beta-lactam + macrolide, or respiratory fluoroquinolone monotherapy. Amoxicillin alone covers only typical organisms — inadequate for severe CAP.',
-    cogLevel:'Application',
-    src:'Mudit Khanna / IDSA 2019 — ID: Severe CAP Treatment'
-  },
-  /* Q33 */ {
-    id:33, domain:'Infectious Disease',
-    text:'Typhoid intestinal perforation occurs most commonly in the:',
-    opts:["Sigmoid colon (Peyer patch–rich area)", "Terminal ileum (Peyer patches on the antimesenteric wall)", "Caecum", "Jejunum"],
-    ans:1,
-    exp:'Salmonella typhi invades and proliferates in the lymphoid Peyer patches of the TERMINAL ILEUM. Ulceration occurs in the antimesenteric wall during the 2nd–3rd week of illness, causing perforation. Associated leucopenia (paradoxically low WBC in a severe infection) distinguishes typhoid perforation from other causes of acute abdomen (which cause leucocytosis).',
-    cogLevel:'Recall',
-    src:'Nepal DM Guide / Mudit Khanna — ID: Typhoid Complications'
-  },
-  /* Q34 */ {
-    id:34, domain:'Infectious Disease',
-    text:'Relative bradycardia (Faget\'s sign) in a febrile patient is defined as:',
-    opts:["Heart rate >100 bpm despite a normal temperature", "Heart rate failing to increase proportionally with fever — pulse does not rise ~10 bpm per 1°C elevation", "Sinus arrhythmia exacerbated by fever", "Fixed heart rate of <60 bpm regardless of temperature"],
-    ans:1,
-    exp:'Faget\'s sign (pulse-temperature dissociation): the heart rate fails to rise ~10 bpm per 1°C fever rise, producing relative bradycardia. In typhoid, endotoxin directly depresses the SA node. Other causes: Legionella, yellow fever, brucellosis, leptospirosis, drug fever. In most bacterial infections fever drives the expected tachycardia — relative bradycardia points to a specific aetiology.',
-    cogLevel:'Recall',
-    src:'Mudit Khanna — ID: Typhoid Fever / Faget\'s Sign'
-  },
-  /* Q35 */ {
-    id:35, domain:'Infectious Disease',
-    text:'The rK39 immunochromatographic strip test in Nepal is used for the diagnosis of:',
-    opts:["Scrub typhus", "Leptospirosis", "Visceral leishmaniasis (kala-azar)", "Falciparum malaria"],
-    ans:2,
-    exp:'The rK39 antigen strip test detects IgG antibodies against Leishmania donovani — sensitivity ~95%, specificity ~98% in South Asia. Kala-azar is endemic in Nepal\'s Terai districts, and rK39 is recommended by Nepal\'s national programme as the point-of-care test. Diagnosis should be confirmed by splenic/bone marrow aspirate when rK39 is negative in suspected cases.',
-    cogLevel:'Recall',
-    src:'Nepal DM Guide — ID: Kala-azar Nepal, rK39 Test'
-  },
-  /* Q36 */ {
-    id:36, domain:'Infectious Disease',
-    text:'The Widal test for typhoid diagnosis: the MOST important limitation in the Nepalese context is:',
-    opts:["It requires 10 mL blood and takes 4 weeks for results", "False-positive results are very common in endemic areas due to cross-reactive antibodies from prior exposure or TAB vaccination", "It only detects O-antigen and misses H-antigen", "It cannot be performed on whole blood in field settings"],
-    ans:1,
-    exp:'In typhoid-endemic areas like Nepal, baseline anti-O and anti-H titres are elevated from prior subclinical infection or vaccination, causing false-positive Widal tests. A single titre has poor positive predictive value; a four-fold rise in paired sera is more meaningful. Blood culture (1st week of fever, 3 sets, Castaneda medium) remains the gold standard (~60–80% sensitivity).',
-    cogLevel:'Application',
-    src:'Nepal DM Guide — ID: Typhoid Widal Test Limitations'
-  },
-  /* Q37 */ {
-    id:37, domain:'Infectious Disease',
-    text:'The antibiotic of choice for uncomplicated typhoid fever in Nepal, where fluoroquinolone resistance (H58 genotype) is increasing, is:',
-    opts:["Ciprofloxacin 500 mg BD × 10 days", "Chloramphenicol 500 mg QID", "Azithromycin (oral, uncomplicated) OR IV ceftriaxone (complicated/resistant typhoid)", "Co-trimoxazole alone"],
-    ans:2,
-    exp:'Fluoroquinolone-resistant S. typhi (H58/4.3.1 haplotype) is now dominant in Nepal, India, and Pakistan — resistance >50% in some regions. WHO and Nepal guidelines recommend azithromycin (20 mg/kg/day × 7 days) for uncomplicated typhoid; IV ceftriaxone (60 mg/kg/day × 10–14 days) for complicated or fluoroquinolone-resistant cases. Ciprofloxacin risks treatment failure empirically.',
-    cogLevel:'Application',
-    src:'Nepal DM Guide / WHO Guidelines — ID: Typhoid Nepal 2019'
-  },
-  /* Q38 */ {
-    id:38, domain:'Infectious Disease',
-    text:'Criteria for SEVERE malaria (P. falciparum requiring parenteral treatment) include all of the following EXCEPT:',
-    opts:["Cerebral malaria (unarousable coma, Blantyre score ≤2)", "Hyperparasitaemia (parasitaemia >5% RBCs)", "Single episode of vomiting preventing oral therapy", "Acute kidney injury (creatinine >265 µmol/L)"],
-    ans:2,
-    exp:'WHO criteria for severe falciparum malaria include: cerebral malaria, severe anaemia (Hb <7 g/dL), respiratory distress, circulatory collapse, renal failure, hyperparasitaemia (>5%), hypoglycaemia, jaundice, haemoglobinuria, and bleeding. A single episode of vomiting alone does NOT meet criteria for severe malaria — recurrent vomiting preventing oral treatment is a criterion for parenteral therapy in uncomplicated malaria, but not \'severe malaria\'.',
-    cogLevel:'Analysis',
-    src:'Mudit Khanna / WHO Guidelines — ID: Severe Malaria Criteria'
-  },
-  /* Q39 */ {
-    id:39, domain:'Infectious Disease',
-    text:'Drug of choice for uncomplicated P. falciparum malaria in Nepal (artemisinin-based combination therapy) is:',
-    opts:["Chloroquine + primaquine (3 days)", "Artesunate–amodiaquine (ASAQ)", "Artemether–lumefantrine (AL, Coartem)", "Quinine + doxycycline (7 days)"],
-    ans:2,
-    exp:'WHO recommends artemisinin-based combination therapy (ACT) for uncomplicated falciparum malaria. Nepal\'s national protocol uses artemether–lumefantrine (Coartem) as first-line ACT. Chloroquine is now largely ineffective for P. falciparum globally due to widespread resistance. Quinine + doxycycline is reserved for severe disease or ACT failure.',
-    cogLevel:'Application',
-    src:'Nepal DM Guide / WHO — ID: Falciparum Malaria Treatment Nepal'
-  },
-  /* Q40 */ {
-    id:40, domain:'Infectious Disease',
-    text:'Opportunistic infection most commonly seen as the AIDS-defining illness in HIV-infected patients with CD4 count <200 cells/µL is:',
-    opts:["Toxoplasma encephalitis", "Cryptococcal meningitis", "Pneumocystis jirovecii pneumonia (PCP)", "CMV retinitis"],
-    ans:2,
-    exp:'PCP (Pneumocystis jirovecii pneumonia) is the most common AIDS-defining opportunistic infection in patients with CD4 <200 cells/µL. Presents with progressive dyspnoea, dry cough, fever, and hypoxia — CXR shows bilateral \'ground glass\' or \'batwing\' perihilar infiltrates. Treatment: high-dose co-trimoxazole (TMP-SMX). Prophylaxis with TMP-SMX is started when CD4 drops below 200 cells/µL.',
-    cogLevel:'Recall',
-    src:'Mudit Khanna — ID: AIDS Opportunistic Infections'
-  },
-  /* Q41 */ {
-    id:41, domain:'Infectious Disease',
-    text:'The CURB-65 score in community-acquired pneumonia includes all of the following parameters EXCEPT:',
-    opts:["Confusion (new onset)", "Urea >7 mmol/L", "Respiratory rate ≥30/min", "Oxygen saturation <94%"],
-    ans:3,
-    exp:'CURB-65 = Confusion (new), Urea >7 mmol/L, Respiratory rate ≥30/min, Blood pressure (systolic <90 or diastolic ≤60 mmHg), Age ≥65. Each parameter scores 1 point (maximum 5). Oxygen saturation is NOT part of CURB-65 — it is included in the PSI/PORT score. Score ≥3 = severe CAP, consider ICU.',
-    cogLevel:'Recall',
-    src:'Mudit Khanna — ID/Pulmonology: CURB-65 Score'
-  },
-  /* Q42 */ {
-    id:42, domain:'Infectious Disease',
-    text:'Which CSF finding BEST distinguishes bacterial meningitis from viral (aseptic) meningitis?',
-    opts:["CSF pressure elevated (>200 mmH₂O)", "CSF glucose <45 mg/dL (CSF:serum glucose ratio <0.4) with neutrophilic pleocytosis >1000 cells/µL", "CSF protein elevated >100 mg/dL", "Opening pressure >300 mmH₂O"],
-    ans:1,
-    exp:'Bacterial meningitis: CSF shows neutrophilic pleocytosis (often >1000 cells/µL), markedly low glucose (<45 mg/dL or CSF:serum ratio <0.4 — bacteria consume glucose), very high protein (>100 mg/dL). Viral meningitis: lymphocytic pleocytosis (<500 cells/µL), normal or mildly low glucose, mildly elevated protein. Low CSF glucose with neutrophilic pleocytosis is the key discriminator for bacterial aetiology.',
-    cogLevel:'Application',
-    src:'Mudit Khanna — ID/Neurology: CSF Analysis, Bacterial vs Viral Meningitis'
-  },
-  /* Q43 */ {
-    id:43, domain:'Infectious Disease',
-    text:'Drug-induced lupus (DIL): the MOST specific laboratory marker to confirm DIL rather than idiopathic SLE is:',
-    opts:["Anti-double-stranded DNA (anti-dsDNA) antibodies", "Antihistone antibodies", "Anti-Smith (anti-Sm) antibodies", "Low complement C3/C4"],
-    ans:1,
-    exp:'Antihistone antibodies are present in >95% of DIL but only ~75% of idiopathic SLE. In DIL, anti-dsDNA and anti-Sm are characteristically ABSENT (these are specific for idiopathic SLE). Classic drugs causing DIL: INH, hydralazine, procainamide, penicillamine, sulphonamides, minocycline. DIL resolves on drug withdrawal — unlike idiopathic SLE.',
-    cogLevel:'Recall',
-    src:'Mudit Khanna — Rheumatology/ID: Drug-Induced Lupus; AI 2009'
-  },
-  /* Q44 */ {
-    id:44, domain:'Endocrinology',
-    text:'The MOST COMMON cause of Cushing\'s syndrome overall (including all causes) is:',
-    opts:["Pituitary adenoma (Cushing's disease)", "Adrenal adenoma", "Ectopic ACTH secretion (e.g., small cell lung carcinoma)", "Iatrogenic — exogenous corticosteroid administration"],
-    ans:3,
-    exp:'Iatrogenic Cushing\'s from exogenous glucocorticoid therapy is by far the most common cause of Cushing\'s syndrome in clinical practice. Of endogenous causes, pituitary adenoma (Cushing\'s disease) accounts for ~65–70%, adrenal adenoma ~15%, and ectopic ACTH ~15%. The question asks about ALL causes — iatrogenic is overwhelmingly most common globally.',
-    cogLevel:'Recall',
-    src:'Mudit Khanna — Endocrinology: Cushing\'s Syndrome; AI 1995'
-  },
-  /* Q45 */ {
-    id:45, domain:'Endocrinology',
-    text:'The differentiating feature between ectopic ACTH syndrome (e.g., small cell lung cancer) and Cushing\'s disease (pituitary adenoma) is:',
-    opts:["Degree of obesity", "Hypokalemic alkalosis — more severe in ectopic ACTH", "Hyperpigmentation", "Hypertension"],
-    ans:1,
-    exp:'Ectopic ACTH syndrome (e.g., from SCLC) produces extremely high ACTH and cortisol levels — much higher than pituitary-source Cushing\'s. The markedly elevated mineralocorticoid activity causes severe HYPOKALEMIC alkalosis (K+ often <3 mEq/L) — a characteristic feature. The Cushing phenotype may be absent in rapidly progressive ectopic ACTH. High-dose dexamethasone suppression also helps: suppresses Cushing\'s disease but NOT ectopic ACTH.',
-    cogLevel:'Analysis',
-    src:'Mudit Khanna — Endocrinology: Cushing\'s / Ectopic ACTH; AIIMS Dec 98'
-  },
-  /* Q46 */ {
-    id:46, domain:'Endocrinology',
-    text:'Conn\'s syndrome (primary hyperaldosteronism) is most commonly caused by:',
-    opts:["Adrenal cortical carcinoma", "Adrenal cortical adenoma", "Bilateral adrenal hyperplasia", "Pheochromocytoma"],
-    ans:1,
-    exp:'Primary hyperaldosteronism is the most common cause of secondary hypertension. Approximately 65% of cases are due to unilateral adrenal adenoma (Conn\'s adenoma), and ~35% due to bilateral adrenal hyperplasia (idiopathic hyperaldosteronism). Carcinoma is rare (<1%). The distinction is critical because adenoma is treated surgically (adrenalectomy) while hyperplasia is treated medically with mineralocorticoid receptor antagonists (spironolactone).',
-    cogLevel:'Recall',
-    src:'Mudit Khanna — Endocrinology: Conn\'s Syndrome; AI 2008'
-  },
-  /* Q47 */ {
-    id:47, domain:'Endocrinology',
-    text:'Primary hyperaldosteronism (Conn\'s syndrome) is characterised by all of the following EXCEPT:',
-    opts:["Hypertension (diastolic, without oedema)", "Hypokalaemia", "Increased plasma renin activity", "Metabolic alkalosis"],
-    ans:2,
-    exp:'In primary hyperaldosteronism, excess aldosterone causes Na+ retention (hypertension), K+ loss (hypokalaemia → alkalosis). Crucially, plasma renin is SUPPRESSED (not increased) — the high aldosterone directly suppresses renin via negative feedback. Low renin + high aldosterone (aldosterone:renin ratio >30) is the diagnostic screening test. High renin would suggest secondary hyperaldosteronism (renal artery stenosis, CHF).',
-    cogLevel:'Recall',
-    src:'Mudit Khanna — Endocrinology: Primary Hyperaldosteronism; AIIMS May 93'
-  },
-  /* Q48 */ {
-    id:48, domain:'Endocrinology',
-    text:'The GOLD STANDARD diagnostic test to confirm Addison\'s disease (primary adrenal insufficiency) is:',
-    opts:["Serum Na+ and K+ levels", "8 AM serum cortisol <3 µg/dL", "Short Synacthen (ACTH stimulation) test — cortisol fails to rise above 500 nmol/L at 30 minutes", "24-hour urinary free cortisol"],
-    ans:2,
-    exp:'The 250 µg short ACTH stimulation test (Synacthen test) is the gold standard — cortisol at 30 minutes should exceed 500 nmol/L (18 µg/dL) in normal individuals. Failure to achieve this confirms adrenal insufficiency. An 8 AM cortisol <3 µg/dL is diagnostic but <15 µg/dL needs confirmation. Both primary and secondary AI may fail the test, but elevated ACTH distinguishes primary from secondary.',
-    cogLevel:'Recall',
-    src:'Mudit Khanna — Endocrinology: Addison\'s Disease; PGI Dec 97'
-  },
-  /* Q49 */ {
-    id:49, domain:'Endocrinology',
-    text:'The MOST IMMEDIATE life-saving intervention in an acute Addisonian crisis is:',
-    opts:["IV fludrocortisone 0.2 mg immediately", "IV 0.9% normal saline infusion alone", "IV hydrocortisone 100 mg STAT bolus, then 50–100 mg every 6–8 hours PLUS large-volume IV 0.9% normal saline with dextrose", "IM ACTH stimulation test before starting any steroids"],
-    ans:2,
-    exp:'Acute adrenal crisis = medical emergency. IV hydrocortisone 100 mg bolus IMMEDIATELY — it provides glucocorticoid, mineralocorticoid, and vasopressor support simultaneously. Do NOT delay to perform ACTH stimulation in a haemodynamically compromised patient. Alongside hydrocortisone: large-volume IV 0.9% saline + dextrose corrects hypovolaemia and hypoglycaemia. High-dose hydrocortisone has sufficient mineralocorticoid activity — separate fludrocortisone not needed acutely.',
-    cogLevel:'Application',
-    src:'Mudit Khanna / Nepal DM Guide — Endocrinology: Addisonian Crisis'
-  },
-  /* Q50 */ {
-    id:50, domain:'Endocrinology',
-    text:'The Somogyi effect (posthypoglycaemic hyperglycaemia) in diabetes mellitus is best described as:',
-    opts:["Morning hyperglycaemia due to insufficient overnight basal insulin", "Morning hyperglycaemia following nocturnal hypoglycaemia — rebound from counter-regulatory hormones (glucagon, adrenaline, cortisol, GH)", "Morning hypoglycaemia followed by afternoon hyperglycaemia", "Stable glycaemia throughout the day from perfect insulin matching"],
-    ans:1,
-    exp:'Somogyi effect: excess insulin causes nocturnal hypoglycaemia → counter-regulatory hormone surge → rebound morning hyperglycaemia. Treatment: REDUCE evening insulin. Distinguished from Dawn phenomenon (GH surge in early morning hours causing hyperglycaemia WITHOUT preceding hypoglycaemia — treat by INCREASING insulin or adding basal analogue). Continuous glucose monitoring (CGM) helps distinguish the two.',
-    cogLevel:'Application',
-    src:'Mudit Khanna — Endocrinology: Diabetes / Somogyi; AI 2000'
-  },
-  /* Q51 */ {
-    id:51, domain:'Endocrinology',
-    text:'The Wolff-Chaikoff effect describes:',
-    opts:["Iodine-induced hyperthyroidism in a patient with pre-existing autonomous thyroid nodules", "Large doses of inorganic iodide transiently inhibiting thyroid hormone synthesis (organification block)", "Amiodarone-induced thyroid dysfunction", "Thyrotoxicosis from excessive exogenous levothyroxine"],
-    ans:1,
-    exp:'Wolff-Chaikoff effect: excess inorganic iodide transiently inhibits iodide organification and thyroid hormone synthesis. Exploited clinically: Lugol\'s iodine is given before thyroid surgery (reduces vascularity) and in thyroid storm (blocks acute hormone release). The effect is temporary — the thyroid \'escapes\' after 10–14 days. Jod-Basedow effect (A) is the OPPOSITE: iodine causes HYPERthyroidism in autonomous tissue.',
-    cogLevel:'Recall',
-    src:'Mudit Khanna — Endocrinology: Thyroid; AI 2004'
-  },
-  /* Q52 */ {
-    id:52, domain:'Endocrinology',
-    text:'Acromegaly: the GOLD STANDARD confirmatory diagnostic test is:',
-    opts:["Single random serum GH level >10 ng/mL", "IGF-1 (insulin-like growth factor-1) level alone", "Oral glucose tolerance test (OGTT, 75 g) — GH fails to suppress below 0.4 ng/mL", "24-hour integrated GH secretion profile"],
-    ans:2,
-    exp:'In acromegaly, pulsatile GH secretion from a somatotroph adenoma resists physiological suppression. During OGTT, blood glucose rises → normally suppresses GH to <0.4 ng/mL. In acromegaly, GH FAILS to suppress (often rises paradoxically). IGF-1 is the best SCREENING test (reflects 24-hour GH exposure, stable levels) but OGTT is the CONFIRMATORY (gold standard) test for diagnosis.',
-    cogLevel:'Recall',
-    src:'Mudit Khanna / Nepal DM Guide — Endocrinology: Acromegaly'
-  },
-  /* Q53 */ {
-    id:53, domain:'GI / Hepatology',
-    text:'Hepatic encephalopathy may be precipitated by all of the following EXCEPT:',
-    opts:["GI bleeding (protein substrate for ammonia generation)", "Constipation (increased colonic ammonia absorption)", "Hyperkalaemia", "Barbiturates and benzodiazepines"],
-    ans:2,
-    exp:'HE precipitants increase ammonia or CNS sensitivity: GI bleeding (blood=protein→ammonia), constipation (prolonged colon transit→ammonia absorption), HYPOkalaemia (stimulates renal tubular ammoniagensis), sedatives, infection/SBP, diuretic excess, metabolic alkalosis. HYPERkalaemia does NOT precipitate HE — it is hypokalaemia that does by stimulating renal ammoniagenesis.',
-    cogLevel:'Application',
-    src:'Mudit Khanna — Gastroenterology: HE Precipitants; AI 1999, PGI June 03'
-  },
-  /* Q54 */ {
-    id:54, domain:'GI / Hepatology',
-    text:'Spontaneous bacterial peritonitis (SBP) is diagnosed by ascitic fluid PMN count of:',
-    opts:["≥100 cells/mm³", "≥250 cells/mm³ (regardless of culture result)", "≥500 cells/mm³", "Only by positive bacterial culture"],
-    ans:1,
-    exp:'SBP is defined by ascitic PMN ≥250 cells/mm³ regardless of culture result. Culture-negative neutrocytic ascites (CNNA: PMN ≥250 + negative culture) is treated identically to culture-positive SBP because ascitic culture sensitivity is only ~40–50%. Treatment begins immediately on PMN result — never await culture results. Most common organisms: E. coli (~40%), Klebsiella, Streptococcus pneumoniae.',
-    cogLevel:'Recall',
-    src:'Mudit Khanna / Nepal DM Guide — Hepatology: SBP Diagnosis'
-  },
-  /* Q55 */ {
-    id:55, domain:'GI / Hepatology',
-    text:'Features of hepatorenal syndrome (HRS) in cirrhosis include all of the following EXCEPT:',
-    opts:["Urinary sodium <10 mEq/L", "Normal renal histology on biopsy", "Renal function improves after successful liver transplantation", "Renal function does NOT respond to IV fluid challenge or nephrotoxin withdrawal"],
-    ans:3,
-    exp:'HRS is a FUNCTIONAL renal failure — kidneys are structurally intact (normal histology). Features: oliguria, urinary Na <10 (avid sodium retention), urine osmolality > plasma, low proteinuria. Crucially, HRS IS REVERSIBLE — renal function IMPROVES after liver transplantation because the underlying hepatic failure driving splanchnic vasodilation is corrected. The failure to respond to IV fluids or nephrotoxin withdrawal (D) is correct — it helps distinguish HRS from pre-renal AKI.',
-    cogLevel:'Analysis',
-    src:'Mudit Khanna — Gastroenterology: HRS; AIIMS Nov 2004, AI 2003'
-  },
-  /* Q56 */ {
-    id:56, domain:'GI / Hepatology',
-    text:'The SAAG (serum-ascites albumin gradient) threshold that distinguishes portal hypertension from non-portal hypertension causes of ascites is:',
-    opts:["SAAG ≥0.5 g/dL", "SAAG ≥1.1 g/dL (portal hypertension — cirrhosis, CHF, Budd-Chiari)", "SAAG ≥1.5 g/dL", "SAAG ≥2.0 g/dL"],
-    ans:1,
-    exp:'SAAG = serum albumin − ascitic albumin. SAAG ≥1.1 g/dL: portal hypertension (cirrhosis, cardiac ascites, Budd-Chiari syndrome, hepatic metastases). SAAG <1.1 g/dL: non-portal hypertension causes (malignant ascites, TB peritonitis, pancreatitis, nephrotic syndrome). SAAG has replaced the old transudate/exudate classification for ascites (>97% accuracy for portal hypertension).',
-    cogLevel:'Recall',
-    src:'Mudit Khanna / Nepal DM Guide — Gastroenterology: SAAG'
-  },
-  /* Q57 */ {
-    id:57, domain:'GI / Hepatology',
-    text:'Autoimmune hepatitis (AIH): the characteristic histological finding on liver biopsy is:',
-    opts:["Non-caseating granulomata in portal tracts", "Macrovesicular steatosis with lobular inflammation (Mallory bodies)", "Interface hepatitis (piecemeal necrosis) with dense lymphoplasmacytic infiltrate and hepatic rosette formation", "Destruction of interlobular bile ducts with granulomas (florid duct lesion)"],
-    ans:2,
-    exp:'AIH hallmark: interface hepatitis (lymphoplasmacytic infiltration at the portal-lobule interface extending into periportal parenchyma), prominent plasma cells, and hepatic rosette formation. Non-caseating granulomata (A) are the hallmark of primary biliary cholangitis (PBC) and sarcoidosis. Florid duct lesion (D) is pathognomonic of PBC. Biopsy is mandatory for AIH diagnosis; serology (ANA, anti-SMA, anti-LKM1) guides type.',
-    cogLevel:'Recall',
-    src:'Mudit Khanna / Nepal DM Guide — Gastroenterology: AIH Histology'
-  },
-  /* Q58 */ {
-    id:58, domain:'GI / Hepatology',
-    text:'Secretory diarrhoea is characterised by all of the following EXCEPT:',
-    opts:["Stool volume >1 litre per day", "Normal faecal osmotic gap (<50 mOsm/kg)", "Diarrhoea ceases (improves) with fasting", "Painless watery stools without blood or mucus"],
-    ans:2,
-    exp:'Secretory diarrhoea is caused by active electrolyte secretion into the gut lumen (cholera toxin, VIPoma, carcinoid, bile salt malabsorption). It PERSISTS WITH FASTING — unlike osmotic diarrhoea (caused by unabsorbed solutes) which STOPS on fasting. Secretory diarrhoea: large volume, watery, painless, normal faecal osmotic gap, isoosmotic stool. \'Ceases with fasting\' (C) defines osmotic, not secretory, diarrhoea.',
-    cogLevel:'Application',
-    src:'Mudit Khanna — Gastroenterology: Diarrhoea; AI 2005'
-  },
-  /* Q59 */ {
-    id:59, domain:'GI / Hepatology',
-    text:'Hypergastrinemia with hypochlorhydria (low acid) is MOST characteristically seen in:',
-    opts:["Zollinger-Ellison syndrome (ZES)", "VIPoma", "Pernicious anaemia", "Glucagonoma"],
-    ans:2,
-    exp:'In pernicious anaemia, autoimmune destruction of parietal cells causes hypochlorhydria AND elevated gastrin (loss of acid-mediated negative feedback on G-cells). In ZES, hypergastrinemia occurs WITH HYPERchlorhydria — excess gastrin drives massive acid production. The acid level with the elevated gastrin is the discriminating point: low acid = pernicious anaemia; high acid = ZES.',
-    cogLevel:'Application',
-    src:'Mudit Khanna — Gastroenterology: Gastric Acid; AI 2002'
-  },
-  /* Q60 */ {
-    id:60, domain:'GI / Hepatology',
-    text:'The Maddrey discriminant function (MDF) ≥32 in alcoholic hepatitis indicates:',
-    opts:["Mild alcoholic hepatitis — abstinence alone is sufficient", "Severe alcoholic hepatitis with 30-day mortality >30% — prednisolone is indicated if no contraindications", "Hepatocellular carcinoma — urgent tumour board referral", "Chronic stable cirrhosis — no urgent intervention needed"],
-    ans:1,
-    exp:'MDF = 4.6 × (patient PT − control PT in seconds) + serum bilirubin (mg/dL). MDF ≥32 defines SEVERE acute alcoholic hepatitis with 30-day mortality >30–50%. Prednisolone 40 mg/day × 28 days reduces short-term mortality. Response assessed at day 7 by Lille score — if Lille >0.45, prednisolone is discontinued (non-responders derive no benefit and have increased infection risk). Contraindications: active infection, GI bleeding, renal failure.',
-    cogLevel:'Application',
-    src:'Mudit Khanna — Hepatology: Maddrey Score, Alcoholic Hepatitis'
-  },
-  /* Q61 */ {
-    id:61, domain:'GI / Hepatology',
-    text:'The \'onion-skin\' (concentric periarteriolar fibrosis) lesion of the spleen is pathognomonic of:',
-    opts:["Immune thrombocytopenic purpura (ITP)", "Sickle cell disease", "Systemic lupus erythematosus (SLE)", "Infectious mononucleosis"],
-    ans:2,
-    exp:'Concentric periarteriolar fibrous thickening of the splenic central arterioles — giving the laminated \'onion-skin\' appearance on histology — is pathognomonic of SLE. It results from immune complex deposition and fibrosis around Malpighian corpuscle arterioles. This finding distinguishes SLE-related splenomegaly from other causes. ITP causes reactive lymphoid follicle hyperplasia.',
-    cogLevel:'Recall',
-    src:'Mudit Khanna — Rheumatology: SLE Spleen Pathology; AI 2003'
-  },
-  /* Q62 */ {
-    id:62, domain:'Neurology',
-    text:'\'Dawson\'s fingers\' on MRI brain are specifically associated with:',
-    opts:["Cerebral venous sinus thrombosis", "Watershed infarction", "Multiple sclerosis (MS)", "Subacute combined degeneration (SACD)"],
-    ans:2,
-    exp:'Dawson\'s fingers are periventricular demyelinating plaques oriented perpendicular to the lateral ventricles along medullary veins — visible on sagittal MRI FLAIR/T2 sequences. They are a characteristic imaging sign of MS contributing to McDonald criteria (dissemination in space — juxtacortical, periventricular, infratentorial, spinal cord). SACD shows posterior and lateral column T2 signal changes, not periventricular finger-like lesions.',
-    cogLevel:'Recall',
-    src:'Mudit Khanna — Neurology: MS MRI; AI 2010'
-  },
-  /* Q63 */ {
-    id:63, domain:'Neurology',
-    text:'The MOST common initial presenting feature of multiple sclerosis (MS) is:',
-    opts:["Cerebellar ataxia", "Optic neuritis (painful, monocular visual loss)", "Internuclear ophthalmoplegia (INO)", "Spastic paraparesis"],
-    ans:1,
-    exp:'Optic neuritis — painful, typically monocular subacute visual loss with central scotoma and relative afferent pupillary defect (RAPD) — is the most common initial presentation of MS, occurring in ~15–20% of cases at onset. It is caused by demyelination of the optic nerve and serves as a clinically isolated syndrome (CIS). INO (caused by MLF demyelination) is highly specific for MS but not the most common initial presentation.',
-    cogLevel:'Recall',
-    src:'Mudit Khanna — Neurology: Multiple Sclerosis Presentation'
-  },
-  /* Q64 */ {
-    id:64, domain:'Neurology',
-    text:'Glasgow Coma Scale (GCS): a verbal score of V2 represents:',
-    opts:["Disoriented but conversational speech", "Inappropriate words (single recognisable words, not sentences)", "Incomprehensible sounds (moans, groans — no recognisable words)", "No verbal response whatsoever"],
-    ans:2,
-    exp:'GCS verbal component: V1=No response; V2=Incomprehensible sounds (grunting, moaning — not words); V3=Inappropriate words (single words, not sentence context); V4=Confused/disoriented conversation; V5=Orientated. V2 = incomprehensible sounds (C in this question is V2). The question asks for V2 specifically — incomprehensible sounds.',
-    cogLevel:'Recall',
-    src:'Mudit Khanna — Neurology: Glasgow Coma Scale; AI 2005'
-  },
-  /* Q65 */ {
-    id:65, domain:'Neurology',
-    text:'Asterixis (flapping tremor) is seen in all of the following EXCEPT:',
-    opts:["Hepatic encephalopathy", "Uraemia (renal failure)", "CO₂ narcosis (hypercapnic respiratory failure)", "Thyrotoxicosis"],
-    ans:3,
-    exp:'Asterixis is a negative myoclonus (brief lapse of sustained posture) reflecting metabolic encephalopathy. Causes: hepatic encephalopathy, uraemia, hypercapnia (CO₂ narcosis), hypomagnesaemia, drug toxicity. Thyrotoxicosis produces a FINE RAPID TREMOR (enhanced physiological tremor at 8–12 Hz) — NOT asterixis/flapping tremor. Asterixis is low-frequency (3–5 Hz) irregular lapses, not tremor.',
-    cogLevel:'Recall',
-    src:'Mudit Khanna — Neurology/Gastroenterology: Asterixis; NBE'
-  },
-  /* Q66 */ {
-    id:66, domain:'Neurology',
-    text:'The investigation of choice for diagnosis of multiple sclerosis is:',
-    opts:["CT myelogram", "Non-contrast CT brain", "MRI brain and spine with gadolinium contrast", "Skull X-ray"],
-    ans:2,
-    exp:'MRI with gadolinium is the gold standard for MS — demonstrating periventricular white matter plaques (Dawson\'s fingers), subcortical and infratentorial lesions, and gadolinium-enhancing active lesions (acute inflammation, breakdown of blood-brain barrier). McDonald 2017 criteria use MRI to demonstrate dissemination in space and time, enabling early diagnosis after a first clinical event (CIS). CT has very low sensitivity for demyelinating plaques.',
-    cogLevel:'Recall',
-    src:'Mudit Khanna — Neurology: MS Investigation'
-  },
-  /* Q67 */ {
-    id:67, domain:'Neurology',
-    text:'Corticosteroids are NOT effective in the treatment of:',
-    opts:["Multiple sclerosis (acute relapse)", "Myasthenia gravis (long-term immunosuppression)", "Guillain-Barré syndrome (GBS)", "Neuromyelitis optica spectrum disorder (NMOSD) acute attack"],
-    ans:2,
-    exp:'Multiple clinical trials (the UK GBS study, the Dutch GBS study) have demonstrated that corticosteroids provide NO benefit and may even prolong disability in GBS. Effective treatments: IVIg (0.4 g/kg/day × 5 days) or plasma exchange — both equivalent in efficacy. GBS is also notably the only major autoimmune neuropathy where steroids fail. Contrast with CIDP — a chronic demyelinating neuropathy — which DOES respond to steroids.',
-    cogLevel:'Application',
-    src:'Mudit Khanna — Neurology: GBS Treatment'
-  },
-  /* Q68 */ {
-    id:68, domain:'Neurology',
-    text:'Lambert-Eaton myasthenic syndrome (LEMS) is characterised by all of the following EXCEPT:',
-    opts:["Proximal muscle weakness that transiently IMPROVES with repeated activity (post-tetanic facilitation)", "Absent deep tendon reflexes that return after brief voluntary exercise", "Positive Tensilon (edrophonium) test confirming the diagnosis", "Association with small cell lung carcinoma in >50% of cases"],
-    ans:2,
-    exp:'The Tensilon (edrophonium) test is positive in MYASTHENIA GRAVIS (postsynaptic ACh receptor defect). In LEMS, the defect is PRESYNAPTIC (antibodies against P/Q-type voltage-gated calcium channels → reduced ACh vesicle release). The Tensilon test is typically NEGATIVE or weakly positive in LEMS. Post-tetanic facilitation (A) — brief high-frequency stimulation temporarily restores ACh release — is the pathognomonic feature of LEMS.',
-    cogLevel:'Application',
-    src:'Mudit Khanna — Neurology: Lambert-Eaton Syndrome'
-  },
-  /* Q69 */ {
-    id:69, domain:'Nephrology',
-    text:'IgA nephropathy (Berger\'s disease) versus post-streptococcal glomerulonephritis (PSGN): the SINGLE MOST IMPORTANT clinical distinguishing feature is:',
-    opts:["Degree of proteinuria", "Serum complement C3 level", "Timing of haematuria relative to URTI — simultaneous/concurrent (IgA) versus 1–3 weeks after (PSGN)", "Patient age and gender"],
-    ans:2,
-    exp:'IgA nephropathy: haematuria occurs simultaneously with URTI (\'synpharyngitic\') — within 24–48 hours, because mucosal infection rapidly triggers mesangial IgA1 deposition. PSGN: haematuria has a latent period of 1–3 WEEKS after streptococcal URTI (time for immune complex formation and deposition). Serum C3 (low in PSGN, normal in IgA) also helps, but timing of haematuria is the most readily testable discriminator.',
-    cogLevel:'Application',
-    src:'Nepal DM Guide Q44 / Mudit Khanna — Nephrology: IgA vs PSGN'
-  },
-  /* Q70 */ {
-    id:70, domain:'Nephrology',
-    text:'Adult polycystic kidney disease (ADPKD) is associated with which important extra-renal vascular complication?',
-    opts:["Saccular aneurysms of the abdominal aorta", "Berry (saccular) aneurysms in the Circle of Willis — risk of subarachnoid haemorrhage", "Fusiform aneurysms of the thoracic aorta", "Coronary artery aneurysms"],
-    ans:1,
-    exp:'ADPKD (PKD1/PKD2 genes, defective fibrocystin/polycystin) is associated with intracranial berry aneurysms in ~8–10% of patients (higher if family history of SAH). Rupture is a major cause of sudden death in ADPKD. Screening with MRA is recommended in those with family history of aneurysm or SAH. Other extra-renal features: hepatic/pancreatic cysts, MVP, colonic diverticulosis.',
-    cogLevel:'Recall',
-    src:'Mudit Khanna — Nephrology: ADPKD Extra-renal; AIIMS 2001'
-  },
-  /* Q71 */ {
-    id:71, domain:'Nephrology',
-    text:'Primary membranous nephropathy: the specific pathogenic autoantibody is:',
-    opts:["Anti-double-stranded DNA (anti-dsDNA)", "Anti-glomerular basement membrane (anti-GBM)", "Anti-PLA2R (phospholipase A2 receptor) antibody", "Anti-CCP (cyclic citrullinated peptide)"],
-    ans:2,
-    exp:'Anti-PLA2R antibodies are present in 70–80% of primary (idiopathic) membranous nephropathy. PLA2R is a podocyte antigen — immune complexes form on the subepithelial surface, producing the characteristic \'spike and dome\' pattern on electron microscopy. Anti-PLA2R titres correlate with disease activity and guide treatment response monitoring. Anti-GBM causes Goodpasture\'s syndrome (RPGN + pulmonary haemorrhage).',
-    cogLevel:'Recall',
-    src:'Nepal DM Guide Q45 / Mudit Khanna — Nephrology: Membranous Nephropathy'
-  },
-  /* Q72 */ {
-    id:72, domain:'Nephrology',
-    text:'The MOST life-threatening acute thrombotic complication in nephrotic syndrome, particularly in membranous nephropathy, is:',
-    opts:["Deep vein thrombosis of the calf only", "Renal artery thrombosis with acute hypertension", "Renal vein thrombosis with extension to pulmonary embolism", "Mesenteric vein thrombosis"],
-    ans:2,
-    exp:'Nephrotic syndrome creates hypercoagulability: urinary loss of anticoagulants (protein C, S, antithrombin III), elevated procoagulants (factors V, VIII, fibrinogen), hyperviscosity. Membranous nephropathy has the highest thrombotic risk (~40% renal vein thrombosis). Renal vein thrombosis can embolise → pulmonary embolism (most life-threatening). New flank pain, worsening proteinuria, or haematuria with RVT should prompt CT venography.',
-    cogLevel:'Analysis',
-    src:'Mudit Khanna — Nephrology: Nephrotic Syndrome Complications'
-  },
-  /* Q73 */ {
-    id:73, domain:'Nephrology',
-    text:'Pre-renal azotemia is differentiated from intrinsic renal (acute tubular necrosis) AKI by:',
-    opts:["Fractional excretion of sodium (FENa) >2% in pre-renal; <1% in ATN", "Urinary sodium <10 mEq/L AND urine:plasma creatinine ratio >40 (pre-renal); urinary sodium >40 AND FENa >2% (ATN)", "Serum creatinine level alone", "Blood urea nitrogen alone"],
-    ans:1,
-    exp:'Pre-renal azotemia: kidneys aggressively retain sodium (urine Na <10 mEq/L, FENa <1%) and concentrate urine (osmolality >500 mOsm/kg, urine:plasma Cr ratio >40, BUN:Cr ratio >20). In ATN: tubular damage → inability to reabsorb sodium (urine Na >40, FENa >2%), urine isoosmotic (~300 mOsm/kg), urine:plasma Cr ratio <20. FENa = (urine Na × plasma Cr)/(plasma Na × urine Cr) × 100.',
-    cogLevel:'Application',
-    src:'Mudit Khanna — Nephrology: Pre-renal vs ATN; AIIMS Nov 07'
-  },
-  /* Q74 */ {
-    id:74, domain:'Nephrology',
-    text:'Wilms tumour (nephroblastoma): the most common clinical presentation is:',
-    opts:["Painless gross haematuria", "An asymptomatic abdominal mass discovered incidentally (e.g., during bathing)", "Hydronephrosis with loin pain", "Recurrent urinary tract infections"],
-    ans:1,
-    exp:'Wilms tumour peaks at age 3–4 years. The most common presenting feature is an ASYMPTOMATIC ABDOMINAL MASS noticed incidentally — often by parents during bathing or dressing. Haematuria occurs in only ~25% of cases (usually microscopic). Associated features: aniridia, hemihypertrophy, Beckwith-Wiedemann syndrome, WAGR syndrome. Contrast with RCC in adults where haematuria is the most common presentation.',
-    cogLevel:'Recall',
-    src:'Mudit Khanna — Nephrology: Wilms Tumour; AIIMS Nov 95'
-  },
-  /* Q75 */ {
-    id:75, domain:'Nephrology',
-    text:'Conservative (non-immunosuppressive) management of nephrotic syndrome should include all of the following EXCEPT:',
-    opts:["ACE inhibitor or ARB (reduces intraglomerular pressure and proteinuria)", "Statin therapy (treats hypercholesterolaemia, reduces CVD risk)", "High-protein diet to replace urinary protein losses", "Sodium restriction and loop diuretics for oedema"],
-    ans:2,
-    exp:'High-protein diet is CONTRAINDICATED in nephrotic syndrome — it INCREASES intraglomerular pressure and proteinuria and accelerates glomerulosclerosis. Current guidelines recommend 0.8 g/kg/day protein intake. Conservative management: ACEi/ARB (reduce proteinuria), statin (hyperlipidaemia), low-salt diet, loop diuretics for oedema, anticoagulation when serum albumin <2 g/dL in membranous nephropathy.',
-    cogLevel:'Application',
-    src:'Mudit Khanna / Nepal DM Guide — Nephrology: Nephrotic Syndrome Management'
-  },
-  /* Q76 */ {
-    id:76, domain:'Rheumatology',
-    text:'Anticentromere antibodies are most specifically associated with:',
-    opts:["Diffuse cutaneous systemic sclerosis (anti-Scl-70 positive)", "Limited cutaneous systemic sclerosis (CREST syndrome)", "Systemic lupus erythematosus", "Mixed connective tissue disease (MCTD)"],
-    ans:1,
-    exp:'Anticentromere antibodies (ACA) are highly specific for limited cutaneous systemic sclerosis (lcSSc) / CREST syndrome — present in 60–90% of CREST patients. They correlate with isolated pulmonary arterial hypertension without ILD and predict better prognosis than diffuse disease. Diffuse cutaneous SSc is associated with anti-Scl-70 (anti-topoisomerase I) — associated with ILD and worse prognosis.',
-    cogLevel:'Recall',
-    src:'Mudit Khanna — Rheumatology: Systemic Sclerosis Antibodies; AI 06'
-  },
-  /* Q77 */ {
-    id:77, domain:'Rheumatology',
-    text:'Antihistone antibodies are the characteristic marker of:',
-    opts:["Idiopathic SLE — most sensitive test", "Drug-induced lupus (DIL) — present in >95% of cases, while anti-dsDNA and anti-Sm are ABSENT", "Primary Sjögren's syndrome", "ANCA-associated vasculitis"],
-    ans:1,
-    exp:'Antihistone antibodies are present in >95% of DIL but only ~75% of idiopathic SLE — making them the most specific serological marker for DIL. In DIL, anti-dsDNA and anti-Sm are characteristically absent. Classic DIL drugs: procainamide, hydralazine, INH, minocycline, penicillamine, sulphonamides. DIL resolves when the offending drug is withdrawn. Complement levels are normal in DIL (unlike idiopathic SLE).',
-    cogLevel:'Recall',
-    src:'Mudit Khanna — Rheumatology: Drug-Induced Lupus; AI 2009'
-  },
-  /* Q78 */ {
-    id:78, domain:'Rheumatology',
-    text:'The combination of medullary thyroid carcinoma, phaeochromocytoma, and primary hyperparathyroidism defines:',
-    opts:["MEN Type 1 (Werner's syndrome)", "MEN Type 2A (Sipple syndrome)", "MEN Type 2B", "VHL (von Hippel-Lindau) syndrome"],
-    ans:1,
-    exp:'MEN 2A (Sipple syndrome): medullary thyroid carcinoma + phaeochromocytoma + primary hyperparathyroidism. Caused by RET proto-oncogene mutations. MEN 1 (Werner): parathyroid + pituitary + pancreatic (gastrinoma most common). MEN 2B: medullary thyroid Ca + phaeochromocytoma + marfanoid habitus + mucosal neuromas (NO hyperparathyroidism). Always screen for phaeochromocytoma BEFORE thyroid surgery in MEN 2A.',
-    cogLevel:'Recall',
-    src:'Mudit Khanna — Endocrinology: MEN Syndromes; AI 2004'
-  },
-  /* Q79 */ {
-    id:79, domain:'Haematology',
-    text:'Leukocyte alkaline phosphatase (LAP) score is characteristically LOW or ABSENT in:',
-    opts:["Polycythaemia vera", "Chronic myeloid leukaemia (CML)", "Myelofibrosis", "Leukaemoid reaction"],
-    ans:1,
-    exp:'LAP is an enzyme in mature neutrophil secondary granules. It is DECREASED (low or zero) in CML — a hallmark feature distinguishing CML from leukaemoid reaction (where LAP is very high). LAP is increased in polycythaemia vera, myelofibrosis, leukaemoid reactions, infections, and pregnancy. The LAP score (0–400 scale) was the classical bedside distinguisher before Philadelphia chromosome testing became routine.',
-    cogLevel:'Recall',
-    src:'Mudit Khanna — Haematology: CML / LAP Score; AIIMS May 94'
-  },
-  /* Q80 */ {
-    id:80, domain:'Haematology',
-    text:'The cornerstone treatment for idiopathic thrombotic thrombocytopenic purpura (iTTP) is:',
-    opts:["IV prednisolone 1 mg/kg/day alone", "IV immunoglobulin (IVIG) 2 g/kg", "Emergency daily plasma exchange (PEX) with fresh frozen plasma replacement", "Platelet transfusion to maintain count >50,000/µL"],
-    ans:2,
-    exp:'Plasma exchange (PEX) started within hours of iTTP diagnosis is the treatment of choice — it simultaneously removes pathogenic anti-ADAMTS-13 antibodies AND replaces functional ADAMTS-13 through FFP. Daily PEX continues until platelet count normalises (>150,000 × 2 consecutive days) and LDH normalises. PLATELET TRANSFUSION (D) is CONTRAINDICATED in TTP — it provides substrate for more platelet-fibrin microthrombi, worsening the condition. Caplacizumab is now added for refractory iTTP.',
-    cogLevel:'Application',
-    src:'Mudit Khanna — Haematology: TTP Treatment'
-  },
-  /* Q81 */ {
-    id:81, domain:'Cardiology',
-    caseNum:1, isCase:true,
-    caseText:'A 58-year-old man presents with crushing chest pain for 90 minutes, diaphoresis, and shock. BP is 78/50 mmHg, HR is 118/min. ECG shows ST elevation in V1–V4 and aVL. Bedside ECHO: LVEF 20%. A PCI-capable cardiac catheterisation lab is available.',
-    text:'The culprit vessel and MI territory based on the ECG are MOST likely:',
-    opts:["Right coronary artery (RCA) — inferior STEMI", "Left circumflex artery (LCx) — lateral STEMI", "Proximal left anterior descending artery (LAD) — anterior STEMI", "Left main coronary artery — global STEMI"],
-    ans:2,
-    exp:'ST elevation in V1–V4 (anterior precordial leads) and aVL (high lateral lead) indicates anterolateral STEMI from proximal LAD occlusion (before the first diagonal branch). This is the highest-risk STEMI pattern — the large anterior territory perfused by the LAD explains the severely depressed LVEF (20%) and cardiogenic shock. Inferior STEMI (RCA) would show elevation in II, III, aVF.',
-    cogLevel:'Application',
-    src:'Mudit Khanna / Nepal DM Guide — Cardiology: STEMI Localisation'
-  },
-  /* Q82 */ {
-    id:82, domain:'Cardiology',
-    caseNum:1, isCase:false,
-    text:'The SINGLE MOST IMPORTANT treatment to reduce mortality in this cardiogenic shock-complicating STEMI is:',
-    opts:["IV thrombolysis (streptokinase 1.5 MU over 60 minutes)", "Intra-aortic balloon pump (IABP) insertion", "Primary percutaneous coronary intervention (PCI) with door-to-balloon time ≤90 minutes", "High-dose IV dobutamine infusion"],
-    ans:2,
-    exp:'Primary PCI is the gold standard reperfusion strategy — door-to-balloon ≤90 minutes when PCI is available. The SHOCK trial proved immediate revascularisation (PCI) is the only intervention reducing 6-month mortality in STEMI-associated cardiogenic shock. Thrombolysis is significantly inferior in cardiogenic shock (reduced efficiency under low-flow states). IABP and inotropes provide haemodynamic support but do not open the culprit artery.',
-    cogLevel:'Application',
-    src:'Mudit Khanna / Nepal DM Guide — Cardiology: Primary PCI, SHOCK Trial'
-  },
-  /* Q83 */ {
-    id:83, domain:'Cardiology',
-    caseNum:1, isCase:false,
-    text:'On day 4, the patient develops a new harsh pansystolic murmur at the LEFT STERNAL BORDER with a palpable thrill. Pulmonary artery catheter shows oxygen saturation step-up from right atrium (65%) to right ventricle (82%). The diagnosis is:',
-    opts:["Acute mitral regurgitation from papillary muscle rupture", "Ventricular septal rupture (VSR) with left-to-right shunt", "Large pericardial effusion causing tamponade", "Free wall rupture with pseudoaneurysm formation"],
-    ans:1,
-    exp:'VSR is a mechanical complication occurring 3–7 days post-MI from septal ischaemic necrosis. The pansystolic murmur is at the LEFT STERNAL BORDER (not apex) with a thrill. The PA catheter oxygen saturation step-up from RA to RV (65%→82%) confirms left-to-right shunting (oxygenated LV blood entering the RV through the septal defect). Papillary muscle rupture also causes pansystolic murmur but at the APEX, radiating to the axilla, with pulmonary oedema — no O₂ step-up.',
-    cogLevel:'Analysis',
-    src:'Mudit Khanna / Nepal DM Guide — Cardiology: VSR vs Papillary Rupture'
-  },
-  /* Q84 */ {
-    id:84, domain:'Pulmonology',
-    caseNum:2, isCase:true,
-    caseText:'A 70-year-old woman presents with productive cough, fever (39.4°C), confusion (new-onset), and systolic BP of 84 mmHg. RR is 34/min. Blood urea is 9.2 mmol/L. Chest X-ray shows right lower lobe consolidation. SpO₂ is 84% on room air.',
-    text:'Her CURB-65 score is:',
-    opts:["2 — ward admission", "3 — consider ICU", "4 — ICU admission with 27–40% 30-day mortality", "5 — ICU admission with >50% 30-day mortality"],
-    ans:2,
-    exp:'CURB-65: Confusion (1) + Urea >7 mmol/L (1) + RR ≥30 (1) + BP systolic <90 (1) + Age ≥65 (1) = 5 parameters. This patient has: Confusion ✓, Urea 9.2 ✓, RR 34 ✓, BP 84 systolic ✓, Age 70 ✓. Score = 4. CURB-65 score 3–5 = severe CAP, consider ICU; score 4 carries 27–40% 30-day mortality.',
-    cogLevel:'Application',
-    src:'Mudit Khanna — Pulmonology: CURB-65 CAP Severity'
-  },
-  /* Q85 */ {
-    id:85, domain:'Pulmonology',
-    caseNum:2, isCase:false,
-    text:'Which additional investigation result would be MOST useful to guide escalation to ICU in this patient?',
-    opts:["Serum PCT (procalcitonin) level >10 ng/mL", "PaO₂/FiO₂ ratio <250 mmHg (hypoxia refractory to supplemental O₂)", "Positive urinary pneumococcal antigen test", "Blood culture result"],
-    ans:1,
-    exp:'IDSA/ATS 2019 minor criteria for ICU admission include: PaO₂/FiO₂ <250 mmHg as one of the strongest indicators of severity requiring ICU-level respiratory support. In this patient with SpO₂ 84% on room air, refractory hypoxia (likely P/F <150 on supplemental O₂) mandates ICU transfer and consideration of NIV or mechanical ventilation. Culture results are important but take ≥48 hours — too slow for escalation decisions.',
-    cogLevel:'Application',
-    src:'Mudit Khanna / IDSA 2019 — Pulmonology: Severe CAP ICU Criteria'
-  },
-  /* Q86 */ {
-    id:86, domain:'Pulmonology',
-    caseNum:2, isCase:false,
-    text:'Legionella pneumophila pneumonia: all of the following are true EXCEPT:',
-    opts:["Transmitted by inhalation of contaminated aerosols (not person-to-person)", "Hyponatraemia and elevated liver enzymes are characteristic features", "Best detected by Legionella urinary antigen test (detects serogroup 1)", "Responds well to beta-lactam antibiotics alone"],
-    ans:3,
-    exp:'Legionella pneumophila is an intracellular pathogen — it resides in alveolar macrophages. Beta-lactam antibiotics penetrate poorly into macrophages and are INEFFECTIVE against Legionella. Treatment requires agents with intracellular penetration: respiratory fluoroquinolones (levofloxacin — first choice) or macrolides (azithromycin). Characteristic features: high fever, hyponatraemia, elevated liver enzymes, diarrhoea, mental confusion — and epidemiological link to cooling towers or water systems.',
-    cogLevel:'Analysis',
-    src:'Mudit Khanna — ID/Pulmonology: Legionella Pneumonia Treatment'
-  },
-  /* Q87 */ {
-    id:87, domain:'Infectious Disease',
-    caseNum:3, isCase:true,
-    caseText:'An 18-year-old male presents on day 14 of a febrile illness with sudden-onset severe abdominal pain, guarding, and rigidity. Blood tests: WBC 2,400/µL (leucopenia), platelet 90,000, bilirubin 3.5 mg/dL. Temperature is 39.6°C with heart rate of 72/min (relative bradycardia). Erect CXR shows free air under the right hemidiaphragm.',
-    text:'The MOST likely precipitating diagnosis and the pathological mechanism are:',
-    opts:["Appendicitis — faecolith obstruction with bacterial overgrowth", "Typhoid intestinal perforation — S. typhi invasion and necrosis of Peyer patches in the terminal ileum", "Meckel's diverticulum perforation — ectopic gastric mucosa with peptic ulceration", "Bowel obstruction from adhesions — strangulation and ischaemia"],
-    ans:1,
-    exp:'The clinical picture is classic for typhoid intestinal perforation: 2nd week of febrile illness, leucopenia (paradoxical — bacterial infections typically cause leucocytosis; typhoid uniquely suppresses WBC), relative bradycardia (Faget\'s sign), and pneumoperitoneum. S. typhi invades Peyer patches in the terminal ileum → ulceration and perforation of the antimesenteric wall in the 2nd–3rd week of infection.',
-    cogLevel:'Analysis',
-    src:'Nepal DM Guide / Mudit Khanna — ID: Typhoid Perforation'
-  },
-  /* Q88 */ {
-    id:88, domain:'Infectious Disease',
-    caseNum:3, isCase:false,
-    text:'Rose spots in typhoid fever are described as:',
-    opts:["Petechial haemorrhagic spots on the hard palate (Forchheimer spots)", "Blanching maculopapular lesions 2–4 mm diameter on the trunk and abdomen, appearing in crops during the 1st–2nd week", "Koplik's spots on the buccal mucosa (pathognomonic)", "Non-blanching purpuric lesions indicating meningococcaemia"],
-    ans:1,
-    exp:'Rose spots of typhoid fever: faint, salmon-coloured, blanching maculopapular lesions 2–4 mm in diameter, appearing in crops of 10–20 on the trunk/abdomen during the 1st–2nd week. Seen in ~30% of patients and represent S. typhi emboli in dermal capillaries. They are transient (24–48 h). Forchheimer spots (hard palate petechiae) are seen in rubella. Koplik\'s spots are pathognomonic of measles.',
-    cogLevel:'Recall',
-    src:'Mudit Khanna — ID: Typhoid Fever Clinical Features'
-  },
-  /* Q89 */ {
-    id:89, domain:'Infectious Disease',
-    caseNum:3, isCase:false,
-    text:'In a young Nepalese patient with typhoid fever, the antibiotic of FIRST CHOICE for uncomplicated disease (assuming no prior antibiotic exposure and sensitive organism) and the duration of treatment are:',
-    opts:["Ciprofloxacin 500 mg BD for 7–10 days", "Azithromycin 1 g daily for 5 days OR 500 mg daily for 7 days", "Chloramphenicol 500 mg QID for 14 days", "Amoxicillin 1 g TDS for 14 days"],
-    ans:1,
-    exp:'Given the rising fluoroquinolone resistance in Nepal (>50% for ciprofloxacin), WHO and Nepal national guidelines recommend azithromycin as first-line for uncomplicated typhoid, especially in outpatient settings. Azithromycin has excellent intracellular penetration, covers fluoroquinolone-resistant strains, and has a favourable safety profile. Chloramphenicol (C) was historic first-line but is now second-line due to resistance and haematological toxicity.',
-    cogLevel:'Application',
-    src:'Nepal DM Guide / WHO 2019 — ID: Typhoid Treatment Nepal'
-  },
-  /* Q90 */ {
-    id:90, domain:'Infectious Disease',
-    caseNum:4, isCase:true,
-    caseText:'A 44-year-old man presents with high fever, altered sensorium, and right lower lobe pneumonia. Despite 30 mL/kg IV 0.9% normal saline, BP remains 80/48 mmHg. Noradrenaline infusion is started to maintain MAP ≥65 mmHg. Serum lactate is 4.2 mmol/L. WBC 18,400, procalcitonin 48 ng/mL.',
-    text:'The Sepsis-3 definition is met. The MOST appropriate TARGET for haemodynamic resuscitation in the first 6 hours (per Surviving Sepsis Campaign 2021) is:',
-    opts:["MAP ≥65 mmHg + urine output >0.5 mL/kg/h + normalisation of skin perfusion", "CVP 8–12 mmHg (as per original 'Surviving Sepsis' EGDT targets)", "MAP ≥65 mmHg + lactate clearance ≥10% per 2 hours OR normalisation of serum lactate (<2 mmol/L)", "ScvO₂ >70% measured by central venous catheter"],
-    ans:2,
-    exp:'Surviving Sepsis Campaign 2021 (based on ANDROMEDA-SHOCK, SMART, and lactate-guided trials) recommends lactate-guided resuscitation: targeting MAP ≥65 mmHg + ≥10% lactate clearance per 2 hours (or lactate normalisation to <2 mmol/L). EGDT (B) with rigid CVP/ScvO₂ targets was disproved by PROCESS, ARISE, and ProMISe trials — no longer recommended. Lactate clearance is the most evidence-based endpoint for septic shock resuscitation.',
-    cogLevel:'Analysis',
-    src:'Mudit Khanna / Surviving Sepsis Campaign 2021 — ID/Critical Care: Septic Shock Resuscitation'
-  },
-  /* Q91 */ {
-    id:91, domain:'Infectious Disease',
-    caseNum:4, isCase:false,
-    text:'The FIRST antibiotic dose in septic shock should be administered:',
-    opts:["Within 24 hours", "Within 1 hour of recognition (door-to-needle ≤60 minutes)", "After blood cultures and after confirmation of infection source", "Only after ICU admission"],
-    ans:1,
-    exp:'Every hour of delay in antibiotic administration in septic shock increases mortality by 7–10% (Kumar et al, 2006). Surviving Sepsis Campaign 2021 mandates antibiotics within 1 HOUR of recognition. Blood cultures (3 sets from different sites) must be drawn BEFORE antibiotics — but this should take <15 minutes and must not delay antibiotic administration. Broad empirical coverage is started based on likely source.',
-    cogLevel:'Recall',
-    src:'Mudit Khanna / Surviving Sepsis Campaign — ID: Antibiotic Timing Sepsis'
-  },
-  /* Q92 */ {
-    id:92, domain:'Infectious Disease',
-    caseNum:4, isCase:false,
-    text:'If blood cultures grow Staphylococcus aureus sensitive to oxacillin (MSSA), the DEFINITIVE antibiotic treatment is:',
-    opts:["Continue vancomycin (adequate for MSSA bacteraemia)", "De-escalate to IV flucloxacillin or oxacillin (beta-lactase-stable penicillin — superior to vancomycin for MSSA)", "Switch to oral co-amoxiclav and discharge", "Add rifampicin to vancomycin"],
-    ans:1,
-    exp:'For MSSA (methicillin-sensitive S. aureus) bacteraemia, beta-lactamase-stable penicillins (flucloxacillin/nafcillin/oxacillin) are SUPERIOR to vancomycin — vancomycin is reserved for MRSA. Clinical trials show 30% lower mortality with antistaphylococcal penicillins vs vancomycin for MSSA. De-escalation from vancomycin to flucloxacillin upon sensitivity results is standard of care for MSSA bacteraemia. Duration: 14 days minimum (4–6 weeks for complicated/endocarditis).',
-    cogLevel:'Application',
-    src:'Mudit Khanna / ID Guidelines — ID: MSSA Bacteraemia Treatment'
-  },
-  /* Q93 */ {
-    id:93, domain:'Endocrinology',
-    caseNum:5, isCase:true,
-    caseText:'A 22-year-old woman with Type 1 DM presents with nausea, vomiting, and polyuria for 2 days after stopping her insulin during a respiratory illness. Examination: Kussmaul breathing, acetone breath, dehydration. Labs: glucose 32 mmol/L, pH 7.08, bicarbonate 8 mmol/L, anion gap 26, urine ketones +++, K+ 5.8 mmol/L.',
-    text:'Regarding potassium management in DKA: which statement is CORRECT?',
-    opts:["Do not give potassium initially as K+ is already elevated at 5.8 mEq/L — recheck in 4 hours", "Start IV insulin immediately regardless of K+ level — insulin will naturally correct hyperkalaemia", "Wait until K+ drops below 5.5 mEq/L before starting insulin; begin IV KCl replacement when K+ <5.5 and ensure it is ≥3.5 before or concurrently with insulin", "Give K+ and insulin simultaneously from the start regardless of serum K+ level"],
-    ans:2,
-    exp:'DKA management: serum K+ appears high (5.8) due to acidosis driving K+ out of cells — total body K+ is actually DEPLETED. Insulin must NOT be started until K+ <5.5 mEq/L (risk of life-threatening hypokalaemia as insulin drives K+ intracellularly). Ensure K+ ≥3.5 mEq/L before or with insulin. Once insulin starts, K+ falls rapidly — continuous replacement at 20–40 mEq/h is needed. IV fluid replacement, insulin, and careful K+ management are the pillars.',
-    cogLevel:'Analysis',
-    src:'Mudit Khanna / ADA DKA Guidelines — Endocrinology: DKA Potassium'
-  },
-  /* Q94 */ {
-    id:94, domain:'Endocrinology',
-    caseNum:5, isCase:false,
-    text:'The MOST important monitoring parameter to assess resolution of DKA (and guide insulin cessation) is:',
-    opts:["Blood glucose normalisation to <11 mmol/L", "Anion gap closure (<12 mEq/L) AND bicarbonate ≥18 mmol/L AND pH >7.30", "Urine ketones become negative", "Patient is able to tolerate oral fluids"],
-    ans:1,
-    exp:'DKA resolution criteria (ADA): anion gap closure (<12 mEq/L) + bicarbonate ≥18 mmol/L + pH >7.3 — ALL THREE must be met. Blood glucose falls faster than ketones — a patient may have blood glucose <11 mmol/L but still have significant acidosis and active ketosis. Urine ketones are unreliable (detect acetoacetate not beta-hydroxybutyrate — the main ketone in DKA). Blood beta-hydroxybutyrate <1.0 mmol/L is a better direct marker.',
-    cogLevel:'Application',
-    src:'Mudit Khanna / ADA DKA Guidelines — Endocrinology: DKA Resolution'
-  },
-  /* Q95 */ {
-    id:95, domain:'Endocrinology',
-    caseNum:5, isCase:false,
-    text:'Hyperosmolar hyperglycaemic state (HHS) differs from DKA in that HHS characteristically has:',
-    opts:["Lower blood glucose levels than DKA", "Metabolic acidosis with large anion gap", "Plasma osmolality >320 mOsm/kg with minimal or absent ketoacidosis — sufficient residual insulin prevents lipolysis/ketogenesis", "Lower 30-day mortality than DKA"],
-    ans:2,
-    exp:'HHS (previously HONK): profound hyperglycaemia (>33.3 mmol/L), severe dehydration, hyperosmolality (>320 mOsm/kg), and MINIMAL/ABSENT ketosis — because sufficient residual insulin (Type 2 DM patients) prevents lipolysis and ketogenesis but cannot prevent hyperglycaemia. Mortality 10–20% (vs DKA 1–5%) due to older patients with serious precipitating illness and extreme dehydration. Fluid replacement in HHS is over 48 hours (slower than DKA) to prevent cerebral oedema.',
-    cogLevel:'Application',
-    src:'Mudit Khanna — Endocrinology: HHS vs DKA; Clinical Principles'
-  },
-  /* Q96 */ {
-    id:96, domain:'GI / Hepatology',
-    caseNum:6, isCase:true,
-    caseText:'A 50-year-old man with decompensated hepatitis C cirrhosis (Child-Pugh C) is admitted with worsening ascites, fever (38.9°C), diffuse abdominal tenderness, and confusion. Diagnostic paracentesis: PMN 460 cells/mm³. Serum creatinine 1.9 mg/dL (rising).',
-    text:'The COMPLETE first-line treatment for SBP in this patient includes:',
-    opts:["IV metronidazole + gentamicin for 7 days", "Oral ciprofloxacin 500 mg BD for 5 days", "IV ceftriaxone 2 g/day × 5 days PLUS IV albumin 1.5 g/kg on day 1 AND 1 g/kg on day 3", "IV piperacillin-tazobactam 4.5 g TDS alone"],
-    ans:2,
-    exp:'The SORT trial (NEJM 1999) established IV albumin co-administration with antibiotics reduces Type 1 HRS from 33% to 10% and in-hospital mortality from 29% to 10% in SBP with renal impairment. Albumin prevents circulatory dysfunction from peritoneal inflammation. Aminoglycosides (gentamicin) are avoided due to nephrotoxicity in cirrhosis. Ceftriaxone covers Gram-negative organisms and achieves excellent peritoneal penetration.',
-    cogLevel:'Application',
-    src:'Mudit Khanna / Nepal DM Guide — Hepatology: SBP Treatment + SORT Trial'
-  },
-  /* Q97 */ {
-    id:97, domain:'GI / Hepatology',
-    caseNum:6, isCase:false,
-    text:'Primary prophylaxis for variceal bleeding in cirrhosis with large oesophageal varices is:',
-    opts:["Vasopressin infusion", "Non-selective beta-blocker (propranolol or carvedilol) OR endoscopic band ligation (EVL)", "Prophylactic TIPS (transjugular intrahepatic portosystemic shunt)", "IV octreotide"],
-    ans:1,
-    exp:'Primary variceal haemorrhage prophylaxis: non-selective beta-blockers (propranolol 40–160 mg/day or carvedilol 6.25–12.5 mg/day) or endoscopic band ligation (EVL) — both reduce risk by ~50%. Beta-blockers reduce portal pressure by reducing cardiac output (β1) and causing splanchnic vasoconstriction (β2). NSBB are preferred if no contraindications; EVL if NSBB are contraindicated or not tolerated. TIPS is reserved for secondary prophylaxis in Child-Pugh B/C patients with recurrent bleeding.',
-    cogLevel:'Application',
-    src:'Mudit Khanna / Nepal DM Guide — Hepatology: Variceal Bleeding Prophylaxis'
-  },
-  /* Q98 */ {
-    id:98, domain:'GI / Hepatology',
-    caseNum:6, isCase:false,
-    text:'Which parameter does the Child-Pugh score NOT include?',
-    opts:["Serum bilirubin", "Serum albumin", "Serum creatinine", "Prothrombin time (or INR)"],
-    ans:2,
-    exp:'Child-Pugh score (5 parameters, scored 1–3 each): (1) Serum bilirubin, (2) Serum albumin, (3) PT/INR, (4) Ascites (none/mild/severe), (5) Hepatic encephalopathy (grade). Creatinine is NOT in Child-Pugh — it IS in the MELD score (Model for End-Stage Liver Disease = creatinine, bilirubin, INR + sodium). MELD-Na has largely replaced Child-Pugh for liver transplant prioritisation.',
-    cogLevel:'Recall',
-    src:'Mudit Khanna — Hepatology: Child-Pugh Score vs MELD'
-  },
-  /* Q99 */ {
-    id:99, domain:'Nephrology',
-    caseNum:7, isCase:true,
-    caseText:'A 65-year-old hypertensive man was started on an NSAID for knee pain 3 days ago. He now presents with oliguria, facial oedema, and fatigue. Labs: creatinine 3.8 mg/dL (baseline 0.9 mg/dL), urea 68 mg/dL, potassium 6.2 mEq/L, urinalysis: 2+ proteinuria, no haematuria, few granular casts. Renal ultrasound: normal-sized kidneys, no hydronephrosis.',
-    text:'The MOST likely mechanism of AKI in this patient is:',
-    opts:["Obstructive (post-renal) AKI from prostatic enlargement", "Pre-renal AKI from volume depletion", "NSAID-induced haemodynamically mediated AKI — inhibition of prostaglandin-dependent renal afferent arteriole vasodilation in a patient with pre-existing reduced renal perfusion", "Acute tubular necrosis from NSAID-induced direct tubular toxicity"],
-    ans:2,
-    exp:'NSAIDs inhibit prostaglandin synthesis. In patients with pre-existing reduced effective renal perfusion (hypertension, old age, CHF, CKD, volume depletion), afferent arteriolar tone is maintained by prostaglandins. NSAIDs block this → afferent vasoconstriction → reduced GFR → haemodynamically mediated AKI (pre-renal/functional mechanism). The granular casts and proteinuria reflect glomerular dysfunction, not tubular damage. Normal-sized kidneys on USS excludes obstruction and chronic disease.',
-    cogLevel:'Analysis',
-    src:'Mudit Khanna — Nephrology: NSAID-induced AKI Mechanism'
-  },
-  /* Q100 */ {
-    id:100, domain:'Nephrology',
-    caseNum:7, isCase:false,
-    text:'The ECG finding in this patient with K+ 6.2 mEq/L is MOST likely to show:',
-    opts:["Shortened QT interval", "Tall, peaked (tented) T waves — earliest ECG sign of hyperkalaemia", "Absent P waves with a widened QRS and sine wave", "Prolonged QT with U waves"],
-    ans:1,
-    exp:'Hyperkalaemia ECG progression (as K+ rises): (1) Tall peaked (tented) T waves — earliest sign (K+ ~6.0–6.5); (2) Prolonged PR interval; (3) Flattening/disappearance of P waves; (4) Widened QRS; (5) Sine wave pattern → ventricular fibrillation. With K+ 6.2 mEq/L, tall peaked T waves are the most likely finding. Sine wave (C) occurs at K+ typically >7.5–8 mEq/L and represents pre-arrest. Prolonged QT with U waves is hypokalaemia.',
-    cogLevel:'Application',
-    src:'Mudit Khanna — Nephrology/Cardiology: Hyperkalaemia ECG Changes; AI 2009'
-  },
-  /* Q101 */ {
-    id:101, domain:'Nephrology',
-    caseNum:7, isCase:false,
-    text:'The FASTEST intervention to PREVENT cardiac arrhythmia from hyperkalaemia (K+ 6.2 mEq/L with ECG changes) is:',
-    opts:["Kayexalate (sodium polystyrene sulphonate) enema", "Haemodialysis", "IV calcium gluconate 10% (10 mL over 2–3 minutes) — membrane stabilisation", "Insulin + dextrose infusion"],
-    ans:2,
-    exp:'IV calcium gluconate acts within 1–3 MINUTES — it directly stabilises the cardiac membrane (raises the threshold potential), reversing arrhythmia risk. It does NOT lower serum K+ but buys time. Insulin + dextrose (acts in 15–30 min) and sodium bicarbonate (acts in 15–30 min) shift K+ intracellularly. Kayexalate and haemodialysis remove K+ from the body but take hours. In ECG changes → calcium gluconate FIRST.',
-    cogLevel:'Application',
-    src:'Mudit Khanna — Nephrology: Hyperkalaemia Emergency Treatment'
-  },
-  /* Q102 */ {
-    id:102, domain:'Neurology',
-    caseNum:8, isCase:true,
-    caseText:'A 67-year-old man with known persistent atrial fibrillation (not on anticoagulation) presents with sudden-onset right-sided hemiplegia and expressive aphasia. Time of onset: 2 hours ago. CT brain: no haemorrhage. BP 162/94 mmHg. NIHSS score: 18. INR 1.1. Blood glucose 5.8 mmol/L.',
-    text:'This patient has an ischaemic stroke. Which statement about IV alteplase (thrombolysis) eligibility is CORRECT?',
-    opts:["IV alteplase is contraindicated because the NIHSS is >15 (too severe)", "IV alteplase is contraindicated because the patient has AF — cardioembolic stroke is a relative contraindication", "IV alteplase is indicated — the patient meets eligibility criteria: ischaemic stroke with disabling deficit, within 4.5 hours, no haemorrhage, INR <1.7, no other exclusions. Target door-to-needle ≤60 minutes", "IV alteplase should be withheld until BP is brought below 140/90 mmHg"],
-    ans:2,
-    exp:'This patient meets all criteria for IV alteplase (0.9 mg/kg, max 90 mg): (1) Ischaemic stroke with disabling deficit (NIHSS 18); (2) Onset within 4.5 hours; (3) No haemorrhage on CT; (4) INR 1.1 (<1.7 threshold); (5) BP 162/94 is acceptable — BP <185/110 is the threshold for thrombolysis, NOT necessarily <140/90. High NIHSS is not a contraindication. AF (cardioembolic source) is NOT a contraindication to thrombolysis.',
-    cogLevel:'Analysis',
-    src:'Mudit Khanna / AHA-ASA 2019 — Neurology: Acute Stroke Thrombolysis'
-  },
-  /* Q103 */ {
-    id:103, domain:'Neurology',
-    caseNum:8, isCase:false,
-    text:'When should long-term anticoagulation for AF-related stroke be INITIATED after a moderate-to-severe ischaemic stroke (NIHSS ≥ 16)?',
-    opts:["Day 1 — immediately after alteplase has been given", "Day 3 for all AF strokes regardless of severity", "Approximately day 12–14 (about 2 weeks) to allow blood-brain barrier reconstitution and reduce haemorrhagic transformation risk", "Never anticoagulate after severe stroke — aspirin alone is safer"],
-    ans:2,
-    exp:'The \'1-3-6-12 rule\' guides anticoagulation timing after AF stroke: TIA → day 1; minor stroke (NIHSS <8) → day 3; moderate stroke (NIHSS 8–15) → day 6; severe stroke (NIHSS ≥16) or large infarct → day 12–14. Earlier anticoagulation in large infarcts risks haemorrhagic transformation. DOACs (apixaban, rivaroxaban, edoxaban, dabigatran) are preferred over warfarin for AF stroke prevention. MRI/CT follow-up before starting anticoagulation in severe stroke.',
-    cogLevel:'Application',
-    src:'Nepal DM Guide / ESC 2020 — Neurology: AF Stroke Anticoagulation Timing'
-  },
-  /* Q104 */ {
-    id:104, domain:'Neurology',
-    caseNum:8, isCase:false,
-    text:'This patient\'s AF-related stroke had a CHADS₂-VASc score of 5 before this event. He asks whether he should have been on anticoagulation. What is the recommendation?',
-    opts:["CHADS₂-VASc ≥2 in males warrants anticoagulation — he should have been on oral anticoagulation", "CHADS₂-VASc only applies to females — males need a different score", "Aspirin is equivalent to anticoagulation for AF stroke prevention", "CHADS₂-VASc score has no proven clinical benefit"],
-    ans:0,
-    exp:'CHADS₂-VASc ≥2 in males (≥3 in females) = high risk → oral anticoagulation is recommended (not aspirin). CHADS₂-VASc: C=CHF(1), H=Hypertension(1), A=Age ≥75(2), D=Diabetes(1), S=Stroke/TIA(2), V=Vascular disease(1), A=Age 65–74(1), Sc=Sex category female(1). Maximum 9 points. DOACs are preferred over warfarin for non-valvular AF. Aspirin alone is NOT recommended for AF stroke prevention — it is inadequate.',
-    cogLevel:'Application',
-    src:'Mudit Khanna / ESC 2020 — Cardiology/Neurology: CHA₂DS₂-VASc Score'
-  },
-  /* Q105 */ {
-    id:105, domain:'Rheumatology',
-    caseNum:9, isCase:true,
-    caseText:'A 26-year-old woman has known SLE and now presents with nephrotic and nephritic features: 4+ proteinuria (6 g/day), haematuria, hypertension (158/102), and rising creatinine. Renal biopsy: diffuse proliferative changes with subendothelial deposits on EM and wire-loop lesions. ISN/RPS Class IV. C3/C4 are low. Anti-dsDNA titre is very high.',
-    text:'The ISN/RPS class and its prognostic significance are:',
-    opts:["Class II — mesangial changes, excellent prognosis, no immunosuppression needed", "Class V — membranous lupus nephritis, predominantly nephrotic, moderate prognosis", "Class IV — diffuse proliferative lupus nephritis, MOST common and severe class, highest risk of ESRD without treatment", "Class I — minimal mesangial, incidental finding only"],
-    ans:2,
-    exp:'Class IV LN (diffuse proliferative) involves >50% of glomeruli — most common (40–60% of LN biopsies) and most severe. Features: heavy proteinuria, haematuria, hypertension, rising creatinine, active urine sediment (RBC casts). Wire-loop lesions (thickened glomerular capillary walls from large subendothelial deposits) are characteristic. Without treatment, 50% progress to ESRD within 10 years. Low C3/C4 + rising anti-dsDNA reliably predict renal flare.',
-    cogLevel:'Application',
-    src:'Mudit Khanna — Rheumatology: SLE/ISN-RPS LN Classification'
-  },
-  /* Q106 */ {
-    id:106, domain:'Rheumatology',
-    caseNum:9, isCase:false,
-    text:'The INDUCTION treatment of choice for Class IV lupus nephritis (EULAR 2019 guidelines) is:',
-    opts:["Oral prednisolone alone for 6 months", "Hydroxychloroquine monotherapy", "IV pulse methylprednisolone × 3 days THEN oral prednisolone PLUS mycophenolate mofetil (MMF) 2–3 g/day (preferred) OR IV cyclophosphamide (Euro-Lupus/NIH protocol)", "Azathioprine + prednisolone (maintenance, not induction)"],
-    ans:2,
-    exp:'EULAR 2019 induction: IV methylprednisolone 500–1000 mg/day × 3 days, then oral prednisolone 0.5–1 mg/kg/day tapering + MMF 2–3 g/day (preferred in non-Asians and women of childbearing potential for lower gonadotoxicity) OR IV cyclophosphamide. MMF and cyclophosphamide have equivalent renal outcomes. Azathioprine (D) is the MAINTENANCE therapy — it is NOT induction therapy for Class IV LN.',
-    cogLevel:'Application',
-    src:'Nepal DM Guide / EULAR 2019 — Rheumatology: LN Induction Treatment'
-  },
-  /* Q107 */ {
-    id:107, domain:'Rheumatology',
-    caseNum:9, isCase:false,
-    text:'Which TWO markers are used to monitor disease activity and predict impending renal flare in SLE?',
-    opts:["ANA titre and anti-histone antibody level", "Rising anti-dsDNA titre AND falling complement C3/C4 (complement consumption)", "Anti-Sm antibody and anticentromere antibody", "ESR alone"],
-    ans:1,
-    exp:'Anti-dsDNA titre rises with SLE flares (particularly renal flares), often preceding clinical deterioration by weeks. Simultaneously, C3/C4 fall as they are consumed by classical complement pathway activation from immune complex deposition. The combination of rising anti-dsDNA + falling C3/C4 is the most reliable predictor of impending LN flare. ANA (A) is a stable diagnostic antibody — present throughout the disease regardless of activity, not useful for monitoring.',
-    cogLevel:'Application',
-    src:'Mudit Khanna / Nepal DM Guide — Rheumatology: SLE Activity Monitoring'
-  },
-  /* Q108 */ {
-    id:108, domain:'Haematology',
-    caseNum:10, isCase:true,
-    caseText:'A 32-year-old woman presents with confusion, fever, purpuric rash, and oliguria. Labs: Hb 72 g/L, platelets 18 × 10⁹/L, creatinine 180 µmol/L, LDH 3,400 U/L, indirect bilirubin elevated, Coombs test NEGATIVE. Peripheral blood smear: numerous schistocytes (2.5%). PT/aPTT/fibrinogen are all NORMAL.',
-    text:'The diagnosis is:',
-    opts:["DIC (disseminated intravascular coagulation)", "Haemolytic uraemic syndrome (HUS)", "Thrombotic thrombocytopenic purpura (TTP) — pentad complete", "Immune thrombocytopenic purpura (ITP) with coincidental haemolysis"],
-    ans:2,
-    exp:'TTP pentad: MAHA (schistocytes, high LDH, indirect hyperbilirubinaemia, negative Coombs) + thrombocytopenia + neurological features (confusion) + renal impairment + fever. CRITICALLY, coagulation (PT/aPTT/fibrinogen) is NORMAL — distinguishing TTP from DIC (deranged coagulation). HUS (B) has more pronounced renal impairment with less prominent neurological features and usually follows E. coli O157:H7 infection. Negative Coombs excludes autoimmune haemolytic anaemia.',
-    cogLevel:'Analysis',
-    src:'Mudit Khanna — Haematology: TTP vs DIC vs HUS Diagnosis'
-  },
-  /* Q109 */ {
-    id:109, domain:'Haematology',
-    caseNum:10, isCase:false,
-    text:'The pathogenic mechanism of idiopathic TTP (iTTP) is:',
-    opts:["Congenital deletion of ADAMTS-13 gene (Upshaw-Schulman syndrome is the acquired form)", "IgG autoantibodies inhibiting ADAMTS-13 → ultra-large vWF multimers accumulate → platelet-fibrin microthrombi in microvasculature of brain, heart, and kidneys", "Complement activation (C3/C5) on platelet surfaces — treated with eculizumab", "Liver failure reducing ADAMTS-13 synthesis"],
-    ans:1,
-    exp:'Acquired iTTP: IgG autoantibodies inhibit or clear ADAMTS-13 — the metalloprotease that normally cleaves ultra-large vWF multimers (ULvWF) released from endothelial cells. Without ADAMTS-13, ULvWF accumulates, capturing platelets → widespread microvascular platelet-fibrin thrombi. Complement activation (C) is the mechanism of atypical HUS (aHUS) — treated with eculizumab, NOT TTP. Congenital TTP (Upshaw-Schulman) is autosomal recessive ADAMTS-13 gene mutation.',
-    cogLevel:'Recall',
-    src:'Mudit Khanna / Clinical Principles — Haematology: TTP Pathophysiology'
-  },
-  /* Q110 */ {
-    id:110, domain:'Haematology',
-    caseNum:10, isCase:false,
-    text:'The peripheral blood smear finding that is the hallmark of microangiopathic haemolytic anaemia (MAHA) is:',
-    opts:["Spherocytes", "Target cells", "Schistocytes (fragmented red cells — helmet cells, triangle cells, bite cells)", "Tear-drop cells (dacrocytes)"],
-    ans:2,
-    exp:'Schistocytes are broken red cell fragments produced when RBCs are mechanically sheared by fibrin strands in the microvasculature. They are the hallmark of MAHA (seen in TTP, HUS, DIC, HELLP syndrome, malignant hypertension, mechanical heart valves). >1% schistocytes on peripheral smear is significant (TTP typically shows >1–2%). Spherocytes characterise AIHA (positive Coombs) — TTP is Coombs NEGATIVE. Tear-drop cells suggest myelofibrosis.',
-    cogLevel:'Recall',
-    src:'Mudit Khanna — Haematology: Peripheral Blood Smear, MAHA Schistocytes'
-  },
-  /* Q111 */ {
-    id:111, domain:'Cardiology',
-    caseNum:11, isCase:true,
-    caseText:'A 52-year-old woman with rheumatic mitral stenosis presents for follow-up. Echocardiography shows severe MS (MVA 0.9 cm², mean gradient 18 mmHg). She has recently developed atrial fibrillation with a resting ventricular rate of 110/min and reports worsening dyspnoea on minimal exertion (NYHA Class III). BP is 118/76 mmHg.',
-    text:'The FIRST management priority for this patient\'s haemodynamic compromise is:',
-    opts:["Immediate DC cardioversion to sinus rhythm", "Rate control with beta-blocker (metoprolol) or digoxin to slow ventricular response and improve diastolic filling time", "Urgent percutaneous mitral balloon valvotomy (PMBV)", "Warfarin anticoagulation only"],
-    ans:1,
-    exp:'In MS + AF, the heart relies critically on a slow heart rate for adequate diastolic filling time across the stenotic valve. Tachycardia dramatically worsens MS haemodynamics — there is insufficient time for left atrial emptying. FIRST priority: rate control with beta-blocker or digoxin (HR target <80 resting, <110 during moderate exercise). Anticoagulation with warfarin (INR 2–3) is also mandatory in MS + AF. PMBV is the definitive treatment for severe MS but requires clinical stabilisation first.',
-    cogLevel:'Application',
-    src:'Mudit Khanna / ESC 2021 — Cardiology: Mitral Stenosis + AF Management'
-  },
-  /* Q112 */ {
-    id:112, domain:'Cardiology',
-    caseNum:11, isCase:false,
-    text:'Philadelphia chromosome in CML is the result of translocation t(9;22)(q34;q11). The resulting BCR-ABL1 fusion gene is located on:',
-    opts:["Chromosome 9 (the longer derivative chromosome)", "Chromosome 22 (the Philadelphia chromosome — shortened derivative chromosome 22)", "Both chromosome 9 AND chromosome 22", "A separate extrachromosomal element"],
-    ans:1,
-    exp:'The Philadelphia chromosome IS the shortened derivative chromosome 22 resulting from t(9;22). The ABL1 gene from chromosome 9 is translocated to the BCR region on chromosome 22, creating BCR-ABL1 on the shortened chromosome 22 (Philadelphia chromosome). The derivative chromosome 9 receives a reciprocal segment from 22 but does NOT carry BCR-ABL1. The BCR-ABL1 tyrosine kinase drives CML pathogenesis and is the target of imatinib (Gleevec).',
-    cogLevel:'Recall',
-    src:'Mudit Khanna — Haematology: CML Philadelphia Chromosome; AIIMS Nov 2013'
-  },
-  /* Q113 */ {
-    id:113, domain:'Infectious Disease',
-    caseNum:12, isCase:true,
-    caseText:'A 39-year-old man with a history of pulmonary TB treated 6 years ago presents with massive haemoptysis (>500 mL in 24 hours). CXR shows an old cavitary lesion in the right upper lobe with surrounding infiltrates. SpO₂ is 92% on 4 L/min O₂.',
-    text:'The vascular structure MOST commonly responsible for massive haemoptysis in post-TB disease is:',
-    opts:["Pulmonary artery", "Pulmonary vein", "Bronchial artery", "Superior vena cava"],
-    ans:2,
-    exp:'In post-TB haemoptysis, the source is almost always the BRONCHIAL ARTERY — not the pulmonary artery. Chronic TB causes bronchial artery hypertrophy and erosion into hypervascular granulation tissue within cavities. Rasmussen\'s aneurysm (pulmonary artery pseudoaneurysm within a cavity) is a rare exception. Bronchial artery embolisation (BAE) is the interventional treatment of choice and achieves immediate control in >85% of cases.',
-    cogLevel:'Recall',
-    src:'Mudit Khanna — Pulmonology: TB Haemoptysis; AIIMS May 03'
-  },
-  /* Q114 */ {
-    id:114, domain:'Pulmonology',
-    caseNum:12, isCase:false,
-    text:'Miliary tuberculosis: all of the following statements are true EXCEPT:',
-    opts:["May occur following primary infection or secondary reactivation", "Sputum AFB smear microscopy is usually NEGATIVE (few organisms reach airways)", "Chest X-ray shows uniform 1–2 mm nodules throughout both lung fields", "Mantoux (tuberculin skin) test is ALWAYS positive in miliary TB"],
-    ans:3,
-    exp:'Miliary TB causes haematogenous dissemination producing millet-seed granulomas. Sputum AFB is usually negative (few organisms reach airways via haematogenous route — not bronchogenic spread). CXR: uniform 1–2 mm nodules. The Mantoux test is frequently FALSE-NEGATIVE in miliary TB due to profound immunosuppression and T-cell anergy — the massive antigen load depletes antigen-specific T cells. Stating it is \'always positive\' is FALSE — it is often negative, making diagnosis challenging.',
-    cogLevel:'Recall',
-    src:'Mudit Khanna — Pulmonology/ID: Miliary TB; NBE'
-  },
-  /* Q115 */ {
-    id:115, domain:'Endocrinology',
-    caseNum:13, isCase:true,
-    caseText:'A 36-year-old woman presents with profound fatigue, nausea, vomiting, and dizziness. On examination: BP 74/40 mmHg, HR 118/min, deeply hyperpigmented skin (buccal mucosa, skin creases, old scars). Labs: Na+ 121 mEq/L, K+ 6.4 mEq/L, glucose 2.8 mmol/L, cortisol <1 µg/dL, ACTH 2,800 pg/mL (markedly elevated).',
-    text:'The marked elevation of ACTH in primary adrenal insufficiency (Addison\'s disease) causes the characteristic hyperpigmentation because:',
-    opts:["ACTH directly deposits melanin in the skin", "ACTH is co-secreted with MSH (melanocyte-stimulating hormone) from pro-opiomelanocortin (POMC) — MSH stimulates melanocytes", "ACTH stimulates adrenal androgens which are converted peripherally to melanin", "Loss of cortisol feedback reduces ACTH but increases MSH independently"],
-    ans:1,
-    exp:'ACTH and MSH are both derived from the same precursor polypeptide — pro-opiomelanocortin (POMC) — in the anterior pituitary. When cortisol is low (primary AI), loss of negative feedback drives excess POMC cleavage, producing both elevated ACTH AND MSH. MSH stimulates melanocytes to increase melanin production → characteristic bronzing/hyperpigmentation in Addison\'s disease. In secondary AI (pituitary failure), ACTH and MSH are both LOW — so hyperpigmentation is ABSENT.',
-    cogLevel:'Analysis',
-    src:'Nepal DM Guide Q40 / Mudit Khanna — Endocrinology: Addison\'s Hyperpigmentation Mechanism'
-  },
-  /* Q116 */ {
-    id:116, domain:'Endocrinology',
-    caseNum:13, isCase:false,
-    text:'Most common cause of primary adrenal insufficiency in India and Nepal is:',
-    opts:["Autoimmune adrenalitis", "Metastatic carcinoma to adrenal glands", "Tuberculosis of the adrenal glands", "HIV-associated adrenal insufficiency"],
-    ans:2,
-    exp:'Tuberculosis is the most common cause of primary adrenal insufficiency in India and Nepal (and other TB-endemic developing countries). TB destroys the adrenal cortex bilaterally — the glands may show calcification on CT scan. In developed Western countries, autoimmune adrenalitis (A) is the most common cause overall. The distinction is clinically important: TB-associated Addison\'s disease requires anti-TB therapy in addition to steroid replacement.',
-    cogLevel:'Recall',
-    src:'Mudit Khanna — Endocrinology: Addison\'s Disease Cause; AIIMS May 94, AIIMS Nov 2017'
-  },
-  /* Q117 */ {
-    id:117, domain:'GI / Hepatology',
-    caseNum:14, isCase:true,
-    caseText:'A 58-year-old man with Child-Pugh B cirrhosis (alcohol-related) presents with increasing confusion and drowsiness (Grade III HE). He had a large upper GI bleed (haematemesis) 3 days ago treated with banding. He is on lactulose. Labs: ammonia 142 µmol/L, creatinine 1.3 mg/dL, Na+ 129 mEq/L.',
-    text:'The PRECIPITANT of hepatic encephalopathy in this patient is MOST LIKELY:',
-    opts:["Constipation from lactulose", "Hyponatraemia (Na+ 129 mEq/L)", "The preceding gastrointestinal bleed — blood in the gut provides a large protein load → ammonia generation", "Spontaneous bacterial peritonitis (SBP)"],
-    ans:2,
-    exp:'Blood in the gastrointestinal tract acts as a massive protein substrate for colonic bacteria — enzymatic breakdown produces large amounts of ammonia, precipitating HE. GI bleeding is one of the MOST COMMON precipitants of HE in cirrhosis. Other key precipitants: infection/SBP, constipation, HYPOkalaemia, sedatives, diuretic excess, and metabolic alkalosis. Lactulose (A) causes diarrhoea — not constipation — and is actually the treatment for HE.',
-    cogLevel:'Application',
-    src:'Mudit Khanna — Gastroenterology: Hepatic Encephalopathy Precipitants; AI 1999'
-  },
-  /* Q118 */ {
-    id:118, domain:'GI / Hepatology',
-    caseNum:14, isCase:false,
-    text:'The mechanism by which lactulose improves hepatic encephalopathy is:',
-    opts:["Directly neutralises blood ammonia (NH₃) in the portal circulation", "Acidifies colonic pH → converts NH₃ (diffusible) to NH₄⁺ (non-diffusible/charged) → trapped in colon + accelerates transit reducing absorption + cathartic effect", "Inhibits hepatic glutaminase reducing ammonia production", "Binds ammonia in the bloodstream like a chelating agent"],
-    ans:1,
-    exp:'Lactulose (non-absorbable disaccharide) is metabolised by colonic bacteria to lactic, acetic, and formic acids → acidifies colonic pH to ~5.0. At this pH, NH₃ (uncharged, lipid-soluble, diffuses into blood) is converted to NH₄⁺ (charged ammonium ion, cannot cross membranes → trapped in colon). Additionally, the osmotic cathartic effect accelerates bowel transit, reducing ammonia absorption time. Target: 2–4 loose stools per day.',
-    cogLevel:'Application',
-    src:'Mudit Khanna — Gastroenterology: Lactulose Mechanism in HE'
-  },
-  /* Q119 */ {
-    id:119, domain:'Nephrology',
-    caseNum:15, isCase:true,
-    caseText:'A 42-year-old man presents with nephrotic syndrome (generalised oedema, proteinuria 8 g/day, albumin 2.0 g/dL, cholesterol 9.2 mmol/L). Renal biopsy shows subepithelial \'spike and dome\' deposits on electron microscopy. ANA is negative, HBsAg is negative. Anti-PLA2R antibody titre is markedly elevated.',
-    text:'This patient has primary membranous nephropathy. Regarding the NATURAL HISTORY of untreated primary MN:',
-    opts:["100% progress to end-stage renal disease within 5 years — all patients require immediate immunosuppression", "Rule of thirds: approximately 1/3 spontaneous complete remission, 1/3 partial remission, 1/3 progressive renal decline — watch-and-wait for low-risk patients", "All patients with proteinuria >3.5 g/day must receive cyclophosphamide immediately", "Steroids alone are sufficient first-line treatment"],
-    ans:1,
-    exp:'Primary membranous nephropathy follows the \'rule of thirds\': ~1/3 spontaneous complete or partial remission within 5 years (especially those with low-risk features: male, proteinuria <4 g/day, normal GFR, low anti-PLA2R titre); ~1/3 stable partial remission; ~1/3 progressive to ESRD. Immunosuppression is reserved for high-risk patients (proteinuria >8 g/day for >6 months, declining GFR, or very high anti-PLA2R titre). Low-risk patients warrant conservative management + watch-and-wait.',
-    cogLevel:'Analysis',
-    src:'Mudit Khanna / Nepal DM Guide — Nephrology: MN Natural History'
-  },
-  /* Q120 */ {
-    id:120, domain:'Nephrology',
-    caseNum:15, isCase:false,
-    text:'For this patient with primary membranous nephropathy and serum albumin of 2.0 g/dL, which additional preventive measure is specifically recommended?',
-    opts:["Prophylactic antibiotic for SBP (as in cirrhotic ascites)", "Prophylactic anticoagulation — due to very high risk of renal vein thrombosis/PE when serum albumin <2.0 g/dL in membranous nephropathy", "Monthly IV immunoglobulin infusion to replace lost IgG", "Annual pneumococcal vaccine only"],
-    ans:1,
-    exp:'Membranous nephropathy has the highest thrombotic risk of all glomerulopathies. When serum albumin <2.0 g/dL in primary MN, prophylactic anticoagulation (warfarin or LMWH) is recommended by most guidelines — risk of renal vein thrombosis (~30–40% in MN) and PE outweighs bleeding risk. Anti-PLA2R titre, serum albumin <2 g/dL, and proteinuria >8 g/day are all indications to consider anticoagulation in MN. Anticoagulation is withdrawn when remission is achieved.',
-    cogLevel:'Application',
-    src:'Mudit Khanna — Nephrology: Membranous Nephropathy — Thrombosis Prevention'
-  }
-];
-
-/* ====================== STATE ====================== */
-let userAnswers = new Array(QUESTIONS.length).fill(null);
-let timerInterval = null;
-let secondsLeft = 7200;
-let examStarted = false;
-let examSubmitted = false;
-let examStopped = false;
-
-/* ====================== PASSWORD ====================== */
-function verifyPassword() {
-  const entered = document.getElementById('exam-password').value.trim();
-  if (entered === "Dr.UpendraPoudel") {
-    document.getElementById('password-section').style.display = 'none';
-    document.getElementById('start-button-section').style.display = 'block';
-  } else {
-    const err = document.getElementById('password-error');
-    err.style.display = 'block';
-    setTimeout(() => err.style.display = 'none', 3000);
-  }
+// ── Chip selection ──
+function initChips(groupId, key) {
+  document.getElementById(groupId).querySelectorAll('.chip').forEach(c => {
+    c.onclick = () => {
+      document.getElementById(groupId).querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));
+      c.classList.add('active');
+      config[key] = c.dataset.v;
+    };
+  });
 }
+initChips('countChips','count');
+initChips('levelChips','level');
+initChips('styleChips','style');
+initChips('nepalChips','nepal');
 
-/* ====================== START EXAM ====================== */
-function startExam() {
-  document.getElementById('landing').classList.add('hidden');
-  setTimeout(() => {
-    document.getElementById('landing').style.display = 'none';
-    document.getElementById('exam-header').style.display = 'flex';
-    document.getElementById('exam-body').style.display = 'block';
-    buildExam();
-    startTimer();
-    examStarted = true;
-  }, 600);
-}
+document.querySelectorAll('.domain-tag').forEach(t => {
+  t.onclick = () => {
+    document.querySelectorAll('.domain-tag').forEach(x=>x.classList.remove('active'));
+    t.classList.add('active');
+    config.domain = t.dataset.d;
+  };
+});
 
-/* ====================== BUILD EXAM ====================== */
-function buildExam() {
-  const body = document.getElementById('exam-body');
-  body.innerHTML = '';
+// ── Prompt builder ──
+function buildPrompt() {
+  const domainMap = {
+    'Cardiology': `Cardiology — focus on: arterial pulses (pulsus bisferiens, paradoxus, alternans), JVP waveforms, heart sounds (S1/S2/S3/S4 splitting), murmurs (MS, MR, AS, AR, TR, PS, PDA, VSD, ASD), ECG interpretation, arrhythmias (AF, VT, SVT, heart block, WPW), STEMI/NSTEMI management, heart failure (HFrEF/HFpEF, acute decompensation), hypertensive emergency, cardiac tamponade, constrictive pericarditis, cardiomyopathies, infective endocarditis, shock management, CPR/ACLS`,
+    'Respiratory': `Respiratory Medicine — focus on: ABG interpretation and acid-base, COPD (GOLD staging, exacerbations), asthma (severity, management), tuberculosis (DOTS, DR-TB, extrapulmonary), pneumonia (CAP/HAP empiric treatment), pleural effusion (transudate/exudate, SAAG), pulmonary embolism (Wells score, management), pulmonary hypertension, lung cancer, interstitial lung disease, respiratory failure`,
+    'Nervous System': `Neurology — focus on: ischemic vs hemorrhagic stroke (thrombolysis eligibility, time windows), seizure classification and drug selection (first-line, refractory), meningitis vs encephalitis (empiric treatment), Parkinson's disease, dementia types, neuropathies, coma assessment (GCS, brainstem reflexes, herniation), raised ICP management, myasthenia gravis, GBS, headache classification`,
+    'Endocrine': `Endocrinology — focus on: DKA vs HHS (diagnosis, severity, management), thyroid disorders (hypothyroidism, hyperthyroidism, thyroid storm, myxedema coma), adrenal disorders (Cushing's, Addison's, adrenal crisis, phaeochromocytoma), diabetes drug selection (insulin types, SGLT2i, GLP-1), calcium disorders (hypercalcemia/hypocalcemia), SIADH vs DI, pituitary disorders`,
+    'Gastrointestinal': `Gastroenterology & Hepatology — focus on: upper GI bleed (Rockford/Blatchford scoring, endoscopy timing), cirrhosis complications (variceal bleeding, SBP, hepatic encephalopathy, hepatorenal syndrome), ascites (SAAG interpretation, management), acute pancreatitis (Ranson/BISAP criteria, management), IBD (Crohn's vs UC treatment), liver failure (acute, chronic), hepatitis (viral, alcoholic), jaundice differential`,
+    'Hematology': `Hematology — focus on: anemia classification (microcytic/normocytic/macrocytic, peripheral smear findings), iron deficiency vs thalassemia vs ACD differentiation, hemolytic anemias (G6PD, hereditary spherocytosis, autoimmune), leukemia (acute presentation, blast crisis), lymphoma basics, coagulation disorders (hemophilia, DIC, VWD), thrombocytopenia (ITP, TTP, HIT), transfusion medicine`,
+    'All Domains': `All medical domains — Cardiology, Respiratory, Neurology, Endocrinology, Gastroenterology/Hepatology, Hematology, Infectious Disease (TB, enteric fever, dengue, malaria, sepsis), Nephrology (AKI, CKD, electrolytes, acid-base), Rheumatology (SLE, RA, gout)`
+  };
 
-  body.innerHTML += `<div class="domain-header">Part 1 — Standalone MCQs (Q1–Q80)</div>`;
+  const domainGuide = domainMap[config.domain] || domainMap['All Domains'];
+  const nepal = config.nepal === 'Yes' ? `
+- Include Nepal-specific context: TB (DOTS regimens, drug-resistant TB, extrapulmonary), enteric fever (Salmonella typhi, fluoroquinolone resistance, ceftriaxone first-line), dengue (hemorrhagic fever recognition, management), malaria (P. vivax/P. falciparum differentiation, cerebral malaria)
+- Reference drug availability relevant to Nepal medical practice` : '';
 
-  for (let i = 0; i < QUESTIONS.length; i++) {
-    const q = QUESTIONS[i];
-    if (i === 80) {
-      body.innerHTML += `<div class="domain-header" style="margin-top:2.5rem">Part 2 — Case-Based MCQs (Q81–Q120)</div>`;
+  const styleGuide = config.style === 'Mixed' 
+    ? `Mix question types: "next best step in management", "most likely diagnosis", "investigation of choice", "drug of choice", "complication expected"` 
+    : `Emphasize "${config.style}" style questions throughout`;
+
+  const levelGuide = config.level === 'Mixed'
+    ? `Mix cognitive levels: ~40% Recall (factual, 1-2 line stems), ~35% Application (clinical scenarios with vitals/labs), ~25% Analysis (complex multi-step reasoning with ECG/ABG/imaging findings)`
+    : `All questions should be at "${config.level}" cognitive level`;
+
+  return `You are an expert Nepal DM Entrance and Internal Medicine Exit examination question writer. Generate exactly ${config.count} completely NEW, original MCQs that authentically mimic real Nepal DM exam style.
+
+DOMAIN: ${domainGuide}
+
+COGNITIVE LEVELS: ${levelGuide}
+
+QUESTION STYLE: ${styleGuide}
+${nepal}
+
+CRITICAL RULES:
+1. Every question must be clinically realistic — reflect actual physician decision-making
+2. Each question has exactly 4 options (A-D), ONE unambiguously correct answer
+3. All distractors must be clinically plausible — no obviously wrong options
+4. Avoid repeating patient demographics (vary age, sex, comorbidities)
+5. Include at least 2-3 emergency management questions if count ≥ 10
+6. ECG findings, ABG values, and electrolyte scenarios must be woven in naturally
+7. Application questions MUST include: patient age, key vitals, relevant labs/findings
+8. NEVER generate questions already present in standard textbooks verbatim — these must be original
+
+MANDATORY OUTPUT FORMAT — respond ONLY with valid JSON, no preamble, no markdown fences:
+{
+  "questions": [
+    {
+      "id": 1,
+      "domain": "Cardiology",
+      "cogLevel": "Recall",
+      "text": "Full question stem here",
+      "opts": ["Option A", "Option B", "Option C", "Option D"],
+      "ans": 0,
+      "exp": "1-2 sentence explanation of correct answer and why key distractors are wrong"
     }
-    if (q.isCase === true) {
-      body.innerHTML += `
-        <div class="case-block" id="case-block-${q.caseNum}">
-          <div class="case-num">Clinical Case ${q.caseNum}</div>
-          <div class="case-text">${q.caseText}</div>
-        </div>`;
+  ]
+}
+
+The "ans" field is the 0-based index of the correct option. Generate all ${config.count} questions now.`;
+}
+
+// ── Generate ──
+async function generateExam() {
+  const btn = document.getElementById('generateBtn');
+  const loader = document.getElementById('loader');
+  const examArea = document.getElementById('examArea');
+  const errorBox = document.getElementById('errorBox');
+
+  btn.disabled = true;
+  errorBox.classList.remove('show');
+  examArea.style.display = 'none';
+  loader.classList.add('active');
+
+  const msgs = [
+    'Constructing clinical scenarios…',
+    'Calibrating difficulty to Nepal DM standards…',
+    'Writing plausible distractors…',
+    'Validating clinical accuracy…'
+  ];
+  let mi = 0;
+  const msgInterval = setInterval(() => {
+    mi = (mi+1) % msgs.length;
+    document.getElementById('loaderText').textContent = msgs[mi];
+  }, 2200);
+
+  try {
+    const prompt = buildPrompt();
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json' },
+      body: JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:8000,
+        messages:[{ role:'user', content: prompt }]
+      })
+    });
+
+    if (!resp.ok) {
+      const err = await resp.json().catch(()=>({error:{message:'API error'}}));
+      throw new Error(err.error?.message || `HTTP ${resp.status}`);
     }
-    body.innerHTML += buildCard(q);
+
+    const data = await resp.json();
+    const raw = data.content?.find(b=>b.type==='text')?.text || '';
+    
+    // Strip markdown fences if present
+    const cleaned = raw.replace(/```json\s*/gi,'').replace(/```\s*/gi,'').trim();
+    
+    let parsed;
+    try {
+      parsed = JSON.parse(cleaned);
+    } catch(e) {
+      // Try to extract JSON object from raw
+      const match = raw.match(/\{[\s\S]*\}/);
+      if (match) parsed = JSON.parse(match[0]);
+      else throw new Error('Could not parse AI response as JSON. Please try again.');
+    }
+
+    questions = parsed.questions || [];
+    if (questions.length === 0) throw new Error('No questions returned. Please try again.');
+    
+    answers = {};
+    renderExam();
+
+  } catch(e) {
+    errorBox.textContent = '⚠ ' + (e.message || 'Generation failed. Please try again.');
+    errorBox.classList.add('show');
+  } finally {
+    clearInterval(msgInterval);
+    loader.classList.remove('active');
+    btn.disabled = false;
   }
 }
 
-function buildCard(q) {
-  const letters = ['A','B','C','D'];
-  const optsHTML = q.opts.map((opt, i) => `
-    <label class="option-label" id="opt-${q.id}-${i}" for="q${q.id}_opt${i}">
-      <input type="radio" name="q${q.id}" id="q${q.id}_opt${i}" value="${i}" onchange="selectAnswer(${q.id-1}, ${i})">
-      <span class="opt-letter">${letters[i]}</span>
-      <span class="opt-text">${opt}</span>
-    </label>
-  `).join('');
+// ── Render ──
+function renderExam() {
+  const container = document.getElementById('questionsContainer');
+  const examArea = document.getElementById('examArea');
+  const results = document.getElementById('results');
+  
+  results.classList.remove('show');
+  container.innerHTML = '';
 
-  return `
-    <div class="q-card" id="qcard-${q.id}">
-      <div class="q-meta">
-        <span class="q-num">Q${q.id}</span>
-        <span class="q-status-dot" id="dot-${q.id}"></span>
+  // Stats
+  const domainCounts = {};
+  const levelCounts = {};
+  questions.forEach(q => {
+    domainCounts[q.domain] = (domainCounts[q.domain]||0)+1;
+    levelCounts[q.cogLevel] = (levelCounts[q.cogLevel]||0)+1;
+  });
+  
+  document.getElementById('statsBar').innerHTML = `
+    <div class="stat"><span class="stat-val">${questions.length}</span><span class="stat-lbl">Questions</span></div>
+    <div class="stat"><span class="stat-val">${Object.keys(domainCounts).length}</span><span class="stat-lbl">Domains</span></div>
+    <div class="stat"><span class="stat-val">${levelCounts['Recall']||0}</span><span class="stat-lbl">Recall</span></div>
+    <div class="stat"><span class="stat-val">${levelCounts['Application']||0}</span><span class="stat-lbl">Application</span></div>
+    <div class="stat"><span class="stat-val">${levelCounts['Analysis']||0}</span><span class="stat-lbl">Analysis</span></div>
+  `;
+
+  const letters = ['A','B','C','D','E'];
+  
+  questions.forEach((q, qi) => {
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    card.style.animationDelay = `${qi * 0.04}s`;
+    card.id = `qcard-${qi}`;
+
+    const levelClass = q.cogLevel?.toLowerCase().replace(/\s+/g,'') || 'recall';
+    const domainColor = {
+      'Cardiology':'#ff6b6b','Respiratory':'#4ecdc4','Nervous System':'#a78bfa',
+      'Endocrine':'#fb923c','Gastrointestinal':'#34d399','Hematology':'#f472b6',
+      'Infectious Disease':'#60a5fa','Nephrology':'#fb7185','Rheumatology':'#e879f9'
+    }[q.domain] || '#7a8aaa';
+
+    const optsHtml = (q.opts||[]).map((opt, oi) => `
+      <div class="option" id="opt-${qi}-${oi}" onclick="selectOpt(${qi},${oi})">
+        <span class="opt-letter">${letters[oi]}</span>
+        <span>${opt}</span>
+      </div>
+    `).join('');
+
+    card.innerHTML = `
+      <div class="q-header">
+        <div class="q-num">${qi+1}</div>
+        <div style="flex:1">
+          <div class="q-meta">
+            <span class="tag tag-domain" style="border-color:${domainColor}44;color:${domainColor};background:${domainColor}11;">${q.domain||'Medicine'}</span>
+            <span class="tag tag-${levelClass}">${q.cogLevel||'Recall'}</span>
+          </div>
+        </div>
       </div>
       <div class="q-text">${q.text}</div>
-      <div class="options-grid">${optsHTML}</div>
-      <div class="explanation-box" id="exp-${q.id}">
-        <div class="exp-header">Explanation</div>
-        <div class="exp-text">${q.exp}</div>
-        <div class="exp-source">📚 ${q.src}</div>
+      <div class="options">${optsHtml}</div>
+      <div class="explanation" id="exp-${qi}">
+        <strong>Explanation:</strong> ${q.exp || ''}
       </div>
-    </div>
-  `;
+    `;
+    container.appendChild(card);
+  });
+
+  examArea.style.display = 'block';
+  document.getElementById('submitBtn').style.display = 'inline-block';
+  document.getElementById('submitBtn').textContent = 'Submit Exam & See Results';
+  examArea.scrollIntoView({ behavior:'smooth', block:'start' });
 }
 
-/* ====================== ANSWER SELECTION ====================== */
-function selectAnswer(qIndex, optIndex) {
-  if (examSubmitted || examStopped) return;
-  userAnswers[qIndex] = optIndex;
-
-  const q = QUESTIONS[qIndex];
-  const card = document.getElementById(`qcard-${q.id}`);
-  const dot = document.getElementById(`dot-${q.id}`);
-
-  for (let i = 0; i < 4; i++) {
-    const label = document.getElementById(`opt-${q.id}-${i}`);
-    if (label) label.classList.remove('selected');
+function selectOpt(qi, oi) {
+  if (answers[qi] !== undefined) return; // already answered
+  answers[qi] = oi;
+  
+  // Disable all opts for this question
+  for (let i=0; i<5; i++) {
+    const el = document.getElementById(`opt-${qi}-${i}`);
+    if (el) el.classList.add('disabled');
   }
-  const selected = document.getElementById(`opt-${q.id}-${optIndex}`);
-  if (selected) selected.classList.add('selected');
-
-  card.classList.add('answered');
-  dot.classList.add('answered');
-  updateProgress();
-}
-
-function updateProgress() {
-  const answered = userAnswers.filter(a => a !== null).length;
-  const pct = (answered / QUESTIONS.length) * 100;
-  document.getElementById('progress-fill').style.width = pct + '%';
-  document.getElementById('progress-text').textContent = `${answered} / ${QUESTIONS.length}`;
-}
-
-/* ====================== TIMER ====================== */
-function startTimer() {
-  timerInterval = setInterval(() => {
-    secondsLeft--;
-    updateTimerDisplay();
-    if (secondsLeft <= 0) {
-      clearInterval(timerInterval);
-      document.getElementById('timeup-overlay').classList.add('show');
-    }
-  }, 1000);
-}
-
-function updateTimerDisplay() {
-  const h = Math.floor(secondsLeft / 3600);
-  const m = Math.floor((secondsLeft % 3600) / 60);
-  const s = secondsLeft % 60;
-  const display = h > 0 ? `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}` : `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-  document.getElementById('timer').textContent = display;
-}
-
-/* ====================== STOP & SUBMIT ====================== */
-function stopExam() {
-  if (examSubmitted || examStopped) return;
-  if (!confirm('Are you sure you want to STOP the exam now?')) return;
-  examStopped = true;
-  clearInterval(timerInterval);
-  submitExam();
-}
-
-function handleSubmit() {
-  if (examSubmitted || examStopped) return;
-  const unanswered = userAnswers.filter(a => a === null).length;
-  if (unanswered > 0 && !confirm(`You have ${unanswered} unanswered question(s). Submit anyway?`)) return;
-  clearInterval(timerInterval);
-  submitExam();
-}
-
-function forceSubmit() {
-  document.getElementById('timeup-overlay').classList.remove('show');
-  clearInterval(timerInterval);
-  submitExam();
+  
+  const correct = questions[qi].ans;
+  const selectedEl = document.getElementById(`opt-${qi}-${oi}`);
+  const correctEl = document.getElementById(`opt-${qi}-${correct}`);
+  
+  if (oi === correct) {
+    selectedEl.classList.add('correct');
+  } else {
+    selectedEl.classList.add('wrong');
+    correctEl.classList.add('correct');
+  }
+  
+  document.getElementById(`exp-${qi}`).classList.add('show');
+  
+  // Check if all answered
+  if (Object.keys(answers).length === questions.length) {
+    document.getElementById('submitBtn').style.display = 'none';
+    showResults();
+  }
 }
 
 function submitExam() {
-  examSubmitted = true;
-  document.getElementById('exam-header').style.display = 'none';
-  document.getElementById('exam-body').style.display = 'none';
-
-  QUESTIONS.forEach((q, i) => {
-    const card = document.getElementById(`qcard-${q.id}`);
-    const dot = document.getElementById(`dot-${q.id}`);
-    const expBox = document.getElementById(`exp-${q.id}`);
-    const userAns = userAnswers[i];
-    const isCorrect = userAns === q.ans;
-
-    for (let j = 0; j < q.opts.length; j++) {
-      const label = document.getElementById(`opt-${q.id}-${j}`);
-      if (!label) continue;
-      label.classList.add('disabled');
-      if (j === q.ans) label.classList.add('correct-opt');
-      else if (j === userAns && !isCorrect) label.classList.add('incorrect-opt');
+  // Reveal all unanswered
+  questions.forEach((q, qi) => {
+    if (answers[qi] === undefined) {
+      // Mark as skipped — show correct answer
+      for (let i=0; i<5; i++) {
+        const el = document.getElementById(`opt-${qi}-${i}`);
+        if (el) el.classList.add('disabled');
+      }
+      const correctEl = document.getElementById(`opt-${qi}-${q.ans}`);
+      if (correctEl) correctEl.classList.add('correct');
+      document.getElementById(`exp-${qi}`)?.classList.add('show');
+      answers[qi] = -1; // skipped
     }
+  });
+  document.getElementById('submitBtn').style.display = 'none';
+  showResults();
+}
 
-    if (userAns === null) {
-      card.style.borderColor = 'var(--amber)';
-    } else if (isCorrect) {
-      card.classList.add('correct-card');
-      dot.classList.add('correct');
-    } else {
-      card.classList.add('incorrect-card');
-      dot.classList.add('incorrect');
-    }
-    expBox.classList.add('show');
+function showResults() {
+  let correct = 0, wrong = 0, skipped = 0;
+  questions.forEach((q, qi) => {
+    const a = answers[qi];
+    if (a === -1) skipped++;
+    else if (a === q.ans) correct++;
+    else wrong++;
   });
 
-  buildResults();
-  window.scrollTo({top:0, behavior:'smooth'});
-  document.getElementById('results-screen').style.display = 'block';
-}
+  const pct = Math.round((correct / questions.length) * 100);
+  let grade = '', color = '';
+  if (pct >= 80) { grade = 'Excellent — Pass'; color = 'var(--green)'; }
+  else if (pct >= 60) { grade = 'Satisfactory — Borderline'; color = 'var(--amber)'; }
+  else { grade = 'Needs Improvement'; color = 'var(--red)'; }
 
-function buildResults() {
-  const correct = QUESTIONS.filter((q,i) => userAnswers[i] === q.ans).length;
-  const incorrect = QUESTIONS.filter((q,i) => userAnswers[i] !== null && userAnswers[i] !== q.ans).length;
-  const skipped = QUESTIONS.filter((q,i) => userAnswers[i] === null).length;
-  const pct = Math.round((correct / QUESTIONS.length) * 100);
-
-  let grade = pct >= 80 ? 'DISTINCTION' : pct >= 65 ? 'PASS' : pct >= 50 ? 'BORDERLINE' : 'FAIL';
-  let gradeClass = pct >= 80 ? 'grade-A' : pct >= 65 ? 'grade-B' : pct >= 50 ? 'grade-C' : 'grade-D';
-
-  const resultsHTML = `
-    <div class="results-hero">
-      <div class="results-score-circle" style="--pct: ${pct * 3.6}deg">
-        <div class="results-score-inner">
-          <div class="results-pct">${pct}%</div>
-          <div class="results-pct-label">Score</div>
-        </div>
-      </div>
-      <div class="grade-badge ${gradeClass}">${grade}</div>
-      <h2 class="results-title">${examStopped ? 'Exam Stopped' : 'Exam Complete'}</h2>
-      <p class="results-subtitle">${correct} of ${QUESTIONS.length} correct</p>
-      <div class="results-stats">
-        <div class="stat-pill correct-p">✓ ${correct} Correct</div>
-        <div class="stat-pill incorrect-p">✗ ${incorrect} Incorrect</div>
-        <div class="stat-pill skipped-p">– ${skipped} Skipped</div>
-      </div>
+  const resultsEl = document.getElementById('results');
+  resultsEl.innerHTML = `
+    <div class="score-circle">
+      <span class="score-val">${correct}</span>
+      <span class="score-pct">/ ${questions.length}</span>
     </div>
-    <h3 class="section-head">Review All Questions</h3>
+    <h3>${pct}% — ${grade}</h3>
+    <p style="color:var(--text-muted);font-size:14px;margin-top:4px;">Scroll up to review explanations for each question</p>
+    <div class="results-grid">
+      <div class="res-stat green"><div class="val">${correct}</div><div class="lbl">Correct</div></div>
+      <div class="res-stat red"><div class="val">${wrong}</div><div class="lbl">Wrong</div></div>
+      <div class="res-stat amber"><div class="val">${skipped}</div><div class="lbl">Skipped</div></div>
+      <div class="res-stat"><div class="val" style="color:var(--blue)">${pct}%</div><div class="lbl">Score</div></div>
+    </div>
+    <button class="submit-btn" style="margin-top:24px;" onclick="newExam()">Generate New Exam</button>
   `;
-
-  document.getElementById('results-screen').innerHTML = resultsHTML;
+  resultsEl.classList.add('show');
+  resultsEl.scrollIntoView({ behavior:'smooth', block:'start' });
 }
 
-/* Scroll to top */
-window.addEventListener('scroll', () => {
-  const el = document.getElementById('scroll-top');
-  if (window.scrollY > 400 && examStarted) el.classList.add('show');
-  else el.classList.remove('show');
-});
+function newExam() {
+  document.getElementById('results').classList.remove('show');
+  document.getElementById('examArea').style.display = 'none';
+  document.getElementById('configPanel').scrollIntoView({ behavior:'smooth', block:'start' });
+}
 </script>
 </body>
 </html>
