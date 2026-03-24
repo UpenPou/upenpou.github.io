@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nepal DM Special Exam — Internal Medicine</title>
+<title>Nepal MD Special Exam — Internal Medicine</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -862,7 +862,7 @@
 <!-- ══════════ LANDING ══════════ -->
 <div id="landing">
   <div class="landing-cross">✚</div>
-  <h1 class="landing-title">Nepal DM Special Exam</h1>
+  <h1 class="landing-title">Nepal MD Special Exam</h1>
   <div class="landing-subtitle">April 2, 2026 · Internal Medicine · 120 Questions</div>
   <div class="landing-meta">
     <div class="meta-pill"><span>⏱</span> 2-Hour Time Limit</div>
@@ -1966,45 +1966,35 @@ function startExam() {
 }
 
 /* ══════════════════════════════════════════════════════════
-   BUILD EXAM
+   BUILD EXAM — NOW SERIAL ORDER Q1–Q120 (only change)
    ══════════════════════════════════════════════════════════ */
 function buildExam() {
   const body = document.getElementById('exam-body');
   body.innerHTML = '';
 
-  // Group by section
-  const standalone = QUESTIONS.filter(q => q.id <= 80);
-  const caseBased = QUESTIONS.filter(q => q.id > 80);
-
-  // Section 1 header
+  // Part 1 header
   body.innerHTML += `<div class="domain-header">Part 1 — Standalone MCQs (Q1–Q80)</div>`;
 
-  // Standalone questions by domain groups
-  const domains = [...new Set(standalone.map(q => q.domain))];
-  domains.forEach(domain => {
-    const dqs = standalone.filter(q => q.domain === domain);
-    body.innerHTML += `<div class="domain-header">${domain}</div>`;
-    dqs.forEach(q => body.innerHTML += buildCard(q));
-  });
+  for (let i = 0; i < QUESTIONS.length; i++) {
+    const q = QUESTIONS[i];
 
-  // Section 2 header
-  body.innerHTML += `<div class="domain-header" style="margin-top:2.5rem">Part 2 — Case-Based MCQs (Q81–Q120)</div>`;
+    // Part 2 header exactly before Q81
+    if (i === 80) {
+      body.innerHTML += `<div class="domain-header" style="margin-top:2.5rem">Part 2 — Case-Based MCQs (Q81–Q120)</div>`;
+    }
 
-  // Group by case number
-  const caseNums = [...new Set(caseBased.map(q => q.caseNum))];
-  caseNums.forEach(cn => {
-    const cqs = caseBased.filter(q => q.caseNum === cn);
-    // Print case stem once
-    const caseQ = cqs.find(q => q.isCase);
-    if (caseQ && caseQ.caseText) {
+    // Insert clinical case stem exactly once before its first question
+    if (q.isCase === true) {
       body.innerHTML += `
-        <div class="case-block" id="case-block-${cn}">
-          <div class="case-num">Clinical Case ${cn}</div>
-          <div class="case-text">${caseQ.caseText}</div>
+        <div class="case-block" id="case-block-${q.caseNum}">
+          <div class="case-num">Clinical Case ${q.caseNum}</div>
+          <div class="case-text">${q.caseText}</div>
         </div>`;
     }
-    cqs.forEach(q => body.innerHTML += buildCard(q));
-  });
+
+    // Add the question card (now strictly serial 1–120)
+    body.innerHTML += buildCard(q);
+  }
 }
 
 function buildCard(q) {
