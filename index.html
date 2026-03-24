@@ -1,1079 +1,1869 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Nepal MD Special Exam — Internal Medicine</title>
-    <meta name="description" content="Interactive 120-question MCQ exam for Nepal DM Entrance and Internal Medicine Exit.">
-    <meta name="theme-color" content="#4f46e5">
-    <style>
-        :root {
-            /* Modern Color Palette */
-            --primary: #4f46e5; /* Indigo 600 */
-            --primary-dark: #4338ca; /* Indigo 700 */
-            --primary-light: #e0e7ff; /* Indigo 100 */
-            --secondary: #10b981; /* Emerald 500 */
-            --secondary-dark: #059669; /* Emerald 600 */
-            --danger: #ef4444; /* Red 500 */
-            --danger-bg: #fef2f2; /* Red 50 */
-            --warning: #f59e0b; /* Amber 500 */
-            
-            --bg-body: #f3f4f6; /* Gray 100 */
-            --bg-card: #ffffff;
-            --bg-option: #f9fafb; /* Gray 50 */
-            --bg-option-hover: #f3f4f6;
-            
-            --text-main: #111827; /* Gray 900 */
-            --text-secondary: #6b7280; /* Gray 500 */
-            --text-light: #9ca3af; /* Gray 400 */
-            
-            --border: #e5e7eb; /* Gray 200 */
-            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            
-            --radius-sm: 6px;
-            --radius-md: 12px;
-            --radius-lg: 16px;
-            --radius-full: 9999px;
-            
-            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            font-family: var(--font-sans);
-            background-color: var(--bg-body);
-            background-image: 
-                radial-gradient(at 0% 0%, rgba(79, 70, 229, 0.1) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.1) 0px, transparent 50%);
-            background-attachment: fixed;
-            color: var(--text-main);
-            line-height: 1.6;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            padding: 20px;
-        }
-
-        /* Layout Containers */
-        .container {
-            width: 100%;
-            max-width: 800px;
-            margin: 0 auto;
-            background: var(--bg-card);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-xl);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            transition: all 0.3s ease;
-        }
-
-        /* Header */
-        header {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
-            padding: 24px 24px 16px;
-            text-align: center;
-            position: relative;
-        }
-
-        h1 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            letter-spacing: -0.025em;
-            margin-bottom: 4px;
-        }
-
-        .subtitle {
-            font-size: 0.95rem;
-            opacity: 0.9;
-            font-weight: 400;
-        }
-
-        .exam-meta {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-top: 16px;
-            font-size: 0.85rem;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 8px 16px;
-            border-radius: var(--radius-full);
-            backdrop-filter: blur(4px);
-            width: fit-content;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .meta-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        /* Progress Bar */
-        .progress-container {
-            padding: 20px 24px;
-            background: white;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .progress-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--text-secondary);
-        }
-
-        .progress-track {
-            height: 8px;
-            background: var(--bg-option);
-            border-radius: var(--radius-full);
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
-            border-radius: var(--radius-full);
-            width: 0%;
-            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        /* Timer */
-        .timer-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: var(--bg-option);
-            padding: 6px 14px;
-            border-radius: var(--radius-full);
-            font-weight: 600;
-            font-size: 0.9rem;
-            color: var(--text-main);
-            border: 1px solid var(--border);
-            margin-top: 12px;
-        }
-
-        .timer-badge.warning {
-            background: var(--danger-bg);
-            color: var(--danger);
-            border-color: var(--danger);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
-            70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
-        }
-
-        /* Question Card */
-        .question-area {
-            padding: 24px;
-            flex: 1;
-            overflow-y: auto;
-            max-height: 70vh;
-        }
-
-        .question-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .q-number {
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: var(--primary);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .tags {
-            display: flex;
-            gap: 8px;
-        }
-
-        .tag {
-            font-size: 0.75rem;
-            padding: 4px 10px;
-            border-radius: var(--radius-sm);
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-        .tag.recall { background: #dbeafe; color: #1e40af; }
-        .tag.application { background: #d1fae5; color: #065f46; }
-        .tag.analysis { background: #fee2e2; color: #991b1b; }
-        .tag.domain { background: #f3f4f6; color: #4b5563; }
-
-        .stem {
-            font-size: 1.1rem;
-            font-weight: 500;
-            color: var(--text-main);
-            margin-bottom: 24px;
-            line-height: 1.7;
-        }
-
-        .case-vignette {
-            background: var(--primary-light);
-            border-left: 4px solid var(--primary);
-            padding: 16px;
-            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-            margin-bottom: 20px;
-            font-style: italic;
-            color: #3730a3;
-            font-size: 0.95rem;
-        }
-
-        /* Options */
-        .options-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .option-card {
-            position: relative;
-            padding: 16px 20px;
-            background: var(--bg-option);
-            border: 2px solid transparent;
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: flex-start;
-            gap: 14px;
-            font-size: 1rem;
-            color: var(--text-main);
-        }
-
-        .option-card:hover {
-            background: var(--bg-option-hover);
-            transform: translateY(-1px);
-        }
-
-        .option-card.selected {
-            border-color: var(--primary);
-            background: var(--primary-light);
-            color: var(--primary-dark);
-        }
-
-        .option-card.correct {
-            border-color: var(--secondary);
-            background: #ecfdf5;
-            color: var(--secondary-dark);
-        }
-
-        .option-card.incorrect {
-            border-color: var(--danger);
-            background: var(--danger-bg);
-            color: var(--danger);
-            opacity: 0.8;
-        }
-
-        .option-letter {
-            flex-shrink: 0;
-            width: 28px;
-            height: 28px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: white;
-            border: 1px solid var(--border);
-            border-radius: 50%;
-            font-weight: 700;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            transition: all 0.2s;
-        }
-
-        .option-card.selected .option-letter {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-
-        .option-card.correct .option-letter {
-            background: var(--secondary);
-            color: white;
-            border-color: var(--secondary);
-        }
-
-        .option-card.incorrect .option-letter {
-            background: var(--danger);
-            color: white;
-            border-color: var(--danger);
-        }
-
-        /* Explanation */
-        .explanation-box {
-            margin-top: 24px;
-            padding: 20px;
-            background: #f8fafc;
-            border-radius: var(--radius-md);
-            border: 1px solid var(--border);
-            display: none;
-            animation: slideDown 0.3s ease;
-        }
-
-        .explanation-box.show {
-            display: block;
-        }
-
-        .explanation-title {
-            font-weight: 700;
-            color: var(--text-main);
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        /* Footer Actions */
-        .footer-actions {
-            padding: 20px 24px;
-            background: white;
-            border-top: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .btn {
-            padding: 12px 24px;
-            border-radius: var(--radius-md);
-            font-weight: 600;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: none;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-            box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);
-        }
-
-        .btn-primary:hover {
-            background: var(--primary-dark);
-            transform: translateY(-1px);
-            box-shadow: 0 6px 8px -1px rgba(79, 70, 229, 0.3);
-        }
-
-        .btn-primary:disabled {
-            background: var(--text-light);
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        .btn-secondary {
-            background: white;
-            border: 1px solid var(--border);
-            color: var(--text-secondary);
-        }
-
-        .btn-secondary:hover {
-            background: var(--bg-option);
-            color: var(--text-main);
-        }
-
-        .btn-reveal {
-            background: var(--secondary);
-            color: white;
-            width: 100%;
-            margin-top: 16px;
-        }
-        
-        .btn-reveal:hover {
-            background: var(--secondary-dark);
-        }
-
-        /* Screens */
-        .screen {
-            display: none;
-            height: 100%;
-            flex-direction: column;
-        }
-
-        .screen.active {
-            display: flex;
-            animation: fadeIn 0.4s ease;
-        }
-
-        /* Login Screen */
-        .login-content {
-            padding: 40px 24px;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            flex: 1;
-        }
-
-        .login-icon {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            background: var(--primary-light);
-            width: 100px;
-            height: 100px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            color: var(--primary);
-        }
-
-        .input-group {
-            width: 100%;
-            max-width: 320px;
-            margin: 24px 0;
-            position: relative;
-        }
-
-        .input-field {
-            width: 100%;
-            padding: 14px 16px;
-            border: 2px solid var(--border);
-            border-radius: var(--radius-md);
-            font-size: 1rem;
-            font-family: inherit;
-            transition: all 0.2s;
-            text-align: center;
-        }
-
-        .input-field:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px var(--primary-light);
-        }
-
-        .error-msg {
-            color: var(--danger);
-            font-size: 0.9rem;
-            margin-top: 8px;
-            display: none;
-            font-weight: 500;
-        }
-
-        /* Summary Screen */
-        .summary-content {
-            padding: 30px 24px;
-            text-align: center;
-            overflow-y: auto;
-        }
-
-        .score-circle {
-            width: 160px;
-            height: 160px;
-            border-radius: 50%;
-            background: conic-gradient(var(--primary) 0%, var(--border) 0%);
-            margin: 0 auto 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            box-shadow: var(--shadow-lg);
-        }
-
-        .score-circle::before {
-            content: '';
-            position: absolute;
-            width: 140px;
-            height: 140px;
-            background: white;
-            border-radius: 50%;
-        }
-
-        .score-value {
-            position: relative;
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: var(--text-main);
-            z-index: 1;
-        }
-
-        .score-label {
-            font-size: 1rem;
-            color: var(--text-secondary);
-            margin-bottom: 30px;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-            margin-bottom: 30px;
-            text-align: left;
-        }
-
-        .stat-card {
-            background: var(--bg-option);
-            padding: 16px;
-            border-radius: var(--radius-md);
-            border: 1px solid var(--border);
-        }
-
-        .stat-title {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-
-        .stat-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 6px 0;
-            border-bottom: 1px dashed var(--border);
-            font-size: 0.9rem;
-        }
-
-        .stat-row:last-child {
-            border-bottom: none;
-        }
-
-        .text-success { color: var(--secondary); font-weight: 600; }
-        .text-danger { color: var(--danger); font-weight: 600; }
-
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Responsive Adjustments */
-        @media (max-width: 640px) {
-            body {
-                padding: 0;
-                background: var(--bg-body);
-            }
-            
-            .container {
-                border-radius: 0;
-                height: 100vh;
-                max-width: 100%;
-                box-shadow: none;
-            }
-
-            header {
-                padding: 16px;
-            }
-
-            h1 {
-                font-size: 1.25rem;
-            }
-
-            .question-area {
-                padding: 16px;
-            }
-
-            .stem {
-                font-size: 1rem;
-            }
-
-            .footer-actions {
-                padding: 16px;
-                flex-direction: column-reverse;
-                gap: 12px;
-            }
-
-            .btn {
-                width: 100%;
-            }
-            
-            .exam-meta {
-                font-size: 0.75rem;
-                padding: 6px 12px;
-            }
-        }
-
-        @media print {
-            body { background: white; padding: 0; }
-            .container { box-shadow: none; max-width: 100%; }
-            .footer-actions, .progress-container, .timer-badge, .btn-reveal { display: none !important; }
-            .question-card { break-inside: avoid; page-break-inside: avoid; border: 1px solid #ddd; margin-bottom: 20px; }
-            .explanation-box { display: block !important; border: 1px solid #ccc; }
-            .option-card { border: 1px solid #ddd; break-inside: avoid; }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nepal MD Exit & DM Entrance Mock Exam - Internal Medicine</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+      color: white;
+      padding: 30px;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+
+    .header p {
+      opacity: 0.9;
+      font-size: 14px;
+    }
+
+    .progress-bar {
+      background: #ecf0f1;
+      height: 8px;
+      width: 100%;
+    }
+
+    .progress-fill {
+      background: linear-gradient(90deg, #27ae60, #2ecc71);
+      height: 100%;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .quiz-info {
+      display: flex;
+      justify-content: space-between;
+      padding: 15px 30px;
+      background: #f8f9fa;
+      border-bottom: 1px solid #dee2e6;
+      font-size: 14px;
+    }
+
+    .question-container {
+      padding: 30px;
+    }
+
+    .question-meta {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .badge-cardiology { background: #e3f2fd; color: #1976d2; }
+    .badge-respiratory { background: #e8f5e9; color: #388e3c; }
+    .badge-id { background: #fff3e0; color: #f57c00; }
+    .badge-gi { background: #fce4ec; color: #c2185b; }
+    .badge-neuro { background: #f3e5f5; color: #7b1fa2; }
+    .badge-renal { background: #e0f7fa; color: #0097a7; }
+    .badge-rheum { background: #ffebee; color: #c62828; }
+    .badge-heme { background: #fff8e1; color: #ff8f00; }
+
+    .badge-recall { background: #e8eaf6; color: #3f51b5; }
+    .badge-application { background: #e3f2fd; color: #1976d2; }
+    .badge-analysis { background: #fce4ec; color: #c2185b; }
+
+    .question-text {
+      font-size: 18px;
+      line-height: 1.8;
+      margin-bottom: 25px;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 10px;
+      border-left: 4px solid #3498db;
+    }
+
+    .case-id {
+      background: #fff3cd;
+      color: #856404;
+      padding: 8px 15px;
+      border-radius: 5px;
+      margin-bottom: 15px;
+      font-weight: 600;
+      display: inline-block;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .option {
+      padding: 15px 20px;
+      border: 2px solid #dee2e6;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 16px;
+    }
+
+    .option:hover {
+      border-color: #3498db;
+      background: #f0f7ff;
+    }
+
+    .option.selected {
+      border-color: #3498db;
+      background: #e3f2fd;
+    }
+
+    .option.correct {
+      border-color: #27ae60;
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .option.incorrect {
+      border-color: #e74c3c;
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    .option.disabled {
+      pointer-events: none;
+      opacity: 0.7;
+    }
+
+    .explanation {
+      margin-top: 25px;
+      padding: 20px;
+      background: #d1ecf1;
+      border-radius: 10px;
+      border-left: 4px solid #17a2b8;
+      display: none;
+    }
+
+    .explanation.show {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .explanation h4 {
+      color: #0c5460;
+      margin-bottom: 10px;
+    }
+
+    .navigation {
+      display: flex;
+      justify-content: space-between;
+      padding: 20px 30px;
+      border-top: 1px solid #dee2e6;
+      background: #f8f9fa;
+    }
+
+    .btn {
+      padding: 12px 30px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #3498db, #2980b9);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+    }
+
+    .btn-secondary {
+      background: #95a5a6;
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background: #7f8c8d;
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, #27ae60, #229954);
+      color: white;
+    }
+
+    .btn-success:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(39, 174, 96, 0.4);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .summary-container {
+      padding: 30px;
+      display: none;
+    }
+
+    .summary-container.show {
+      display: block;
+    }
+
+    .summary-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .score-display {
+      font-size: 48px;
+      font-weight: 700;
+      color: #2c3e50;
+      margin: 20px 0;
+    }
+
+    .score-percentage {
+      font-size: 24px;
+      color: #7f8c8d;
+    }
+
+    .breakdown-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .breakdown-table th,
+    .breakdown-table td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid #dee2e6;
+    }
+
+    .breakdown-table th {
+      background: #34495e;
+      color: white;
+      font-weight: 600;
+    }
+
+    .breakdown-table tr:hover {
+      background: #f8f9fa;
+    }
+
+    .summary-actions {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 30px;
+    }
+
+    .timer {
+      font-size: 18px;
+      font-weight: 600;
+      color: #e74c3c;
+    }
+
+    .timer.warning {
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    @media print {
+      body {
+        background: white;
+        padding: 0;
+      }
+
+      .container {
+        box-shadow: none;
+        max-width: 100%;
+      }
+
+      .navigation,
+      .progress-bar,
+      .quiz-info {
+        display: none;
+      }
+
+      .question-container {
+        padding: 10px;
+      }
+
+      .explanation {
+        display: block !important;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 22px;
+      }
+
+      .question-text {
+        font-size: 16px;
+      }
+
+      .navigation {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .btn {
+        width: 100%;
+      }
+
+      .summary-actions {
+        flex-direction: column;
+      }
+    }
+
+    .domain-filter {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 20px 0;
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 10px;
+    }
+
+    .filter-btn {
+      padding: 8px 16px;
+      border: 2px solid #dee2e6;
+      border-radius: 20px;
+      background: white;
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.2s ease;
+    }
+
+    .filter-btn.active {
+      background: #3498db;
+      color: white;
+      border-color: #3498db;
+    }
+
+    .filter-btn:hover {
+      border-color: #3498db;
+    }
+  </style>
 </head>
 <body>
-
-    <div class="container">
-        <!-- Login Screen -->
-        <div id="loginScreen" class="screen active">
-            <header style="background: none; color: var(--text-main); padding-top: 40px;">
-                <div class="login-icon">🩺</div>
-                <h1>Nepal MD Special Exam</h1>
-                <p class="subtitle">Internal Medicine · 120 High-Yield Questions</p>
-                <div class="exam-meta" style="background: #f3f4f6; color: #4b5563; margin-top: 20px;">
-                    <div class="meta-item">⏱ 2 Hours</div>
-                    <div class="meta-item">📋 120 MCQs</div>
-                    <div class="meta-item">🏥 9 Domains</div>
-                </div>
-            </header>
-            
-            <div class="login-content">
-                <p style="color: var(--text-secondary); margin-bottom: 20px;">Enter access code to begin examination</p>
-                <div class="input-group">
-                    <input type="password" id="passwordInput" class="input-field" placeholder="Enter Code" autocomplete="off">
-                    <div id="loginError" class="error-msg">❌ Incorrect password. Try again.</div>
-                </div>
-                <button id="startBtn" class="btn btn-primary" style="width: 100%; max-width: 320px;">
-                    Start Examination
-                </button>
-                <p style="font-size: 0.8rem; color: var(--text-light); margin-top: 20px;">
-                    ⚠️ Timer starts immediately upon entry. Cannot be paused.
-                </p>
-            </div>
-        </div>
-
-        <!-- Exam Interface -->
-        <div id="examScreen" class="screen">
-            <header>
-                <h1>Nepal MD Special Exam</h1>
-                <div class="exam-meta">
-                    <div class="meta-item">📊 <span id="qProgress">1</span>/120</div>
-                    <div class="meta-item">⏱ <span id="timerDisplay">2:00:00</span></div>
-                </div>
-            </header>
-
-            <div class="progress-container">
-                <div class="progress-header">
-                    <span>Exam Progress</span>
-                    <span id="progressPercent">0%</span>
-                </div>
-                <div class="progress-track">
-                    <div class="progress-fill" id="progressFill"></div>
-                </div>
-            </div>
-
-            <div class="question-area" id="questionContainer">
-                <!-- Questions injected via JS -->
-            </div>
-
-            <div class="footer-actions">
-                <button id="prevBtn" class="btn btn-secondary" disabled>← Previous</button>
-                <div style="flex:1"></div>
-                <button id="nextBtn" class="btn btn-primary">Next →</button>
-                <button id="submitBtn" class="btn btn-primary" style="background: var(--secondary); display: none;">Submit Exam</button>
-            </div>
-        </div>
-
-        <!-- Summary Screen -->
-        <div id="summaryScreen" class="screen">
-            <header style="background: white; color: var(--text-main); border-bottom: 1px solid var(--border);">
-                <h1>Examination Results</h1>
-                <p class="subtitle">Performance Summary</p>
-            </header>
-            
-            <div class="summary-content">
-                <div class="score-circle" id="scoreCircle">
-                    <div class="score-value" id="finalScore">0%</div>
-                </div>
-                <div class="score-label" id="scoreText">0 / 120 Correct</div>
-
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-title">By Cognitive Level</div>
-                        <div class="stat-row"><span>Recall</span> <span id="recallScore" class="text-success">0/48</span></div>
-                        <div class="stat-row"><span>Application</span> <span id="appScore" class="text-success">0/42</span></div>
-                        <div class="stat-row"><span>Analysis</span> <span id="analysisScore" class="text-success">0/30</span></div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-title">Top Domains</div>
-                        <div class="stat-row"><span>Cardiology</span> <span id="cardioScore">0/24</span></div>
-                        <div class="stat-row"><span>Respiratory</span> <span id="respScore">0/18</span></div>
-                        <div class="stat-row"><span>Infectious Dis.</span> <span id="idScore">0/18</span></div>
-                        <div class="stat-row"><span>Endocrine</span> <span id="endoScore">0/14</span></div>
-                    </div>
-                </div>
-
-                <div style="display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;">
-                    <button onclick="window.print()" class="btn btn-secondary">🖨️ Print Report</button>
-                    <button id="retakeBtn" class="btn btn-primary">🔄 Retake Exam</button>
-                </div>
-            </div>
-        </div>
+  <div class="container">
+    <div class="header">
+      <h1>🏥 Nepal MD Exit & DM Entrance</h1>
+      <p>Internal Medicine • 120 Questions • 2 Hours</p>
     </div>
 
-    <script>
-        // ============ QUESTION DATABASE (120 Questions) ============
-        const questions = [
-            // CARDIOLOGY (24)
-            { id: 1, domain: "Cardiology", type: "recall", stem: "Which electrolyte abnormality is classically associated with peaked, tented T waves on ECG?", options: ["Hypokalemia", "Hyperkalemia", "Hypocalcemia", "Hypercalcemia"], correct: 1, exp: "Hyperkalemia causes characteristic peaked T waves due to accelerated repolarization." },
-            { id: 2, domain: "Cardiology", type: "recall", stem: "What is the diagnostic criterion for STEMI in leads V2-V3 for men?", options: ["≥1 mm ST elevation", "≥2 mm ST elevation", "≥1.5 mm ST elevation", "≥2.5 mm ST elevation"], correct: 3, exp: "For men, STEMI criteria require ≥2.5 mm ST elevation in leads V2-V3." },
-            { id: 3, domain: "Cardiology", type: "recall", stem: "Which heart sound is produced by rapid filling of the ventricle in early diastole?", options: ["S1", "S2", "S3", "S4"], correct: 2, exp: "S3 occurs in early diastole due to rapid ventricular filling." },
-            { id: 4, domain: "Cardiology", type: "recall", stem: "What is the first-line antiplatelet agent for acute coronary syndrome in Nepal?", options: ["Clopidogrel", "Ticagrelor", "Prasugrel", "Aspirin"], correct: 3, exp: "Aspirin is the universal first-line antiplatelet for ACS globally and in Nepal." },
-            { id: 5, domain: "Cardiology", type: "recall", stem: "Which ECG finding is most specific for acute pericarditis?", options: ["ST elevation with reciprocal depression", "Diffuse concave-upward ST elevation", "New LBBB", "Pathological Q waves"], correct: 1, exp: "Acute pericarditis shows diffuse concave-upward ST elevation without reciprocal changes." },
-            { id: 6, domain: "Cardiology", type: "recall", stem: "Target BP for hypertensive emergency with acute aortic dissection?", options: ["<140/90 mmHg", "<130/80 mmHg", "SBP 100-120 mmHg", "DBP <90 mmHg"], correct: 2, exp: "For aortic dissection, rapid BP control to SBP 100-120 mmHg reduces shear stress." },
-            { id: 7, domain: "Cardiology", type: "recall", stem: "Murmur characterized by mid-systolic click followed by late systolic murmur?", options: ["Aortic stenosis", "Mitral regurgitation", "Mitral valve prolapse", "HOCM"], correct: 2, exp: "MVP classically presents with a mid-systolic click followed by late systolic murmur." },
-            { id: 8, domain: "Cardiology", type: "recall", stem: "Most common cause of AF in patients <60 years in Nepal?", options: ["Hypertension", "Rheumatic heart disease", "CAD", "Hyperthyroidism"], correct: 1, exp: "In Nepal, rheumatic heart disease remains the leading cause of AF in younger patients." },
-            { id: 9, domain: "Cardiology", type: "recall", stem: "JVP finding characteristic of cardiac tamponade?", options: ["Prominent 'a' waves", "Prominent 'v' waves", "Absent 'y' descent", "Kussmaul's sign"], correct: 2, exp: "Tamponade shows absent 'y' descent because diastolic filling is impaired." },
-            { id: 10, domain: "Cardiology", type: "recall", stem: "Normal QTc interval upper limit for adult males?", options: ["400 ms", "420 ms", "440 ms", "460 ms"], correct: 2, exp: "Normal QTc is ≤440 ms in men and ≤460 ms in women." },
-            { id: 11, domain: "Cardiology", type: "application", stem: "58M with diabetes, acute chest pain, ST elevation in II, III, aVF. Troponin 2.8. Next step?", options: ["Sublingual nitro", "IV beta-blocker", "Activate cath lab for PCI", "Thrombolytics immediately"], correct: 2, exp: "Inferior STEMI requires primary PCI if available within 90-120 mins." },
-            { id: 12, domain: "Cardiology", type: "application", stem: "72F with AF, HR 145, BP 92/60, mild dyspnea. Next step?", options: ["Synchronized cardioversion", "IV diltiazem", "IV amiodarone", "Oral warfarin"], correct: 0, exp: "Unstable AF (hypotension) requires immediate synchronized cardioversion." },
-            { id: 13, domain: "Cardiology", type: "application", stem: "45M, BP 220/130, papilledema, confusion. Initial antihypertensive?", options: ["Oral nifedipine", "IV labetalol", "Sublingual captopril", "IV hydralazine"], correct: 1, exp: "Hypertensive emergency with encephalopathy: IV labetalol allows titratable reduction." },
-            { id: 14, domain: "Cardiology", type: "application", stem: "68M HFrEF, acute decompensation, orthopnea, BP 105/70. First intervention?", options: ["IV furosemide", "IV nitroglycerin", "BiPAP", "IV morphine"], correct: 1, exp: "In acute pulmonary edema with adequate BP, IV nitroglycerin reduces preload rapidly." },
-            { id: 15, domain: "Cardiology", type: "application", stem: "Septic shock, MAP 55 after fluids, Lactate 4.2. Next vasopressor?", options: ["Dopamine", "Norepinephrine", "Epinephrine", "Phenylephrine"], correct: 1, exp: "Norepinephrine is first-line vasopressor for septic shock." },
-            { id: 16, domain: "Cardiology", type: "application", stem: "55F mechanical mitral valve, INR 1.2, acute dyspnea, new severe MR. Diagnosis?", options: ["Endocarditis", "Valve thrombosis", "Paravalvular leak", "Chordae rupture"], correct: 1, exp: "Subtherapeutic INR predisposes to valve thrombosis causing acute obstruction." },
-            { id: 17, domain: "Cardiology", type: "application", stem: "32M, pleuritic chest pain, friction rub, diffuse ST elevation. Management?", options: ["IV antibiotics", "High-dose aspirin + colchicine", "Pericardiocentesis", "Anticoagulation"], correct: 1, exp: "Acute viral pericarditis is treated with NSAIDs plus colchicine." },
-            { id: 18, domain: "Cardiology", type: "application", stem: "60M diabetic, K+ 6.8, peaked T waves. First intervention?", options: ["IV calcium gluconate", "IV insulin/dextrose", "Oral kayexalate", "IV furosemide"], correct: 0, exp: "With ECG changes, IV calcium stabilizes cardiac membranes immediately." },
-            { id: 19, domain: "Cardiology", type: "analysis", stem: "65M, anterior STEMI post-PCI develops hypotension, JVP elevation, clear lungs. Complication?", options: ["MR from papillary rupture", "Right ventricular infarction", "Tamponade", "VSD"], correct: 1, exp: "RV infarction presents with hypotension, elevated JVP, clear lungs. Avoid nitrates." },
-            { id: 20, domain: "Cardiology", type: "analysis", stem: "ABG: pH 7.28, PaCO2 55, HCO3- 26. COPD exacerbation. Disorder?", options: ["Acute respiratory acidosis", "Chronic respiratory acidosis", "Acute-on-chronic respiratory acidosis", "Mixed acidosis"], correct: 2, exp: "Expected HCO3 for acute rise is ~25. Actual 26 suggests chronic compensation. Acute-on-chronic." },
-            { id: 21, domain: "Cardiology", type: "analysis", stem: "ECG: Regular WCT 180bpm, AV dissociation, fusion beats. Hypotensive. Management?", options: ["SVT; IV adenosine", "VT; synchronized cardioversion", "Torsades; IV magnesium", "Atrial flutter"], correct: 1, exp: "WCT with AV dissociation is VT. With hypotension, immediate cardioversion is needed." },
-            { id: 22, domain: "Cardiology", type: "analysis", stem: "Inferior STEMI, HR 40, hypotension, nausea. Mechanism?", options: ["Vagal stimulation", "AV nodal ischemia from RCA", "Beta-blocker effect", "Hypovolemia"], correct: 1, exp: "Inferior STEMI (RCA) causes AV nodal ischemia → bradycardia. Treat with atropine/pacing." },
-            { id: 23, domain: "Cardiology", type: "analysis", stem: "70F AF on warfarin (INR 2.5), acute stroke, NIHSS 12, 3h onset. Contraindication to tPA?", options: ["Age >65", "Atrial fibrillation", "Therapeutic INR", "NIHSS >10"], correct: 2, exp: "Therapeutic anticoagulation (INR >1.7) is absolute contraindication to IV tPA." },
-            { id: 24, domain: "Cardiology", type: "analysis", stem: "HFrEF 25%, recurrent admissions, LBBB QRS 160ms. Intervention with mortality benefit?", options: ["ICD alone", "CRT-D", "Ivabradine", "Transplant eval"], correct: 1, exp: "CRT-D indicated for HFrEF ≤35%, LBBB ≥150ms, NYHA II-IV on GDMT." },
-            
-            // RESPIRATORY (18)
-            { id: 25, domain: "Respiratory", type: "recall", stem: "Diagnostic PaO2/FiO2 ratio for ARDS?", options: ["<400", "<300", "<200", "<100"], correct: 1, exp: "Berlin Definition: ARDS requires PaO2/FiO2 ≤300 mmHg with PEEP ≥5." },
-            { id: 26, domain: "Respiratory", type: "recall", stem: "Most common cause of CAP in adults in Nepal?", options: ["Mycoplasma", "Strep pneumoniae", "H. influenzae", "Klebsiella"], correct: 1, exp: "Strep pneumoniae remains the most common bacterial cause of CAP." },
-            { id: 27, domain: "Respiratory", type: "recall", stem: "First-line regimen for drug-sensitive TB in Nepal DOTS?", options: ["2HRZE/4HR", "2HRZES/1HRZE/5HRE", "6 months HRZE", "9 months HR"], correct: 0, exp: "Nepal NTP: Intensive 2mo HRZE, Continuation 4mo HR." },
-            { id: 28, domain: "Respiratory", type: "recall", stem: "CXR finding most suggestive of pulmonary TB?", options: ["Lower lobe consolidation", "Upper lobe infiltrates with cavitation", "Bilateral effusions", "Miliary nodules"], correct: 1, exp: "Reactivation TB classically involves apical/posterior segments with cavitation." },
-            { id: 29, domain: "Respiratory", type: "recall", stem: "Target SpO2 for COPD exacerbation to avoid hypercapnia?", options: ["88-92%", "94-98%", ">95%", "As high as possible"], correct: 0, exp: "Target 88-92% in COPD to avoid suppressing hypoxic drive." },
-            { id: 30, domain: "Respiratory", type: "recall", stem: "ABG finding characteristic of acute severe asthma?", options: ["Resp alkalosis, low PaCO2", "Resp acidosis, high PaCO2", "Normal ABG", "Metabolic acidosis"], correct: 0, exp: "Early severe asthma: hyperventilation → respiratory alkalosis. Rising CO2 is ominous." },
-            { id: 31, domain: "Respiratory", type: "application", stem: "28M, 3 weeks fever, night sweats, hemoptysis, RUL cavitation. Next step?", options: ["Empiric TB therapy", "Sputum AFB + GeneXpert", "CT chest", "Bronchoscopy"], correct: 1, exp: "Classic TB: Sputum AFB + GeneXpert is diagnostic standard before treatment." },
-            { id: 32, domain: "Respiratory", type: "application", stem: "65M smoker, acute dyspnea, pleuritic pain, Wells 6.5. Next investigation?", options: ["D-dimer", "CT pulmonary angiography", "V/Q scan", "Leg Doppler"], correct: 1, exp: "High pretest probability (Wells >6) warrants immediate CTPA." },
-            { id: 33, domain: "Respiratory", type: "application", stem: "COPD exacerbation, pH 7.25, PaCO2 65, drowsy. Next step?", options: ["BiPAP", "Intubate", "High flow O2", "IV theophylline"], correct: 0, exp: "Acute hypercapnic respiratory failure with altered mental status: NIV (BiPAP) first-line." },
-            { id: 34, domain: "Respiratory", type: "application", stem: "45F, acute dyspnea 2 days after nitrofurantoin, bilateral infiltrates. Diagnosis?", options: ["CAP", "Acute interstitial pneumonitis", "Heart failure", "PE"], correct: 1, exp: "Nitrofurantoin causes acute hypersensitivity pneumonitis. Stop drug, give steroids." },
-            { id: 35, domain: "Respiratory", type: "application", stem: "Bronchiectasis exacerbation, increased purulent sputum. Initial antibiotic?", options: ["Amox-clav", "Ciprofloxacin", "Azithromycin", "Ceftriaxone"], correct: 0, exp: "Mild-moderate bronchiectasis: Amox-clav covers H. flu and anaerobes." },
-            { id: 36, domain: "Respiratory", type: "application", stem: "30M Terai, fever/myalgia post-flood, thrombocytopenia, elevated creatinine. Diagnosis?", options: ["Dengue", "Leptospirosis", "Malaria", "Enteric fever"], correct: 1, exp: "Leptospirosis (Weil's): post-flood, myalgia, renal failure, thrombocytopenia." },
-            { id: 37, domain: "Respiratory", type: "application", stem: "Severe dengue, warning signs, rising Hct, falling platelets. Critical step?", options: ["Platelet transfusion", "Judicious IV fluids", "Prophylactic antibiotics", "IV steroids"], correct: 1, exp: "Severe dengue: Careful fluid resuscitation is critical during plasma leakage." },
-            { id: 38, domain: "Respiratory", type: "application", stem: "Suspected TB, 2 negative smears, high suspicion. Next step per Nepal guidelines?", options: ["Empiric treatment", "GeneXpert", "CT chest", "Bronchoscopy"], correct: 1, exp: "GeneXpert recommended after negative smears with high suspicion." },
-            { id: 39, domain: "Respiratory", type: "analysis", stem: "ABG: pH 7.52, PaCO2 28, HCO3- 22. Acute dyspnea/anxiety. Disorder?", options: ["Acute resp alkalosis", "Metabolic alkalosis", "Chronic resp alkalosis", "Mixed disorder"], correct: 0, exp: "Low PaCO2, high pH, normal HCO3 = Acute respiratory alkalosis (hyperventilation)." },
-            { id: 40, domain: "Respiratory", type: "analysis", stem: "COPD baseline: pH 7.36, PaCO2 58, HCO3- 32. Acute: pH 7.28, PaCO2 72, HCO3- 34. Interpretation?", options: ["Acute-on-chronic resp acidosis", "Metabolic acidosis", "Compensated chronic", "Lab error"], correct: 0, exp: "Baseline chronic compensation. Acute rise in CO2 with pH drop = Acute-on-chronic." },
-            { id: 41, domain: "Respiratory", type: "analysis", stem: "TB on treatment 2mo, worsening cough/fever, new infiltrates, smear positive. Explanation?", options: ["Treatment failure", "IRIS", "Secondary pneumonia", "Non-adherence"], correct: 1, exp: "Paradoxical worsening after starting TB treatment can be IRIS, especially in HIV." },
-            { id: 42, domain: "Respiratory", type: "analysis", stem: "Severe asthma, pH 7.20, PaCO2 55 on 100% O2, accessory muscles. Interpretation?", options: ["Compensated acidosis", "Acute resp acidosis/fatigue", "Mixed acidosis", "Hypoxemic failure"], correct: 1, exp: "Rising PaCO2 in asthma indicates muscle fatigue. Needs urgent intubation." },
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
 
-            // INFECTIOUS DISEASE (18)
-            { id: 43, domain: "Infectious Disease", type: "recall", stem: "qSOFA score threshold suggesting high risk in suspected sepsis?", options: ["≥1", "≥2", "≥3", "≥4"], correct: 1, exp: "qSOFA: ≥2 of (RR≥22, altered mentation, SBP≤100) suggests high risk." },
-            { id: 44, domain: "Infectious Disease", type: "recall", stem: "First-line antibiotic for uncomplicated falciparum malaria in Nepal?", options: ["Chloroquine", "Artemether-lumefantrine", "Quinine", "Doxycycline"], correct: 1, exp: "ACT (Artemether-lumefantrine) is first-line for P. falciparum due to chloroquine resistance." },
-            { id: 45, domain: "Infectious Disease", type: "recall", stem: "Most sensitive diagnostic test for early dengue (days 1-5)?", options: ["IgM", "NS1 antigen", "PCR", "CBC"], correct: 1, exp: "NS1 antigen is detectable from day 1-5 with high sensitivity." },
-            { id: 46, domain: "Infectious Disease", type: "recall", stem: "Drug of choice for enteric fever in Nepal (fluoroquinolone resistance)?", options: ["Ciprofloxacin", "Ceftriaxone", "Azithromycin", "Chloramphenicol"], correct: 1, exp: "Due to resistance, Ceftriaxone is first-line for enteric fever in Nepal." },
-            { id: 47, domain: "Infectious Disease", type: "recall", stem: "Most common cause of bacterial meningitis in adults in Nepal?", options: ["N. meningitidis", "S. pneumoniae", "H. influenzae", "Listeria"], correct: 1, exp: "S. pneumoniae is the most common cause of bacterial meningitis in adults." },
-            { id: 48, domain: "Infectious Disease", type: "recall", stem: "Recommended duration of antibiotics for uncomplicated CAP?", options: ["3-5 days", "5-7 days", "7-10 days", "10-14 days"], correct: 1, exp: "Current guidelines recommend 5-7 days for uncomplicated CAP if stable." },
-            { id: 49, domain: "Infectious Disease", type: "application", stem: "Fever, headache, neck stiffness. CSF: WBC 450 (lymph), protein 120, glucose 30. Diagnosis?", options: ["Bacterial meningitis", "Viral meningitis", "TB meningitis", "Fungal meningitis"], correct: 2, exp: "TB meningitis: lymphocytic pleocytosis, high protein, low glucose." },
-            { id: 50, domain: "Infectious Disease", type: "application", stem: "25M, fever/myalgia/rash Terai. Platelets 45k, rising Hct. Next step?", options: ["IV antibiotics", "Admit for dengue monitoring", "Prophylactic platelets", "Discharge"], correct: 1, exp: "Suspected dengue with thrombocytopenia/hemoconcentration: Admit for monitoring." },
-            { id: 51, domain: "Infectious Disease", type: "application", stem: "Septic shock, lactate 5.2, MAP 58 after fluids. Next intervention?", options: ["Start antibiotics", "Add vasopressor", "Obtain cultures", "Measure CVP"], correct: 1, exp: "After fluids, if hypotension persists, start vasopressors (norepinephrine)." },
-            { id: 52, domain: "Infectious Disease", type: "application", stem: "HIV CD4 80, headache, confusion. CSF: OP 35, India ink positive. Treatment?", options: ["IV acyclovir", "Amphotericin B + flucytosine", "High-dose steroids", "Ceftriaxone"], correct: 1, exp: "Cryptococcal meningitis: Induction with Amphotericin B + flucytosine." },
-            { id: 53, domain: "Infectious Disease", type: "application", stem: "Suspected enteric fever, stable. Empiric antibiotic in Nepal?", options: ["Oral cipro", "IV ceftriaxone", "Oral azithro", "IV meropenem"], correct: 1, exp: "Given resistance, IV ceftriaxone is preferred empiric therapy." },
-            { id: 54, domain: "Infectious Disease", type: "application", stem: "P. vivax malaria, G6PD deficiency. Treatment?", options: ["Chloroquine + primaquine", "Chloroquine alone", "Artemether-lumefantrine", "Quinine + doxy"], correct: 1, exp: "Primaquine causes hemolysis in G6PD deficiency. Omit primaquine." },
-            { id: 55, domain: "Infectious Disease", type: "application", stem: "CAP, CURB-65 score 3. Management?", options: ["Outpatient", "Hospital admission", "ICU admission", "Observation"], correct: 1, exp: "CURB-65 ≥2 indicates hospital admission. Score 3 has significant mortality risk." },
-            { id: 56, domain: "Infectious Disease", type: "application", stem: "Suspected leptospirosis, AKI, jaundice. Antibiotic of choice?", options: ["Oral doxy", "IV penicillin/ceftriaxone", "Oral azithro", "IV vanco"], correct: 1, exp: "Severe leptospirosis requires IV penicillin G or ceftriaxone." },
-            { id: 57, domain: "Infectious Disease", type: "analysis", stem: "HIV CD4 45, fever, cough, diffuse infiltrates, elevated LDH. Diagnosis/Treatment?", options: ["Bacterial pneumonia", "PJP; TMP-SMX", "TB pneumonia", "CMV pneumonia"], correct: 1, exp: "PJP in advanced HIV: subacute dyspnea, diffuse infiltrates, elevated LDH. Treat with TMP-SMX." },
-            { id: 58, domain: "Infectious Disease", type: "analysis", stem: "Septic shock, persistent hypotension/lactate despite fluids/norepi. Indicates?", options: ["Adequate resuscitation", "Inadequate source control", "Cardiogenic shock", "Lab error"], correct: 1, exp: "Persistent hyperlactatemia suggests ongoing infection or inadequate source control." },
-            { id: 59, domain: "Infectious Disease", type: "analysis", stem: "TB meningitis, worsening neuro status 2 weeks after treatment. CSF: increased protein, no organisms. Cause?", options: ["Treatment failure", "Paradoxical reaction/IRIS", "Secondary bacterial", "Drug toxicity"], correct: 1, exp: "Paradoxical worsening can occur due to immune reconstitution (IRIS)." },
-            { id: 60, domain: "Infectious Disease", type: "analysis", stem: "Dengue day 5: platelets 25k, Hct 48% (base 42%), ascites. Phase/Management?", options: ["Febrile phase", "Critical phase; careful fluids", "Recovery phase", "Severe dengue; plasma"], correct: 1, exp: "Days 3-7: Critical phase with plasma leakage. Judicious IV crystalloids needed." },
+    <div class="quiz-info">
+      <span>Question <span id="currentQ">1</span> of 120</span>
+      <span class="timer" id="timer">2:00:00</span>
+      <span>Score: <span id="scoreDisplay">0</span>/120</span>
+    </div>
 
-            // ENDOCRINE (14)
-            { id: 61, domain: "Endocrine", type: "recall", stem: "Diagnostic blood glucose threshold for DKA?", options: [">180 mg/dL", ">250 mg/dL", ">300 mg/dL", ">400 mg/dL"], correct: 1, exp: "DKA criteria: glucose >250, pH <7.3, bicarb <18, ketonemia." },
-            { id: 62, domain: "Endocrine", type: "recall", stem: "Most dangerous electrolyte abnormality in DKA management?", options: ["Hypernatremia", "Hypokalemia", "Hypercalcemia", "Hypophosphatemia"], correct: 1, exp: "Insulin drives K+ intracellularly. Total body K+ is depleted. Risk of life-threatening hypokalemia." },
-            { id: 63, domain: "Endocrine", type: "recall", stem: "First-line medication for T2DM with established CVD?", options: ["Metformin", "SGLT2i or GLP-1 RA", "Sulfonylurea", "DPP-4i"], correct: 1, exp: "ADA/EASD: Prioritize SGLT2i or GLP-1 RA with proven CV benefit." },
-            { id: 64, domain: "Endocrine", type: "recall", stem: "Finding characteristic of thyroid storm?", options: ["Bradycardia", "Fever, tachycardia, AMS", "Weight gain", "Dry skin"], correct: 1, exp: "Thyroid storm: Fever, tachycardia out of proportion, CNS dysfunction." },
-            { id: 65, domain: "Endocrine", type: "recall", stem: "Target BP for diabetes with CKD?", options: ["<140/90", "<130/80", "<120/80", "Individualized"], correct: 1, exp: "For diabetes with CKD, target BP <130/80 mmHg." },
-            { id: 66, domain: "Endocrine", type: "recall", stem: "Medication contraindicated in Type 1 Diabetes?", options: ["Insulin", "Metformin", "SGLT2 inhibitors", "GLP-1 RA"], correct: 2, exp: "SGLT2 inhibitors increase risk of euglycemic DKA in T1DM." },
-            { id: 67, domain: "Endocrine", type: "application", stem: "T1DM, nausea, Kussmaul, glucose 420, pH 7.15, ketones +. First intervention?", options: ["IV insulin bolus", "IV NS bolus", "IV potassium", "SC insulin"], correct: 1, exp: "DKA: Fluid resuscitation first to restore perfusion, then insulin." },
-            { id: 68, domain: "Endocrine", type: "application", stem: "T2DM on metformin, acute illness, AKI (Cr 2.8). Action?", options: ["Continue", "Reduce dose", "Hold metformin", "Switch to insulin"], correct: 2, exp: "Metformin contraindicated in AKI (eGFR <30) due to lactic acidosis risk." },
-            { id: 69, domain: "Endocrine", type: "application", stem: "Graves' disease, fever 39.5, HR 140, agitation. Immediate management?", options: ["Methimazole + propranolol", "IV hydrocortisone + PTU", "Iodine immediately", "Beta-blocker, then antithyroid, then iodine"], correct: 3, exp: "Thyroid storm: Beta-blocker first, then antithyroid, then iodine (after 1h)." },
-            { id: 70, domain: "Endocrine", type: "application", stem: "T2DM, fasting 180, PP 280 on maximal orals, HbA1c 9.2%. Next step?", options: ["Add 3rd oral", "Start basal insulin", "Switch to premix", "Bariatric eval"], correct: 1, exp: "When orals fail (HbA1c >9%), initiate basal insulin." },
-            { id: 71, domain: "Endocrine", type: "application", stem: "Adrenal insufficiency, hypotension, hyponatremia, hyperkalemia. Emergency treatment?", options: ["IV hydrocortisone 100mg", "IV fludrocortisone", "Oral prednisone", "IV saline"], correct: 0, exp: "Adrenal crisis: Immediate IV hydrocortisone 100mg bolus." },
-            { id: 72, domain: "Endocrine", type: "application", stem: "Hypercalcemia 14.2, confused, dehydrated. First intervention?", options: ["IV bisphosphonate", "IV NS infusion", "Calcitonin", "Furosemide"], correct: 1, exp: "Severe hypercalcemia: Aggressive IV hydration first to promote calciuresis." },
-            { id: 73, domain: "Endocrine", type: "analysis", stem: "DKA initial K+ 5.8. After 2h insulin/fluids, K+ 3.2. Explanation?", options: ["Lab error", "Insulin-driven intracellular shift", "Renal wasting", "Inadequate replacement"], correct: 1, exp: "Insulin therapy rapidly shifts K+ intracellularly, unmasking total body depletion." },
-            { id: 74, domain: "Endocrine", type: "analysis", stem: "T2DM on SGLT2i, nausea, glucose 180, pH 7.20, AG 20. Diagnosis?", options: ["Lactic acidosis", "Euglycemic DKA", "Pancreatitis", "Gastroenteritis"], correct: 1, exp: "SGLT2i can cause euglycemic DKA (glucose <250) with anion gap acidosis." },
+    <div id="quizContainer" class="question-container">
+      <!-- Questions will be rendered here -->
+    </div>
 
-            // GASTRO (14)
-            { id: 75, domain: "Gastro", type: "recall", stem: "Diagnostic SAAG threshold for portal hypertension?", options: ["≥0.5", "≥1.1", "≥1.5", "≥2.0"], correct: 1, exp: "SAAG ≥1.1 g/dL indicates portal hypertension." },
-            { id: 76, domain: "Gastro", type: "recall", stem: "First-line for primary prophylaxis of variceal bleeding?", options: ["Propranolol/Carvedilol", "Isosorbide", "Band ligation", "TIPS"], correct: 0, exp: "Non-selective beta-blockers are first-line for primary prophylaxis." },
-            { id: 77, domain: "Gastro", type: "recall", stem: "Most common cause of acute pancreatitis worldwide?", options: ["Alcohol", "Gallstones", "Hypertriglyceridemia", "Medications"], correct: 1, exp: "Gallstones are the most common cause (~40-70%)." },
-            { id: 78, domain: "Gastro", type: "recall", stem: "Endoscopic finding diagnostic of Barrett's esophagus?", options: ["Squamous epithelium", "Intestinal metaplasia with goblet cells", "Erosive esophagitis", "Stricture"], correct: 1, exp: "Barrett's requires histologic confirmation of intestinal metaplasia (goblet cells)." },
-            { id: 79, domain: "Gastro", type: "recall", stem: "First-line treatment for H. pylori in Nepal?", options: ["Triple therapy", "Quadruple therapy", "Concomitant therapy", "Levofloxacin"], correct: 1, exp: "Due to clarithromycin resistance, Bismuth Quadruple therapy is preferred." },
-            { id: 80, domain: "Gastro", type: "recall", stem: "Lab finding most specific for alcoholic hepatitis?", options: ["AST:ALT >2:1", "Elevated ALP", "Hyperbilirubinemia", "Prolonged PT"], correct: 0, exp: "Alcoholic hepatitis typically shows AST:ALT ratio >2:1." },
-            { id: 81, domain: "Gastro", type: "application", stem: "Cirrhosis, hematemesis, BP 90/60. First intervention?", options: ["Endoscopy", "IV octreotide + antibiotics", "Balloon tamponade", "IV PPI"], correct: 1, exp: "Variceal bleed: Resuscitate, start vasoactive drug + antibiotics immediately." },
-            { id: 82, domain: "Gastro", type: "application", stem: "Cirrhosis, ascites, fever, confusion. Ascitic fluid PMN 650. Diagnosis/Treatment?", options: ["SBP; IV ceftriaxone", "Secondary peritonitis", "TB peritonitis", "Malignant ascites"], correct: 0, exp: "SBP: PMN ≥250. Treat with IV ceftriaxone + albumin." },
-            { id: 83, domain: "Gastro", type: "application", stem: "Acute pancreatitis day 5, fever, CT shows necrosis with gas. Management?", options: ["Conservative", "Antibiotics", "Percutaneous drainage/necrosectomy", "Cholecystectomy"], correct: 2, exp: "Infected necrosis requires source control (step-up approach)." },
-            { id: 84, domain: "Gastro", type: "application", stem: "UC, severe bloody diarrhea, fever, colonic dilation >6cm. Diagnosis?", options: ["Toxic megacolon", "Severe flare", "C. diff", "Ischemic colitis"], correct: 0, exp: "Toxic megacolon: Dilation >6cm with toxicity. High risk of perforation." },
-            { id: 85, domain: "Gastro", type: "application", stem: "Chronic Hep B, DNA 200k, ALT 2x, F2 fibrosis. Indication for therapy?", options: ["All treated", "Treat with elevated ALT + fibrosis", "Only if HBeAg+", "Only if cirrhosis"], correct: 1, exp: "Treatment indicated with HBV DNA >2k, ALT elevation, and/or significant fibrosis." },
-            { id: 86, domain: "Gastro", type: "application", stem: "Upper GI bleed, unstable. Next step after resuscitation?", options: ["CT angiography", "Urgent endoscopy <24h", "Tagged RBC", "Empiric PPI"], correct: 1, exp: "After stabilization, urgent endoscopy (<24h) is diagnostic and therapeutic." },
-            { id: 87, domain: "Gastro", type: "analysis", stem: "Cirrhosis ascites: Protein 3.5, SAAG 1.3, WBC 150. Etiology?", options: ["Cirrhosis", "Carcinomatosis", "TB", "Pancreatic"], correct: 0, exp: "SAAG ≥1.1 indicates portal hypertension (cirrhosis). High protein can occur in cirrhosis." },
-            { id: 88, domain: "Gastro", type: "analysis", stem: "Pancreatitis Ranson's: 5 admission + 5 at 48h. Predicted mortality?", options: ["<1%", "3%", "15%", "40%"], correct: 3, exp: "Ranson's ≥6 criteria indicates severe pancreatitis with ~40% mortality." },
+    <div id="summaryContainer" class="summary-container">
+      <div class="summary-header">
+        <h2>📊 Examination Results</h2>
+        <div class="score-display" id="finalScore">0/120</div>
+        <div class="score-percentage" id="finalPercentage">0%</div>
+      </div>
 
-            // NEUROLOGY (10)
-            { id: 89, domain: "Neurology", type: "recall", stem: "Time window for IV thrombolysis in acute ischemic stroke?", options: ["3 hours", "4.5 hours", "6 hours", "24 hours"], correct: 1, exp: "IV alteplase window is within 4.5 hours of symptom onset." },
-            { id: 90, domain: "Neurology", type: "recall", stem: "CT finding most specific for acute hemorrhagic stroke?", options: ["Hypodense area", "Hyperdense area in basal ganglia", "Loss of gray-white diff", "Midline shift"], correct: 1, exp: "Acute ICH appears hyperdense (bright) on non-contrast CT." },
-            { id: 91, domain: "Neurology", type: "recall", stem: "First-line medication for generalized tonic-clonic seizures?", options: ["Phenytoin", "Levetiracetam", "Valproate", "Carbamazepine"], correct: 2, exp: "Valproate is broad-spectrum first-line for generalized seizures." },
-            { id: 92, domain: "Neurology", type: "recall", stem: "CSF finding characteristic of bacterial meningitis?", options: ["Lymphocytic, normal glucose", "Neutrophilic, low glucose, high protein", "Normal cell count", "Xanthochromia"], correct: 1, exp: "Bacterial meningitis: Neutrophilic predominance, low glucose, high protein." },
-            { id: 93, domain: "Neurology", type: "application", stem: "68M, acute R-sided weakness/aphasia, 2h onset, CT normal, NIHSS 14. Next step?", options: ["Aspirin", "IV alteplase", "Carotid endarterectomy", "MRI"], correct: 1, exp: "Acute ischemic stroke <4.5h, no contraindications: IV alteplase indicated." },
-            { id: 94, domain: "Neurology", type: "application", stem: "Sudden severe headache, vomiting, neck stiffness. CT shows SAH. Next investigation?", options: ["LP", "CTA/DSA", "MRI/MRA", "TCD"], correct: 1, exp: "After CT confirms SAH, vascular imaging is urgent to identify aneurysm." },
-            { id: 95, domain: "Neurology", type: "application", stem: "Known epilepsy, GTC seizure lasting 8 minutes. Emergency treatment?", options: ["IV lorazepam/diazepam", "IV phenytoin", "Rectal diazepam", "IM midazolam"], correct: 0, exp: "Status epilepticus (>5 min): First-line is IV benzodiazepine." },
-            { id: 96, domain: "Neurology", type: "application", stem: "Acute confusion, fever, focal deficits. CSF lymphocytic, MRI temporal lobe hyperintensity. Treatment?", options: ["Ceftriaxone", "IV acyclovir", "Anti-TB", "IV steroids"], correct: 1, exp: "HSV encephalitis: Temporal lobe involvement. Start IV acyclovir immediately." },
-            { id: 97, domain: "Neurology", type: "analysis", stem: "Stroke post-tPA, 24h CT shows hemorrhagic transformation, patient improved. Management?", options: ["Reverse anticoagulation", "Continue antiplatelet", "Hold antithrombotics, repeat imaging", "Surgery"], correct: 2, exp: "Asymptomatic hemorrhagic transformation: Hold antithrombotics 24h, repeat imaging." },
-            { id: 98, domain: "Neurology", type: "analysis", stem: "Altered mental status, CT normal, CSF 50 WBC (lymph), glucose 45. Next step?", options: ["Empiric anti-TB", "CSF cytology", "Repeat LP", "MRI brain with contrast"], correct: 3, exp: "Subacute meningitis: MRI with contrast can show basal enhancement (TB) or carcinomatosis." },
+      <h3>Cognitive Level Breakdown</h3>
+      <table class="breakdown-table">
+        <thead>
+          <tr>
+            <th>Level</th>
+            <th>Correct</th>
+            <th>Total</th>
+            <th>Percentage</th>
+          </tr>
+        </thead>
+        <tbody id="cognitiveBreakdown">
+        </tbody>
+      </table>
 
-            // NEPHROLOGY (10)
-            { id: 99, domain: "Nephrology", type: "recall", stem: "KDIGO criterion for AKI based on creatinine?", options: ["↑0.3 mg/dL in 48h", "↑0.5 mg/dL in 72h", "↑1.0 mg/dL in 1 week", "↑50% from baseline"], correct: 0, exp: "KDIGO: Increase in SCr by ≥0.3 mg/dL within 48h." },
-            { id: 100, domain: "Nephrology", type: "recall", stem: "Electrolyte abnormality causing peaked T waves?", options: ["Hypokalemia", "Hyperkalemia", "Hypocalcemia", "Hypercalcemia"], correct: 1, exp: "Hyperkalemia: Peaked T waves are earliest sign." },
-            { id: 101, domain: "Nephrology", type: "recall", stem: "First-line treatment for hyperkalemia with ECG changes?", options: ["IV calcium gluconate", "IV insulin/dextrose", "Oral kayexalate", "IV furosemide"], correct: 0, exp: "With ECG changes, IV calcium stabilizes membranes immediately." },
-            { id: 102, domain: "Nephrology", type: "recall", stem: "Finding suggests prerenal AKI?", options: ["Urinary Na >40", "FeNa >2%", "BUN:Cr >20:1", "Urine Osm <350"], correct: 2, exp: "Prerenal AKI: BUN:Cr >20:1, FeNa <1%, Urine Na <20." },
-            { id: 103, domain: "Nephrology", type: "application", stem: "CKD stage 4, volume overload, K+ 6.2. Diuretic of choice?", options: ["HCTZ", "Furosemide", "Spironolactone", "Acetazolamide"], correct: 1, exp: "Loop diuretics (furosemide) are effective in CKD stage 4-5." },
-            { id: 104, domain: "Nephrology", type: "application", stem: "AKI: Urine Na 15, FeNa 0.5%, BUN:Cr 28. Etiology?", options: ["ATN", "Prerenal azotemia", "AIN", "Glomerulonephritis"], correct: 1, exp: "Low Urine Na, low FeNa, high BUN:Cr indicates Prerenal AKI." },
-            { id: 105, domain: "Nephrology", type: "application", stem: "ESRD on HD, chest pain, diffuse ST elevation, troponin elevated. Diagnosis?", options: ["AMI", "Uremic pericarditis", "PE", "Dissection"], correct: 1, exp: "Uremic pericarditis: Pleuritic pain, diffuse ST elevation. Treat with intensified dialysis." },
-            { id: 106, domain: "Nephrology", type: "application", stem: "Hyponatremia 118, euvolemic, normal renal/thyroid/adrenal, Urine Osm 400. Diagnosis?", options: ["SIADH", "Polydipsia", "Heart failure", "Cerebral salt wasting"], correct: 0, exp: "SIADH: Euvolemic hyponatremia, inappropriately concentrated urine." },
-            { id: 107, domain: "Nephrology", type: "analysis", stem: "ABG: pH 7.25, PaCO2 30, HCO3- 13, AG 20. Diarrhea. Disorder?", options: ["High AG metabolic acidosis", "Normal AG metabolic acidosis", "Mixed high and normal AG", "Metabolic acidosis + resp alkalosis"], correct: 2, exp: "AG 17 (elevated). Diarrhea causes normal AG acidosis. Elevated AG suggests concurrent lactic/ketoacidosis." },
-            { id: 108, domain: "Nephrology", type: "analysis", stem: "Cirrhosis, Na+ 122, Urine Na+ 8, Urine Osm 450. Mechanism?", options: ["SIADH", "Hypervolemic hyponatremia", "CSW", "Adrenal insufficiency"], correct: 1, exp: "Cirrhosis causes hypervolemic hyponatremia via non-osmotic ADH release." },
+      <h3>Domain Breakdown</h3>
+      <table class="breakdown-table">
+        <thead>
+          <tr>
+            <th>Domain</th>
+            <th>Correct</th>
+            <th>Total</th>
+            <th>Percentage</th>
+          </tr>
+        </thead>
+        <tbody id="domainBreakdown">
+        </tbody>
+      </table>
 
-            // RHEUMATOLOGY (6)
-            { id: 109, domain: "Rheumatology", type: "recall", stem: "Antibody most specific for SLE?", options: ["ANA", "Anti-dsDNA", "Anti-Smith", "Anti-Ro"], correct: 2, exp: "Anti-Smith is highly specific for SLE (>95%)." },
-            { id: 110, domain: "Rheumatology", type: "recall", stem: "First-line treatment for acute gout flare?", options: ["Colchicine", "NSAIDs", "Corticosteroids", "All are appropriate"], correct: 3, exp: "NSAIDs, colchicine, or steroids are all first-line depending on comorbidities." },
-            { id: 111, domain: "Rheumatology", type: "recall", stem: "Finding characteristic of RA on joint exam?", options: ["Asymmetric oligoarthritis", "Symmetric polyarthritis of small joints", "Sacroiliitis", "Dactylitis"], correct: 1, exp: "RA: Symmetric polyarthritis of MCPs, PIPs, wrists." },
-            { id: 112, domain: "Rheumatology", type: "application", stem: "SLE, proteinuria 3.5g, hematuria, elevated Cr. Next step?", options: ["Start steroids", "Renal biopsy", "24h urine", "Start cyclophosphamide"], correct: 1, exp: "Lupus nephritis: Renal biopsy essential to classify and guide therapy." },
-            { id: 113, domain: "Rheumatology", type: "application", stem: "RA on methotrexate, fever, cough, bilateral infiltrates. Diagnosis?", options: ["RA lung", "Methotrexate pneumonitis", "CAP", "TB"], correct: 1, exp: "Methotrexate pneumonitis: Subacute cough, dyspnea, infiltrates. Stop drug." },
-            { id: 114, domain: "Rheumatology", type: "application", stem: "Vasculitis, palpable purpura, abdominal pain, hematuria, ANCA negative. Diagnosis?", options: ["GPA", "MPA", "IgA vasculitis", "EGPA"], correct: 2, exp: "IgA vasculitis (HSP): Purpura, abdominal pain, renal involvement, ANCA-negative." },
+      <div class="summary-actions">
+        <button class="btn btn-primary" onclick="reviewIncorrect()">Review Incorrect</button>
+        <button class="btn btn-success" onclick="retakeExam()">Retake Exam</button>
+        <button class="btn btn-secondary" onclick="window.print()">Print Results</button>
+      </div>
 
-            // HEMATOLOGY (6)
-            { id: 115, domain: "Hematology", type: "recall", stem: "Diagnostic ferritin threshold for iron deficiency?", options: ["<15", "<30", "<50", "<100"], correct: 1, exp: "Ferritin <30 ng/mL is diagnostic of iron deficiency." },
-            { id: 116, domain: "Hematology", type: "recall", stem: "Finding characteristic of DIC?", options: ["Prolonged PT/aPTT, low fibrinogen, high D-dimer", "Normal PT/aPTT", "Prolonged PT only", "Normal PT/aPTT, low fibrinogen"], correct: 0, exp: "DIC: Consumption of factors → prolonged PT/aPTT, low fibrinogen, high D-dimer." },
-            { id: 117, domain: "Hematology", type: "recall", stem: "Most common cause of microcytic anemia worldwide?", options: ["Iron deficiency", "Thalassemia", "Anemia of chronic disease", "Sideroblastic"], correct: 0, exp: "Iron deficiency is the most common cause globally." },
-            { id: 118, domain: "Hematology", type: "application", stem: "Suspected DIC: Plt 45k, PT 18, Fib 90, D-dimer high. Priority intervention?", options: ["Platelet transfusion", "FFP", "Treat underlying cause", "Cryoprecipitate"], correct: 2, exp: "DIC management: Treat underlying trigger is paramount." },
-            { id: 119, domain: "Hematology", type: "application", stem: "IDA, Hb 8.2, Ferritin 12, stable. First-line treatment?", options: ["IV iron", "Oral ferrous sulfate", "PRBC transfusion", "Erythropoietin"], correct: 1, exp: "Stable IDA: Oral iron is first-line." },
-            { id: 120, domain: "Hematology", type: "application", stem: "Thrombocytopenia 25k, no bleeding, normal smear. Next step?", options: ["Bone marrow", "HIV/HCV testing", "Review smear for clumping", "Start prednisone"], correct: 2, exp: "Pseudothrombocytopenia from EDTA clumping is common. Repeat with citrate tube." }
-        ];
+      <div class="domain-filter" id="domainFilter" style="display:none;">
+        <button class="filter-btn active" data-domain="all">All</button>
+        <button class="filter-btn" data-domain="Cardiology">Cardiology</button>
+        <button class="filter-btn" data-domain="Respiratory">Respiratory</button>
+        <button class="filter-btn" data-domain="ID">Infectious Disease</button>
+        <button class="filter-btn" data-domain="GI">Gastroenterology</button>
+        <button class="filter-btn" data-domain="Neuro">Neurology</button>
+        <button class="filter-btn" data-domain="Renal">Nephrology</button>
+        <button class="filter-btn" data-domain="Rheum">Rheumatology</button>
+        <button class="filter-btn" data-domain="Heme">Hematology</button>
+      </div>
+    </div>
 
-        // ============ APP LOGIC ============
-        let currentQ = 0;
-        let answers = new Array(120).fill(null);
-        let timerInterval;
-        const EXAM_DURATION = 2 * 60 * 60 * 1000; // 2 hours
-        let startTime;
+    <div class="navigation" id="navigation">
+      <button class="btn btn-secondary" id="prevBtn" onclick="prevQuestion()" disabled>← Previous</button>
+      <button class="btn btn-success" id="showAnswerBtn" onclick="showAnswer()">Show Answer</button>
+      <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()">Next →</button>
+    </div>
+  </div>
 
-        // DOM Elements
-        const loginScreen = document.getElementById('loginScreen');
-        const examScreen = document.getElementById('examScreen');
-        const summaryScreen = document.getElementById('summaryScreen');
-        const questionContainer = document.getElementById('questionContainer');
-        const passwordInput = document.getElementById('passwordInput');
-        const loginError = document.getElementById('loginError');
-        const timerDisplay = document.getElementById('timerDisplay');
-        const timerBadge = document.querySelector('.timer-badge');
+  <script>
+    const QUESTIONS = [
+      // CARDIOLOGY (24 questions)
+      {
+        id: 1,
+        domain: 'Cardiology',
+        cogLevel: 'Recall',
+        text: 'Pulsus paradoxus is a characteristic feature of which condition?',
+        opts: ['A) Constrictive pericarditis', 'B) Cardiac tamponade', 'C) Hypertrophic obstructive cardiomyopathy', 'D) Restrictive cardiomyopathy'],
+        ans: 1,
+        exp: 'Pulsus paradoxus (>10 mmHg drop in systolic BP during inspiration) is characteristic of cardiac tamponade; it is typically absent in constrictive pericarditis.'
+      },
+      {
+        id: 2,
+        domain: 'Cardiology',
+        cogLevel: 'Recall',
+        text: 'Which of the following is the most common cause of sudden death in young athletes?',
+        opts: ['A) Aortic stenosis', 'B) Mitral regurgitation', 'C) Hypertrophic obstructive cardiomyopathy', 'D) Coronary artery anomaly'],
+        ans: 2,
+        exp: 'HOCM is the most common cause of sudden cardiac death in young athletes due to ventricular arrhythmias during exertion.'
+      },
+      {
+        id: 3,
+        domain: 'Cardiology',
+        cogLevel: 'Application',
+        text: 'A 58-year-old male presents with chest pain for 2 hours. ECG shows ST elevation in leads II, III, and aVF. What is the next best step in management?',
+        opts: ['A) Administer thrombolytics immediately', 'B) Arrange for primary PCI within 90 minutes', 'C) Start IV beta-blockers', 'D) Give sublingual nitrates'],
+        ans: 1,
+        exp: 'Primary PCI within 90 minutes is preferred over thrombolytics for STEMI if available; inferior STEMI requires careful assessment before nitrates due to RV involvement risk.'
+      },
+      {
+        id: 4,
+        domain: 'Cardiology',
+        cogLevel: 'Analysis',
+        text: 'ECG shows: Rate 150/min, regular rhythm, sawtooth waves in leads II, III, aVF. What is the most likely diagnosis?',
+        opts: ['A) Atrial fibrillation', 'B) Atrial flutter', 'C) Paroxysmal supraventricular tachycardia', 'D) Ventricular tachycardia'],
+        ans: 1,
+        exp: 'Sawtooth waves (flutter waves) at approximately 300/min with 2:1 conduction giving ventricular rate of 150/min is characteristic of atrial flutter.'
+      },
+      {
+        id: 5,
+        domain: 'Cardiology',
+        cogLevel: 'Recall',
+        text: 'Beck\'s triad of cardiac tamponade includes all EXCEPT:',
+        opts: ['A) Hypotension', 'B) Distended neck veins', 'C) Muffled heart sounds', 'D) Tachycardia'],
+        ans: 3,
+        exp: 'Beck\'s triad consists of hypotension, distended neck veins (increased JVP), and muffled heart sounds; tachycardia is common but not part of the classic triad.'
+      },
+      {
+        id: 6,
+        domain: 'Cardiology',
+        cogLevel: 'Application',
+        text: 'A 65-year-old with acute inferior wall MI develops hypotension (BP 80/50 mmHg) and clear lung fields. What is the most likely cause?',
+        opts: ['A) Left ventricular failure', 'B) Right ventricular infarction', 'C) Cardiac tamponade', 'D) Papillary muscle rupture'],
+        ans: 1,
+        exp: 'RV infarction commonly complicates inferior MI, presenting with hypotension, clear lungs, and elevated JVP; treatment is IV fluids, not diuretics.'
+      },
+      {
+        id: 7,
+        domain: 'Cardiology',
+        cogLevel: 'Analysis',
+        text: 'ECG shows: Wide QRS (>0.12s), AV dissociation, capture beats, and fusion beats. What is the diagnosis?',
+        opts: ['A) SVT with aberrancy', 'B) Ventricular tachycardia', 'C) Supraventricular tachycardia', 'D) Bundle branch block'],
+        ans: 1,
+        exp: 'AV dissociation, capture beats, and fusion beats are pathognomonic for ventricular tachycardia and help differentiate from SVT with aberrancy.'
+      },
+      {
+        id: 8,
+        domain: 'Cardiology',
+        cogLevel: 'Recall',
+        text: 'Which murmur increases with Valsalva maneuver?',
+        opts: ['A) Mitral regurgitation', 'B) Aortic stenosis', 'C) Hypertrophic obstructive cardiomyopathy', 'D) Ventricular septal defect'],
+        ans: 2,
+        exp: 'HOCM murmur increases with Valsalva (decreased preload worsens obstruction); most other murmurs decrease with Valsalva.'
+      },
+      {
+        id: 9,
+        domain: 'Cardiology',
+        cogLevel: 'Application',
+        text: 'A 45-year-old presents with palpitations. ECG shows irregularly irregular rhythm, no P waves, rate 120/min. What is the next best step for rate control?',
+        opts: ['A) IV adenosine', 'B) IV metoprolol or diltiazem', 'C) IV amiodarone', 'D) DC cardioversion'],
+        ans: 1,
+        exp: 'For AF with RVR in stable patients, beta-blockers or calcium channel blockers are first-line for rate control; cardioversion if unstable.'
+      },
+      {
+        id: 10,
+        domain: 'Cardiology',
+        cogLevel: 'Recall',
+        text: 'Fixed splitting of S2 is characteristic of:',
+        opts: ['A) Pulmonary stenosis', 'B) Atrial septal defect', 'C) Ventricular septal defect', 'D) Patent ductus arteriosus'],
+        ans: 1,
+        exp: 'Fixed splitting of S2 is pathognomonic for ASD due to equalization of pressures between atria throughout respiratory cycle.'
+      },
+      {
+        id: 11,
+        domain: 'Cardiology',
+        cogLevel: 'Analysis',
+        text: 'A patient with MI develops a new harsh systolic murmur at left sternal border and hemodynamic collapse. What complication should you suspect?',
+        opts: ['A) Mitral regurgitation', 'B) Ventricular septal rupture', 'C) Free wall rupture', 'D) Papillary muscle rupture'],
+        ans: 1,
+        exp: 'VSR presents with new harsh systolic murmur at LSB and acute hemodynamic deterioration 3-5 days post-MI; requires urgent surgical repair.'
+      },
+      {
+        id: 12,
+        domain: 'Cardiology',
+        cogLevel: 'Recall',
+        text: 'Drug of choice for maintenance therapy in PSVT is:',
+        opts: ['A) Amiodarone', 'B) Verapamil', 'C) Adenosine', 'D) Lignocaine'],
+        ans: 1,
+        exp: 'Verapamil or beta-blockers are used for maintenance therapy in PSVT; adenosine is for acute termination only.'
+      },
+      {
+        id: 13,
+        domain: 'Cardiology',
+        cogLevel: 'Application',
+        text: 'A 70-year-old with AF and CHA2DS2-VASc score of 4 presents for anticoagulation. Which agent is NOT appropriate?',
+        opts: ['A) Warfarin', 'B) Dabigatran', 'C) Rivaroxaban', 'D) Clopidogrel alone'],
+        ans: 3,
+        exp: 'Clopidogrel alone is inadequate for stroke prevention in high-risk AF; oral anticoagulants (warfarin or DOACs) are required.'
+      },
+      {
+        id: 14,
+        domain: 'Cardiology',
+        cogLevel: 'Analysis',
+        text: 'ECG shows: ST elevation in V1-V4, reciprocal ST depression in inferior leads. What is the infarct location?',
+        opts: ['A) Inferior wall', 'B) Anterior wall', 'C) Posterior wall', 'D) Lateral wall'],
+        ans: 1,
+        exp: 'ST elevation in V1-V4 indicates anterior wall MI (LAD territory); reciprocal changes may be seen in inferior leads.'
+      },
+      {
+        id: 15,
+        domain: 'Cardiology',
+        cogLevel: 'Recall',
+        text: 'Which of the following is contraindicated in acute severe aortic regurgitation?',
+        opts: ['A) IV diuretics', 'B) Sodium nitroprusside', 'C) Intra-aortic balloon pump', 'D) Emergency surgery'],
+        ans: 2,
+        exp: 'IABP is contraindicated in severe AR as it increases diastolic pressure and worsens regurgitation; vasodilators and surgery are preferred.'
+      },
+      {
+        id: 16,
+        domain: 'Cardiology',
+        cogLevel: 'Application',
+        text: 'A patient with WPW syndrome develops AF with rapid ventricular response. Which drug should be AVOIDED?',
+        opts: ['A) Procainamide', 'B) Verapamil', 'C) Amiodarone', 'D) Ibutilide'],
+        ans: 1,
+        exp: 'AV nodal blockers (verapamil, digoxin, beta-blockers) are contraindicated in WPW with AF as they may accelerate conduction via accessory pathway.'
+      },
+      {
+        id: 17,
+        domain: 'Cardiology',
+        cogLevel: 'Recall',
+        text: 'The most common valvular lesion associated with sudden death is:',
+        opts: ['A) Mitral stenosis', 'B) Aortic stenosis', 'C) Mitral regurgitation', 'D) Aortic regurgitation'],
+        ans: 1,
+        exp: 'Severe aortic stenosis carries the highest risk of sudden death among valvular lesions, especially when symptomatic (angina, syncope, HF).'
+      },
+      {
+        id: 18,
+        domain: 'Cardiology',
+        cogLevel: 'Analysis',
+        text: 'A patient presents with hypotension, distended neck veins, and clear lung fields. BP 70/50 mmHg. What is the most likely diagnosis?',
+        opts: ['A) Cardiogenic shock', 'B) Cardiac tamponade', 'C) Massive PE', 'D) RV infarction'],
+        ans: 3,
+        exp: 'This triad (hypotension, elevated JVP, clear lungs) suggests RV infarction or tamponade; RV infarction is common with inferior MI.'
+      },
+      {
+        id: 19,
+        domain: 'Cardiology',
+        cogLevel: 'Recall',
+        text: 'Kussmaul\'s sign is NOT seen in:',
+        opts: ['A) Constrictive pericarditis', 'B) Cardiac tamponade', 'C) Restrictive cardiomyopathy', 'D) Right ventricular infarct'],
+        ans: 1,
+        exp: 'Kussmaul\'s sign (paradoxical rise in JVP with inspiration) is seen in constrictive pericarditis, restrictive CM, and RV infarct; typically absent in tamponade.'
+      },
+      {
+        id: 20,
+        domain: 'Cardiology',
+        cogLevel: 'Application',
+        text: 'A 55-year-old with chest pain has ST depression in V1-V4 with tall R waves. What additional ECG finding would confirm posterior MI?',
+        opts: ['A) ST elevation in V7-V9', 'B) ST elevation in II, III, aVF', 'C) ST elevation in V5-V6', 'D) T wave inversion in aVL'],
+        ans: 0,
+        exp: 'Posterior MI shows ST depression in V1-V4 with tall R waves; confirmation requires ST elevation in posterior leads V7-V9.'
+      },
+      {
+        id: 21,
+        domain: 'Cardiology',
+        cogLevel: 'Recall',
+        text: 'Which biomarker remains elevated longest after MI?',
+        opts: ['A) CK-MB', 'B) Troponin', 'C) Myoglobin', 'D) LDH'],
+        ans: 1,
+        exp: 'Troponin remains elevated for 7-14 days after MI, making it useful for late diagnosis; CK-MB normalizes in 2-3 days.'
+      },
+      {
+        id: 22,
+        domain: 'Cardiology',
+        cogLevel: 'Analysis',
+        text: 'ECG shows: Peaked T waves, prolonged PR interval, widened QRS, absent P waves. What electrolyte abnormality is present?',
+        opts: ['A) Hypokalemia', 'B) Hyperkalemia', 'C) Hypocalcemia', 'D) Hypercalcemia'],
+        ans: 1,
+        exp: 'Progressive ECG changes of hyperkalemia: peaked T waves → prolonged PR → widened QRS → absent P waves → sine wave → asystole.'
+      },
+      {
+        id: 23,
+        domain: 'Cardiology',
+        cogLevel: 'Application',
+        text: 'A patient with acute MI develops cardiogenic shock. What is the treatment of choice?',
+        opts: ['A) Thrombolysis alone', 'B) IABP and urgent PCI', 'C) IV fluids and inotropes', 'D) Conservative management'],
+        ans: 1,
+        exp: 'Cardiogenic shock in MI requires urgent revascularization (PCI preferred) with hemodynamic support (IABP); thrombolysis alone is inadequate.'
+      },
+      {
+        id: 24,
+        domain: 'Cardiology',
+        cogLevel: 'Recall',
+        text: 'Which of the following drugs has been linked with increased cardiac mortality?',
+        opts: ['A) Metoprolol', 'B) Rofecoxib', 'C) Losartan', 'D) Nicorandil'],
+        ans: 1,
+        exp: 'Rofecoxib (COX-2 inhibitor) was withdrawn due to increased cardiovascular mortality; all NSAIDs carry some CV risk.'
+      },
 
-        // Initialization
-        document.getElementById('startBtn').addEventListener('click', () => {
-            if (passwordInput.value === 'Upendra_Poudel') {
-                loginScreen.classList.remove('active');
-                examScreen.classList.add('active');
-                startTimer();
-                renderQuestion();
-            } else {
-                loginError.style.display = 'block';
-                passwordInput.value = '';
-                passwordInput.focus();
-            }
-        });
+      // RESPIRATORY (16 questions)
+      {
+        id: 25,
+        domain: 'Respiratory',
+        cogLevel: 'Analysis',
+        text: 'ABG: pH 7.28, PaCO2 55 mmHg, PaO2 60 mmHg, HCO3 28 mEq/L. What is the acid-base disorder?',
+        opts: ['A) Acute respiratory acidosis', 'B) Chronic respiratory acidosis', 'C) Metabolic acidosis', 'D) Mixed disorder'],
+        ans: 1,
+        exp: 'Elevated PaCO2 with acidemia and elevated HCO3 (renal compensation) indicates chronic respiratory acidosis, typical of COPD.'
+      },
+      {
+        id: 26,
+        domain: 'Respiratory',
+        cogLevel: 'Recall',
+        text: 'FEV1/FVC ratio is decreased in:',
+        opts: ['A) Pulmonary fibrosis', 'B) Asthma', 'C) Pleural effusion', 'D) Kyphoscoliosis'],
+        ans: 1,
+        exp: 'FEV1/FVC <0.7 indicates obstructive lung disease (asthma, COPD); restrictive diseases have normal or increased ratio.'
+      },
+      {
+        id: 27,
+        domain: 'Respiratory',
+        cogLevel: 'Application',
+        text: 'A 60-year-old smoker presents with sudden onset breathlessness and pleuritic chest pain. D-dimer is elevated. What is the next best investigation?',
+        opts: ['A) Chest X-ray', 'B) CT pulmonary angiography', 'C) V/Q scan', 'D) Echocardiography'],
+        ans: 1,
+        exp: 'CT pulmonary angiography is the investigation of choice for suspected PE in patients with elevated D-dimer and clinical suspicion.'
+      },
+      {
+        id: 28,
+        domain: 'Respiratory',
+        cogLevel: 'Recall',
+        text: 'Most common cause of chronic cor pulmonale is:',
+        opts: ['A) Pulmonary embolism', 'B) COPD', 'C) Cystic fibrosis', 'D) Primary pulmonary hypertension'],
+        ans: 1,
+        exp: 'COPD is the most common cause of chronic cor pulmonale worldwide due to chronic hypoxic pulmonary vasoconstriction.'
+      },
+      {
+        id: 29,
+        domain: 'Respiratory',
+        cogLevel: 'Analysis',
+        text: 'ABG: pH 7.52, PaCO2 28 mmHg, PaO2 95 mmHg, HCO3 22 mEq/L. What is the diagnosis?',
+        opts: ['A) Respiratory alkalosis', 'B) Metabolic alkalosis', 'C) Respiratory acidosis', 'D) Metabolic acidosis'],
+        ans: 0,
+        exp: 'Elevated pH with low PaCO2 and normal HCO3 indicates acute respiratory alkalosis, commonly from hyperventilation.'
+      },
+      {
+        id: 30,
+        domain: 'Respiratory',
+        cogLevel: 'Application',
+        text: 'A patient with severe asthma has silent chest on auscultation. What does this indicate?',
+        opts: ['A) Improvement', 'B) Grave prognosis', 'C) Mild disease', 'D) No clinical significance'],
+        ans: 1,
+        exp: 'Silent chest in asthma indicates severe airway obstruction with minimal air movement; this is a life-threatening emergency.'
+      },
+      {
+        id: 31,
+        domain: 'Respiratory',
+        cogLevel: 'Recall',
+        text: 'Most common organism causing pulmonary infection in cystic fibrosis infants is:',
+        opts: ['A) Pseudomonas aeruginosa', 'B) Staphylococcus aureus', 'C) Burkholderia cepacia', 'D) Aspergillus'],
+        ans: 1,
+        exp: 'S. aureus is most common in infants/young children with CF; Pseudomonas becomes dominant in older patients.'
+      },
+      {
+        id: 32,
+        domain: 'Respiratory',
+        cogLevel: 'Application',
+        text: 'A 45-year-old presents with hemoptysis, perihilar bronchiectasis, and elevated IgE. What is the most likely diagnosis?',
+        opts: ['A) Tuberculosis', 'B) Allergic bronchopulmonary aspergillosis', 'C) Lung cancer', 'D) Sarcoidosis'],
+        ans: 1,
+        exp: 'ABPA presents with asthma, central bronchiectasis, elevated IgE, and eosinophilia; common in asthmatics and CF patients.'
+      },
+      {
+        id: 33,
+        domain: 'Respiratory',
+        cogLevel: 'Recall',
+        text: 'Gold criteria for very severe COPD is:',
+        opts: ['A) FEV1 <80% predicted', 'B) FEV1 <50% predicted', 'C) FEV1 <30% predicted', 'D) FEV1 <15% predicted'],
+        ans: 2,
+        exp: 'GOLD Stage 4 (very severe) COPD is defined as FEV1/FVC <0.7 and FEV1 <30% predicted or <50% with chronic respiratory failure.'
+      },
+      {
+        id: 34,
+        domain: 'Respiratory',
+        cogLevel: 'Analysis',
+        text: 'CXR shows: Bilateral hilar lymphadenopathy with clear lung fields. What is the most likely diagnosis?',
+        opts: ['A) Tuberculosis', 'B) Sarcoidosis', 'C) Lymphoma', 'D) Silicosis'],
+        ans: 1,
+        exp: 'Bilateral hilar lymphadenopathy with clear lung fields is classic for sarcoidosis (Stage I); TB typically shows parenchymal involvement.'
+      },
+      {
+        id: 35,
+        domain: 'Respiratory',
+        cogLevel: 'Application',
+        text: 'A patient with COPD exacerbation has pH 7.25, PaCO2 65 mmHg. What is the next best step?',
+        opts: ['A) Intubate immediately', 'B) Start non-invasive ventilation', 'C) Give IV bicarbonate', 'D) Increase oxygen to 100%'],
+        ans: 1,
+        exp: 'NIV is first-line for acute hypercapnic respiratory failure in COPD exacerbation; reduces intubation rates and mortality.'
+      },
+      {
+        id: 36,
+        domain: 'Respiratory',
+        cogLevel: 'Recall',
+        text: 'Most common site for bronchiectasis is:',
+        opts: ['A) Right upper lobe', 'B) Right middle lobe', 'C) Left lower lobe', 'D) Right lower lobe'],
+        ans: 2,
+        exp: 'Left lower lobe is most commonly affected by bronchiectasis due to narrower bronchial angle and impaired drainage.'
+      },
+      {
+        id: 37,
+        domain: 'Respiratory',
+        cogLevel: 'Analysis',
+        text: 'ABG: pH 7.20, PaCO2 30 mmHg, HCO3 12 mEq/L, anion gap 20. What is the diagnosis?',
+        opts: ['A) Respiratory acidosis', 'B) Metabolic acidosis with respiratory compensation', 'C) Metabolic alkalosis', 'D) Mixed disorder'],
+        ans: 1,
+        exp: 'Low pH, low HCO3, and elevated anion gap indicate high anion gap metabolic acidosis; low PaCO2 shows appropriate respiratory compensation.'
+      },
+      {
+        id: 38,
+        domain: 'Respiratory',
+        cogLevel: 'Recall',
+        text: 'Drug of choice for Pneumocystis jirovecii pneumonia is:',
+        opts: ['A) Doxycycline', 'B) Cotrimoxazole', 'C) Dapsone', 'D) Pentamidine'],
+        ans: 1,
+        exp: 'Cotrimoxazole (TMP-SMX) is first-line for PCP treatment and prophylaxis; alternatives include pentamidine, dapsone, or atovaquone.'
+      },
+      {
+        id: 39,
+        domain: 'Respiratory',
+        cogLevel: 'Application',
+        text: 'A 55-year-old with lung cancer presents with facial swelling and dilated chest veins. What is the diagnosis?',
+        opts: ['A) Pericardial effusion', 'B) Superior vena cava syndrome', 'C) Cardiac tamponade', 'D) Pulmonary embolism'],
+        ans: 1,
+        exp: 'SVC syndrome presents with facial swelling, dilated chest veins, and dyspnea; small cell lung cancer is the most common cause.'
+      },
+      {
+        id: 40,
+        domain: 'Respiratory',
+        cogLevel: 'Recall',
+        text: 'Most common type of lung carcinoma in non-smokers is:',
+        opts: ['A) Squamous cell carcinoma', 'B) Adenocarcinoma', 'C) Small cell carcinoma', 'D) Large cell carcinoma'],
+        ans: 1,
+        exp: 'Adenocarcinoma is the most common lung cancer in non-smokers and has become the most common overall type.'
+      },
 
-        document.getElementById('prevBtn').addEventListener('click', () => {
-            if (currentQ > 0) {
-                currentQ--;
-                renderQuestion();
-            }
-        });
+      // INFECTIOUS DISEASE (14 questions)
+      {
+        id: 41,
+        domain: 'ID',
+        cogLevel: 'Application',
+        text: 'A patient presents with fever, headache, and neck stiffness. CSF shows: high protein, low glucose, lymphocytic predominance. What is the most likely diagnosis?',
+        opts: ['A) Bacterial meningitis', 'B) Viral meningitis', 'C) Tubercular meningitis', 'D) Fungal meningitis'],
+        ans: 2,
+        exp: 'TB meningitis shows lymphocytic pleocytosis, elevated protein, and low glucose; bacterial shows neutrophilic predominance.'
+      },
+      {
+        id: 42,
+        domain: 'ID',
+        cogLevel: 'Recall',
+        text: 'Most common cause of sepsis in hospitalized patients is:',
+        opts: ['A) Gram-positive organisms', 'B) Gram-negative organisms', 'C) Fungal infections', 'D) Viral infections'],
+        ans: 0,
+        exp: 'Gram-positive organisms (especially Staph aureus) are now the most common cause of sepsis in hospitalized patients.'
+      },
+      {
+        id: 43,
+        domain: 'ID',
+        cogLevel: 'Application',
+        text: 'A 30-year-old from Nepal Terai presents with fever for 3 weeks, hepatosplenomegaly, and pancytopenia. What is the most likely diagnosis?',
+        opts: ['A) Malaria', 'B) Enteric fever', 'C) Visceral leishmaniasis (Kala-azar)', 'D) Tuberculosis'],
+        ans: 2,
+        exp: 'Kala-azar presents with prolonged fever, massive splenomegaly, and pancytopenia; endemic in Nepal Terai region.'
+      },
+      {
+        id: 44,
+        domain: 'ID',
+        cogLevel: 'Recall',
+        text: 'Drug of choice for severe malaria (P. falciparum) is:',
+        opts: ['A) Chloroquine', 'B) IV artesunate', 'C) Oral artemether-lumefantrine', 'D) Quinine'],
+        ans: 1,
+        exp: 'IV artesunate is first-line for severe malaria; reduces mortality compared to quinine and is WHO recommended.'
+      },
+      {
+        id: 45,
+        domain: 'ID',
+        cogLevel: 'Application',
+        text: 'A patient with suspected enteric fever in Nepal. Which antibiotic is most appropriate?',
+        opts: ['A) Ciprofloxacin', 'B) Ceftriaxone', 'C) Amoxicillin', 'D) Cotrimoxazole'],
+        ans: 1,
+        exp: 'Fluoroquinolone resistance is prevalent in Nepal; third-generation cephalosporins (ceftriaxone) are first-line for enteric fever.'
+      },
+      {
+        id: 46,
+        domain: 'ID',
+        cogLevel: 'Recall',
+        text: 'qSOFA criteria include all EXCEPT:',
+        opts: ['A) Respiratory rate ≥22/min', 'B) Altered mental status', 'C) Systolic BP ≤100 mmHg', 'D) Temperature >38°C'],
+        ans: 3,
+        exp: 'qSOFA includes RR ≥22, altered mentation, and SBP ≤100 mmHg; fever is not part of qSOFA criteria.'
+      },
+      {
+        id: 47,
+        domain: 'ID',
+        cogLevel: 'Analysis',
+        text: 'A patient with HIV (CD4 count 150) presents with headache and focal deficits. MRI shows ring-enhancing lesions. What is the most likely diagnosis?',
+        opts: ['A) Cryptococcal meningitis', 'B) Toxoplasmosis', 'C) Primary CNS lymphoma', 'D) TB meningitis'],
+        ans: 1,
+        exp: 'Multiple ring-enhancing lesions in HIV with CD4 <200 suggests toxoplasmosis; single lesion suggests lymphoma.'
+      },
+      {
+        id: 48,
+        domain: 'ID',
+        cogLevel: 'Application',
+        text: 'A patient presents with biphasic fever, myalgia, rash, and platelet count of 80,000. What is the next best step?',
+        opts: ['A) Start antibiotics', 'B) Monitor for warning signs and provide supportive care', 'C) Give platelet transfusion', 'D) Start steroids'],
+        ans: 1,
+        exp: 'This suggests dengue fever; management is supportive with careful monitoring for warning signs; platelet transfusion only if bleeding.'
+      },
+      {
+        id: 49,
+        domain: 'ID',
+        cogLevel: 'Recall',
+        text: 'Most common organism causing infective endocarditis in IV drug users is:',
+        opts: ['A) Streptococcus viridans', 'B) Staphylococcus aureus', 'C) Enterococcus', 'D) HACEK organisms'],
+        ans: 1,
+        exp: 'S. aureus is the most common cause of IE in IV drug users, typically affecting the tricuspid valve.'
+      },
+      {
+        id: 50,
+        domain: 'ID',
+        cogLevel: 'Application',
+        text: 'A patient with suspected sepsis has lactate 4.5 mmol/L and BP 85/50 mmHg. What is the next best step?',
+        opts: ['A) Start vasopressors immediately', 'B) Give 30 mL/kg IV crystalloid', 'C) Wait for culture results', 'D) Give steroids'],
+        ans: 1,
+        exp: 'Sepsis bundle requires 30 mL/kg crystalloid within first hour for hypotension or lactate ≥4 mmol/L before vasopressors.'
+      },
+      {
+        id: 51,
+        domain: 'ID',
+        cogLevel: 'Recall',
+        text: 'Most common cause of community-acquired pneumonia is:',
+        opts: ['A) Haemophilus influenzae', 'B) Streptococcus pneumoniae', 'C) Mycoplasma pneumoniae', 'D) Staphylococcus aureus'],
+        ans: 1,
+        exp: 'S. pneumoniae remains the most common cause of CAP in adults despite vaccination programs.'
+      },
+      {
+        id: 52,
+        domain: 'ID',
+        cogLevel: 'Analysis',
+        text: 'A patient on antibiotics develops severe diarrhea. Stool test positive for C. difficile toxin. What is the treatment of choice?',
+        opts: ['A) Stop antibiotics and give oral vancomycin', 'B) Give IV metronidazole', 'C) Continue current antibiotics', 'D) Give loperamide'],
+        ans: 0,
+        exp: 'Oral vancomycin or fidaxomicin is first-line for C. difficile; stop inciting antibiotics; avoid antimotility agents.'
+      },
+      {
+        id: 53,
+        domain: 'ID',
+        cogLevel: 'Recall',
+        text: 'Prophylaxis for Pneumocystis jirovecii is indicated when CD4 count is:',
+        opts: ['A) <500 cells/μL', 'B) <350 cells/μL', 'C) <200 cells/μL', 'D) <100 cells/μL'],
+        ans: 2,
+        exp: 'PCP prophylaxis is indicated when CD4 <200 cells/μL or history of oropharyngeal candidiasis.'
+      },
+      {
+        id: 54,
+        domain: 'ID',
+        cogLevel: 'Application',
+        text: 'A patient presents with fever, cough, and night sweats for 4 weeks. Sputum AFB is positive. What is the intensive phase regimen?',
+        opts: ['A) HRZE for 2 months', 'B) HR for 4 months', 'C) HRZE for 4 months', 'D) HRE for 2 months'],
+        ans: 0,
+        exp: 'Standard DOTS regimen: Intensive phase HRZE (2 months) + Continuation phase HR (4 months) for drug-sensitive TB.'
+      },
 
-        document.getElementById('nextBtn').addEventListener('click', () => {
-            if (currentQ < 119) {
-                currentQ++;
-                renderQuestion();
-            } else {
-                document.getElementById('nextBtn').style.display = 'none';
-                document.getElementById('submitBtn').style.display = 'inline-flex';
-            }
-        });
+      // GASTROENTEROLOGY (14 questions)
+      {
+        id: 55,
+        domain: 'GI',
+        cogLevel: 'Analysis',
+        text: 'A patient with ascites has SAAG 1.3 g/dL and ascitic fluid protein 3.5 g/dL. What is the most likely cause?',
+        opts: ['A) Cirrhosis', 'B) Cardiac ascites', 'C) Peritoneal carcinomatosis', 'D) Tuberculous peritonitis'],
+        ans: 1,
+        exp: 'SAAG ≥1.1 with high protein (>2.5 g/dL) suggests cardiac ascites; cirrhosis has SAAG ≥1.1 with low protein.'
+      },
+      {
+        id: 56,
+        domain: 'GI',
+        cogLevel: 'Application',
+        text: 'A cirrhotic patient presents with hematemesis. What is the next best step?',
+        opts: ['A) Urgent endoscopy', 'B) Start IV PPI', 'C) Give IV octreotide and antibiotics', 'D) All of the above'],
+        ans: 3,
+        exp: 'Variceal bleed management: IV fluids, octreotide, antibiotics (ceftriaxone), PPI, and urgent endoscopy within 12 hours.'
+      },
+      {
+        id: 57,
+        domain: 'GI',
+        cogLevel: 'Recall',
+        text: 'Most common cause of acute pancreatitis is:',
+        opts: ['A) Alcohol', 'B) Gallstones', 'C) Hypertriglyceridemia', 'D) Drugs'],
+        ans: 1,
+        exp: 'Gallstones and alcohol account for 80% of acute pancreatitis cases; gallstones are most common overall.'
+      },
+      {
+        id: 58,
+        domain: 'GI',
+        cogLevel: 'Analysis',
+        text: 'A patient with cirrhosis develops confusion and asterixis. Ammonia is elevated. What precipitated this?',
+        opts: ['A) GI bleeding', 'B) Constipation', 'C) Infection', 'D) Any of the above'],
+        ans: 3,
+        exp: 'Hepatic encephalopathy precipitants include GI bleed, infection, constipation, electrolyte abnormalities, and sedatives.'
+      },
+      {
+        id: 59,
+        domain: 'GI',
+        cogLevel: 'Recall',
+        text: 'Spontaneous bacterial peritonitis is diagnosed when ascitic fluid PMN count is:',
+        opts: ['A) >100/mm³', 'B) >250/mm³', 'C) >500/mm³', 'D) >1000/mm³'],
+        ans: 1,
+        exp: 'SBP is diagnosed when ascitic fluid PMN count >250/mm³; treat with third-generation cephalosporin.'
+      },
+      {
+        id: 60,
+        domain: 'GI',
+        cogLevel: 'Application',
+        text: 'A patient presents with dysphagia to both solids and liquids. Barium swallow shows bird-beak appearance. What is the diagnosis?',
+        opts: ['A) Esophageal cancer', 'B) Achalasia cardia', 'C) Peptic stricture', 'D) Diffuse esophageal spasm'],
+        ans: 1,
+        exp: 'Achalasia presents with dysphagia to solids and liquids; barium shows bird-beak appearance and dilated esophagus.'
+      },
+      {
+        id: 61,
+        domain: 'GI',
+        cogLevel: 'Recall',
+        text: 'Most common site of carcinoma esophagus in India is:',
+        opts: ['A) Upper 1/3rd', 'B) Middle 1/3rd', 'C) Lower 1/3rd', 'D) GE junction'],
+        ans: 1,
+        exp: 'In India, squamous cell carcinoma of middle 1/3rd esophagus is most common; adenocarcinoma at GE junction is rising in West.'
+      },
+      {
+        id: 62,
+        domain: 'GI',
+        cogLevel: 'Analysis',
+        text: 'A patient with chronic diarrhea has positive anti-endomysial antibodies and villous atrophy on biopsy. What is the diagnosis?',
+        opts: ['A) Crohn\'s disease', 'B) Celiac disease', 'C) Ulcerative colitis', 'D) Tropical sprue'],
+        ans: 1,
+        exp: 'Celiac disease presents with malabsorption, villous atrophy, and positive anti-tTG/anti-endomysial antibodies.'
+      },
+      {
+        id: 63,
+        domain: 'GI',
+        cogLevel: 'Application',
+        text: 'A patient with UC on sulfasalazine has recurrent exacerbations requiring steroids. What is the next line of treatment?',
+        opts: ['A) Methotrexate', 'B) Azathioprine', 'C) Cyclosporine', 'D) Infliximab'],
+        ans: 1,
+        exp: 'Azathioprine or 6-MP is used for steroid-dependent UC; biologics reserved for refractory cases.'
+      },
+      {
+        id: 64,
+        domain: 'GI',
+        cogLevel: 'Recall',
+        text: 'Most common site of peptic ulcer is:',
+        opts: ['A) Stomach', 'B) First part of duodenum', 'C) Second part of duodenum', 'D) Pylorus'],
+        ans: 1,
+        exp: 'Duodenal ulcers (first part) are more common than gastric ulcers; H. pylori is the major cause.'
+      },
+      {
+        id: 65,
+        domain: 'GI',
+        cogLevel: 'Analysis',
+        text: 'A patient presents with painless jaundice and palpable gallbladder. What is the most likely diagnosis?',
+        opts: ['A) Gallstone disease', 'B) Carcinoma head of pancreas', 'C) Chronic pancreatitis', 'D) Hepatitis'],
+        ans: 1,
+        exp: 'Courvoisier\'s sign (painless jaundice + palpable gallbladder) suggests malignant obstruction (pancreatic cancer).',
+      },
+      {
+        id: 66,
+        domain: 'GI',
+        cogLevel: 'Recall',
+        text: 'Most specific test for acute pancreatitis is:',
+        opts: ['A) Serum amylase', 'B) Serum lipase', 'C) Urinary amylase', 'D) Serum calcium'],
+        ans: 1,
+        exp: 'Serum lipase is more specific and remains elevated longer than amylase in acute pancreatitis.'
+      },
+      {
+        id: 67,
+        domain: 'GI',
+        cogLevel: 'Application',
+        text: 'A patient with alcoholic cirrhosis presents with fever and abdominal pain. Ascitic fluid shows PMN 400/mm³. What is the treatment?',
+        opts: ['A) Oral ciprofloxacin', 'B) IV ceftriaxone', 'C) IV vancomycin', 'D) Oral metronidazole'],
+        ans: 1,
+        exp: 'SBP treatment: IV third-generation cephalosporin (ceftriaxone or cefotaxime) for 5-7 days; albumin infusion reduces renal failure.'
+      },
+      {
+        id: 68,
+        domain: 'GI',
+        cogLevel: 'Recall',
+        text: 'Barrett\'s esophagus is associated with increased risk of:',
+        opts: ['A) Squamous cell carcinoma', 'B) Adenocarcinoma', 'C) Leiomyosarcoma', 'D) Lymphoma'],
+        ans: 1,
+        exp: 'Barrett\'s esophagus (intestinal metaplasia) is a premalignant condition for esophageal adenocarcinoma.'
+      },
 
-        document.getElementById('submitBtn').addEventListener('click', submitExam);
-        document.getElementById('retakeBtn').addEventListener('click', () => location.reload());
+      // NEUROLOGY (14 questions)
+      {
+        id: 69,
+        domain: 'Neuro',
+        cogLevel: 'Application',
+        text: 'A 65-year-old presents with sudden onset right-sided weakness and aphasia. Symptoms started 2 hours ago. CT head is normal. What is the next best step?',
+        opts: ['A) Start aspirin', 'B) IV thrombolysis with alteplase', 'C) Start anticoagulation', 'D) Conservative management'],
+        ans: 1,
+        exp: 'IV thrombolysis within 4.5 hours of symptom onset for ischemic stroke if no contraindications; CT excludes hemorrhage.'
+      },
+      {
+        id: 70,
+        domain: 'Neuro',
+        cogLevel: 'Recall',
+        text: 'Most common cause of spontaneous subarachnoid hemorrhage is:',
+        opts: ['A) AVM', 'B) Berry aneurysm', 'C) Hypertension', 'D) Trauma'],
+        ans: 1,
+        exp: 'Ruptured berry aneurysm (typically at Circle of Willis) is the most common cause of spontaneous SAH.'
+      },
+      {
+        id: 71,
+        domain: 'Neuro',
+        cogLevel: 'Analysis',
+        text: 'A patient presents with thunderclap headache, neck stiffness, and photophobia. CT shows blood in Sylvian fissure. What is the diagnosis?',
+        opts: ['A) Migraine', 'B) Subarachnoid hemorrhage', 'C) Meningitis', 'D) Cluster headache'],
+        ans: 1,
+        exp: 'Thunderclap headache with CT showing subarachnoid blood confirms SAH; lumbar puncture if CT negative but high suspicion.'
+      },
+      {
+        id: 72,
+        domain: 'Neuro',
+        cogLevel: 'Recall',
+        text: 'Drug of choice for absence seizures is:',
+        opts: ['A) Phenytoin', 'B) Valproate', 'C) Ethosuximide', 'D) Carbamazepine'],
+        ans: 2,
+        exp: 'Ethosuximide is first-line for absence seizures; valproate is alternative especially with generalized tonic-clonic seizures.'
+      },
+      {
+        id: 73,
+        domain: 'Neuro',
+        cogLevel: 'Application',
+        text: 'A patient with status epilepticus has received IV lorazepam. Seizures continue. What is the next drug?',
+        opts: ['A) IV phenytoin/fosphenytoin', 'B) IV propofol', 'C) Oral carbamazepine', 'D) IV magnesium'],
+        ans: 0,
+        exp: 'Status epilepticus protocol: Benzodiazepines → Phenytoin/fosphenytoin → Anesthetics (propofol/midazolam) for refractory cases.'
+      },
+      {
+        id: 74,
+        domain: 'Neuro',
+        cogLevel: 'Recall',
+        text: 'Most common cause of bacterial meningitis in adults is:',
+        opts: ['A) Neisseria meningitidis', 'B) Streptococcus pneumoniae', 'C) Haemophilus influenzae', 'D) Listeria monocytogenes'],
+        ans: 1,
+        exp: 'S. pneumoniae is the most common cause of bacterial meningitis in adults; N. meningitidis more common in young adults.'
+      },
+      {
+        id: 75,
+        domain: 'Neuro',
+        cogLevel: 'Analysis',
+        text: 'A patient presents with right-sided weakness, left facial palsy, and right gaze palsy. Where is the lesion?',
+        opts: ['A) Left cerebral hemisphere', 'B) Right cerebral hemisphere', 'C) Left brainstem (pons)', 'D) Right brainstem (pons)'],
+        ans: 3,
+        exp: 'Crossed signs (ipsilateral cranial nerve + contralateral body weakness) indicate brainstem lesion; this is right pontine lesion.'
+      },
+      {
+        id: 76,
+        domain: 'Neuro',
+        cogLevel: 'Recall',
+        text: 'Most common type of intracranial tumor in adults is:',
+        opts: ['A) Meningioma', 'B) Glioma', 'C) Metastasis', 'D) Pituitary adenoma'],
+        ans: 2,
+        exp: 'Metastatic tumors are most common intracranial neoplasms in adults; gliomas are most common primary brain tumors.'
+      },
+      {
+        id: 77,
+        domain: 'Neuro',
+        cogLevel: 'Application',
+        text: 'A 70-year-old presents with progressive memory loss, gait disturbance, and urinary incontinence. What is the diagnosis?',
+        opts: ['A) Alzheimer\'s disease', 'B) Normal pressure hydrocephalus', 'C) Parkinson\'s disease', 'D) Vascular dementia'],
+        ans: 1,
+        exp: 'Classic triad of NPH: gait disturbance, dementia, urinary incontinence ("wet, wobbly, wacky"); potentially reversible.'
+      },
+      {
+        id: 78,
+        domain: 'Neuro',
+        cogLevel: 'Recall',
+        text: 'Drug of choice for trigeminal neuralgia is:',
+        opts: ['A) Gabapentin', 'B) Carbamazepine', 'C) Phenytoin', 'D) Baclofen'],
+        ans: 1,
+        exp: 'Carbamazepine is first-line for trigeminal neuralgia; oxcarbazepine is alternative with fewer side effects.'
+      },
+      {
+        id: 79,
+        domain: 'Neuro',
+        cogLevel: 'Analysis',
+        text: 'A patient presents with ascending paralysis, areflexia, and albuminocytological dissociation in CSF. What is the diagnosis?',
+        opts: ['A) Polio', 'B) Guillain-Barré syndrome', 'C) Botulism', 'D) Myasthenia gravis'],
+        ans: 1,
+        exp: 'GBS presents with ascending paralysis, areflexia, and elevated CSF protein with normal cell count (albuminocytological dissociation).'
+      },
+      {
+        id: 80,
+        domain: 'Neuro',
+        cogLevel: 'Recall',
+        text: 'Most common cause of dementia is:',
+        opts: ['A) Vascular dementia', 'B) Alzheimer\'s disease', 'C) Lewy body dementia', 'D) Frontotemporal dementia'],
+        ans: 1,
+        exp: 'Alzheimer\'s disease accounts for 60-70% of all dementia cases; characterized by memory loss and cognitive decline.'
+      },
+      {
+        id: 81,
+        domain: 'Neuro',
+        cogLevel: 'Application',
+        text: 'A patient with Parkinson\'s disease develops orthostatic hypotension. Which drug should be avoided?',
+        opts: ['A) Levodopa', 'B) Pramipexole', 'C) Selegiline', 'D) All can worsen hypotension'],
+        ans: 3,
+        exp: 'All antiparkinsonian drugs can worsen orthostatic hypotension; careful dose adjustment and monitoring required.'
+      },
+      {
+        id: 82,
+        domain: 'Neuro',
+        cogLevel: 'Recall',
+        text: 'Target BP before thrombolysis in ischemic stroke is:',
+        opts: ['A) <140/90 mmHg', 'B) <160/100 mmHg', 'C) <185/110 mmHg', 'D) <200/120 mmHg'],
+        ans: 2,
+        exp: 'BP must be <185/110 mmHg before IV thrombolysis; maintain <180/105 mmHg for 24 hours after.'
+      },
 
-        function startTimer() {
-            startTime = Date.now();
-            updateTimer();
-            timerInterval = setInterval(() => {
-                const elapsed = Date.now() - startTime;
-                if (elapsed >= EXAM_DURATION) {
-                    clearInterval(timerInterval);
-                    submitExam();
-                } else {
-                    updateTimer();
-                    if (elapsed > EXAM_DURATION - 10 * 60 * 1000) {
-                        timerBadge.classList.add('warning');
-                    }
-                }
-            }, 1000);
+      // NEPHROLOGY (10 questions)
+      {
+        id: 83,
+        domain: 'Renal',
+        cogLevel: 'Analysis',
+        text: 'A patient has Na+ 120 mEq/L, serum osmolality 250 mOsm/kg, urine osmolality 500 mOsm/kg, urine Na+ 40 mEq/L. What is the diagnosis?',
+        opts: ['A) Hypovolemic hyponatremia', 'B) SIADH', 'C) Psychogenic polydipsia', 'D) Heart failure'],
+        ans: 1,
+        exp: 'SIADH: euvolemic hyponatremia, low serum osmolality, inappropriately concentrated urine (>100), urine Na+ >40 mEq/L.'
+      },
+      {
+        id: 84,
+        domain: 'Renal',
+        cogLevel: 'Application',
+        text: 'A patient with hyperkalemia has peaked T waves on ECG. What is the first step in management?',
+        opts: ['A) IV insulin and glucose', 'B) IV calcium gluconate', 'C) Oral kayexalate', 'D) Hemodialysis'],
+        ans: 1,
+        exp: 'IV calcium gluconate stabilizes cardiac membrane first in hyperkalemia with ECG changes; then shift K+ into cells.'
+      },
+      {
+        id: 85,
+        domain: 'Renal',
+        cogLevel: 'Recall',
+        text: 'Most common cause of nephrotic syndrome in children is:',
+        opts: ['A) Focal segmental glomerulosclerosis', 'B) Minimal change disease', 'C) Membranous nephropathy', 'D) IgA nephropathy'],
+        ans: 1,
+        exp: 'Minimal change disease accounts for 80-90% of nephrotic syndrome in children; excellent response to steroids.'
+      },
+      {
+        id: 86,
+        domain: 'Renal',
+        cogLevel: 'Analysis',
+        text: 'ABG: pH 7.30, HCO3 15 mEq/L, PaCO2 30 mmHg, anion gap 24. What is the diagnosis?',
+        opts: ['A) Metabolic acidosis with respiratory compensation', 'B) Respiratory acidosis', 'C) Metabolic alkalosis', 'D) Mixed disorder'],
+        ans: 0,
+        exp: 'Low pH, low HCO3, elevated anion gap = high AG metabolic acidosis; low PaCO2 shows appropriate respiratory compensation.'
+      },
+      {
+        id: 87,
+        domain: 'Renal',
+        cogLevel: 'Application',
+        text: 'A diabetic patient with proteinuria. Which drug is most appropriate for BP control?',
+        opts: ['A) Amlodipine', 'B) Enalapril', 'C) Metoprolol', 'D) Hydrochlorothiazide'],
+        ans: 1,
+        exp: 'ACE inhibitors/ARBs are first-line in diabetic nephropathy; reduce proteinuria and slow progression of renal disease.'
+      },
+      {
+        id: 88,
+        domain: 'Renal',
+        cogLevel: 'Recall',
+        text: 'RIFLE criteria for AKI includes all EXCEPT:',
+        opts: ['A) Risk', 'B) Injury', 'C) Failure', 'D) Recovery'],
+        ans: 3,
+        exp: 'RIFLE: Risk, Injury, Failure, Loss, End-stage; Recovery is not part of RIFLE classification.'
+      },
+      {
+        id: 89,
+        domain: 'Renal',
+        cogLevel: 'Analysis',
+        text: 'A patient with CKD has Ca 7.5 mg/dL, PO4 6.5 mg/dL, PTH 450 pg/mL. What is the diagnosis?',
+        opts: ['A) Primary hyperparathyroidism', 'B) Secondary hyperparathyroidism', 'C) Tertiary hyperparathyroidism', 'D) Hypoparathyroidism'],
+        ans: 1,
+        exp: 'Secondary hyperparathyroidism in CKD: low/normal Ca, high PO4, elevated PTH due to vitamin D deficiency and phosphate retention.'
+      },
+      {
+        id: 90,
+        domain: 'Renal',
+        cogLevel: 'Application',
+        text: 'A patient with ESRD on dialysis develops severe hyperkalemia (K+ 7.5 mEq/L). What is the definitive treatment?',
+        opts: ['A) IV calcium', 'B) Insulin-glucose', 'C) Hemodialysis', 'D) Kayexalate'],
+        ans: 2,
+        exp: 'Hemodialysis is definitive treatment for severe hyperkalemia in ESRD; medical management is temporizing only.'
+      },
+      {
+        id: 91,
+        domain: 'Renal',
+        cogLevel: 'Recall',
+        text: 'Most common cause of glomerulonephritis worldwide is:',
+        opts: ['A) Post-streptococcal GN', 'B) IgA nephropathy', 'C) Lupus nephritis', 'D) Membranous nephropathy'],
+        ans: 1,
+        exp: 'IgA nephropathy (Berger\'s disease) is the most common primary glomerulonephritis worldwide.'
+      },
+      {
+        id: 92,
+        domain: 'Renal',
+        cogLevel: 'Analysis',
+        text: 'A patient presents with hematuria, proteinuria, and RBC casts. What is the most likely diagnosis?',
+        opts: ['A) Cystitis', 'B) Glomerulonephritis', 'C) Nephrolithiasis', 'D) Renal cell carcinoma'],
+        ans: 1,
+        exp: 'RBC casts are pathognomonic for glomerular disease (glomerulonephritis); indicates glomerular bleeding.'
+      },
+
+      // RHEUMATOLOGY (6 questions)
+      {
+        id: 93,
+        domain: 'Rheum',
+        cogLevel: 'Recall',
+        text: 'Most specific antibody for SLE is:',
+        opts: ['A) ANA', 'B) Anti-dsDNA', 'C) Anti-Smith', 'D) Anti-Ro'],
+        ans: 1,
+        exp: 'Anti-dsDNA is highly specific for SLE and correlates with disease activity and lupus nephritis.'
+      },
+      {
+        id: 94,
+        domain: 'Rheum',
+        cogLevel: 'Application',
+        text: 'A 35-year-old female presents with malar rash, arthritis, and proteinuria. ANA is positive. What is the next best test?',
+        opts: ['A) Anti-dsDNA', 'B) RF', 'C) Anti-CCP', 'D) HLA-B27'],
+        ans: 0,
+        exp: 'Clinical features suggest SLE; anti-dsDNA and anti-Smith antibodies help confirm diagnosis and assess renal involvement.'
+      },
+      {
+        id: 95,
+        domain: 'Rheum',
+        cogLevel: 'Recall',
+        text: 'Drug of choice for acute gout attack is:',
+        opts: ['A) Allopurinol', 'B) NSAIDs', 'C) Colchicine', 'D) Any of the above'],
+        ans: 3,
+        exp: 'NSAIDs, colchicine, or steroids are all appropriate for acute gout; allopurinol is for chronic management, not acute attacks.'
+      },
+      {
+        id: 96,
+        domain: 'Rheum',
+        cogLevel: 'Analysis',
+        text: 'A patient presents with morning stiffness >1 hour, symmetric small joint involvement, and positive RF. What is the diagnosis?',
+        opts: ['A) Osteoarthritis', 'B) Rheumatoid arthritis', 'C) Psoriatic arthritis', 'D) Reactive arthritis'],
+        ans: 1,
+        exp: 'RA presents with symmetric small joint arthritis, morning stiffness >1 hour, and positive RF/anti-CCP antibodies.'
+      },
+      {
+        id: 97,
+        domain: 'Rheum',
+        cogLevel: 'Recall',
+        text: 'ANCA-associated vasculitis includes all EXCEPT:',
+        opts: ['A) Granulomatosis with polyangiitis', 'B) Microscopic polyangiitis', 'C) Eosinophilic granulomatosis with polyangiitis', 'D) Polyarteritis nodosa'],
+        ans: 3,
+        exp: 'PAN is not ANCA-associated; GPA (c-ANCA), MPA (p-ANCA), and EGPA (p-ANCA) are ANCA-associated vasculitides.'
+      },
+      {
+        id: 98,
+        domain: 'Rheum',
+        cogLevel: 'Application',
+        text: 'A patient with SLE develops seizures and psychosis. What is the treatment?',
+        opts: ['A) IV methylprednisolone', 'B) Oral prednisone', 'C) Hydroxychloroquine', 'D) Methotrexate'],
+        ans: 0,
+        exp: 'Neuropsychiatric SLE requires aggressive immunosuppression with IV methylprednisolone pulses followed by oral steroids.'
+      },
+
+      // HEMATOLOGY (8 questions)
+      {
+        id: 99,
+        domain: 'Heme',
+        cogLevel: 'Recall',
+        text: 'Most common cause of microcytic hypochromic anemia is:',
+        opts: ['A) Thalassemia', 'B) Iron deficiency', 'C) Sideroblastic anemia', 'D) Lead poisoning'],
+        ans: 1,
+        exp: 'Iron deficiency anemia is the most common cause of microcytic hypochromic anemia worldwide.'
+      },
+      {
+        id: 100,
+        domain: 'Heme',
+        cogLevel: 'Analysis',
+        text: 'A patient has Hb 8 g/dL, MCV 65 fL, RDW 18%, ferritin 8 ng/mL. What is the diagnosis?',
+        opts: ['A) Thalassemia trait', 'B) Iron deficiency anemia', 'C) Anemia of chronic disease', 'D) Sideroblastic anemia'],
+        ans: 1,
+        exp: 'Low ferritin confirms iron deficiency; elevated RDW and low MCV support IDA over thalassemia (normal RDW, normal/high ferritin).'
+      },
+      {
+        id: 101,
+        domain: 'Heme',
+        cogLevel: 'Application',
+        text: 'A patient with AML develops fever and neutropenia (ANC 400). What is the next best step?',
+        opts: ['A) Wait for culture results', 'B) Start broad-spectrum antibiotics immediately', 'C) Give G-CSF', 'D) Transfuse platelets'],
+        ans: 1,
+        exp: 'Febrile neutropenia is oncologic emergency; start broad-spectrum antibiotics within 1 hour without waiting for cultures.'
+      },
+      {
+        id: 102,
+        domain: 'Heme',
+        cogLevel: 'Recall',
+        text: 'Most common inherited bleeding disorder is:',
+        opts: ['A) Hemophilia A', 'B) Von Willebrand disease', 'C) Hemophilia B', 'D) Factor XIII deficiency'],
+        ans: 1,
+        exp: 'Von Willebrand disease is the most common inherited bleeding disorder (1% of population); autosomal dominant inheritance.'
+      },
+      {
+        id: 103,
+        domain: 'Heme',
+        cogLevel: 'Analysis',
+        text: 'A patient has prolonged aPTT, normal PT, normal platelet count, and no bleeding history. What is the likely diagnosis?',
+        opts: ['A) Hemophilia', 'B) Factor XII deficiency', 'C) Von Willebrand disease', 'D) Vitamin K deficiency'],
+        ans: 1,
+        exp: 'Factor XII deficiency prolongs aPTT but doesn\'t cause bleeding; important to recognize before surgery to avoid unnecessary treatment.'
+      },
+      {
+        id: 104,
+        domain: 'Heme',
+        cogLevel: 'Application',
+        text: 'A patient with ITP has platelet count 15,000/mm³ and active bleeding. What is the treatment?',
+        opts: ['A) Observation', 'B) IVIG and steroids', 'C) Platelet transfusion only', 'D) Splenectomy'],
+        ans: 1,
+        exp: 'ITP with active bleeding requires IVIG + steroids for rapid platelet increase; platelet transfusion if life-threatening bleeding.'
+      },
+      {
+        id: 105,
+        domain: 'Heme',
+        cogLevel: 'Recall',
+        text: 'Schistocytes on peripheral smear are seen in:',
+        opts: ['A) Iron deficiency anemia', 'B) Microangiopathic hemolytic anemia', 'C) Megaloblastic anemia', 'D) Aplastic anemia'],
+        ans: 1,
+        exp: 'Schistocytes (fragmented RBCs) indicate microangiopathic hemolytic anemia (TTP, HUS, DIC, MAHA).'
+      },
+      {
+        id: 106,
+        domain: 'Heme',
+        cogLevel: 'Analysis',
+        text: 'A patient has Hb 6 g/dL, reticulocyte count 8%, indirect bilirubin elevated, haptoglobin low. What is the diagnosis?',
+        opts: ['A) Iron deficiency', 'B) Hemolytic anemia', 'C) Aplastic anemia', 'D) Anemia of chronic disease'],
+        ans: 1,
+        exp: 'Elevated reticulocytes, indirect bilirubin, and low haptoglobin indicate hemolytic anemia; bone marrow is responding appropriately.'
+      },
+
+      // CASE-BASED CLUSTERS (Q107-120)
+      // Case 1: STEMI
+      {
+        id: 107,
+        domain: 'Cardiology',
+        cogLevel: 'Analysis',
+        caseId: 'Case 1',
+        questionType: 'Diagnosis',
+        text: 'Case 1: A 55-year-old male smoker presents with severe chest pain for 1 hour. BP 150/90, HR 110/min. ECG shows ST elevation in V1-V4.',
+        opts: ['A) NSTEMI', 'B) Anterior STEMI', 'C) Unstable angina', 'D) Pericarditis'],
+        ans: 1,
+        exp: 'ST elevation in contiguous leads V1-V4 indicates anterior STEMI (LAD territory); requires urgent reperfusion.'
+      },
+      {
+        id: 108,
+        domain: 'Cardiology',
+        cogLevel: 'Application',
+        caseId: 'Case 1',
+        questionType: 'Investigation',
+        text: 'Case 1: What is the most appropriate initial biomarker to order?',
+        opts: ['A) CK-MB', 'B) Cardiac troponin', 'C) Myoglobin', 'D) LDH'],
+        ans: 1,
+        exp: 'Cardiac troponin is the preferred biomarker for MI diagnosis; high sensitivity and specificity for myocardial injury.'
+      },
+      {
+        id: 109,
+        domain: 'Cardiology',
+        cogLevel: 'Application',
+        caseId: 'Case 1',
+        questionType: 'Management',
+        text: 'Case 1: What is the next best step in management?',
+        opts: ['A) Thrombolytics if PCI not available within 120 min', 'B) Primary PCI within 90 minutes', 'C) Conservative management', 'D) IV beta-blockers only'],
+        ans: 1,
+        exp: 'Primary PCI within 90 minutes is preferred; thrombolytics if PCI unavailable within 120 minutes of first medical contact.'
+      },
+
+      // Case 2: DKA
+      {
+        id: 110,
+        domain: 'Endocrinology',
+        cogLevel: 'Analysis',
+        caseId: 'Case 2',
+        questionType: 'Diagnosis',
+        text: 'Case 2: A 25-year-old with Type 1 DM presents with vomiting, abdominal pain, and altered sensorium. Glucose 450 mg/dL, pH 7.15, HCO3 10 mEq/L, ketones positive.',
+        opts: ['A) HHS', 'B) DKA', 'C) Lactic acidosis', 'D) Hypoglycemia'],
+        ans: 1,
+        exp: 'Hyperglycemia, metabolic acidosis (pH <7.3, HCO3 <18), and ketonemia confirm DKA diagnosis.'
+      },
+      {
+        id: 111,
+        domain: 'Endocrinology',
+        cogLevel: 'Application',
+        caseId: 'Case 2',
+        questionType: 'Management',
+        text: 'Case 2: What is the first step in management?',
+        opts: ['A) IV insulin', 'B) IV fluids (normal saline)', 'C) IV bicarbonate', 'D) Subcutaneous insulin'],
+        ans: 1,
+        exp: 'IV fluids first for volume resuscitation; insulin started after confirming K+ >3.3 mEq/L to prevent hypokalemia.'
+      },
+      {
+        id: 112,
+        domain: 'Endocrinology',
+        cogLevel: 'Application',
+        caseId: 'Case 2',
+        questionType: 'Management',
+        text: 'Case 2: Before starting insulin, which electrolyte must be checked?',
+        opts: ['A) Sodium', 'B) Potassium', 'C) Calcium', 'D) Magnesium'],
+        ans: 1,
+        exp: 'Potassium must be >3.3 mEq/L before insulin to prevent life-threatening hypokalemia from intracellular shift.'
+      },
+
+      // Case 3: TB Meningitis
+      {
+        id: 113,
+        domain: 'ID',
+        cogLevel: 'Analysis',
+        caseId: 'Case 3',
+        questionType: 'Diagnosis',
+        text: 'Case 3: A 30-year-old presents with fever, headache for 3 weeks, and neck stiffness. CSF: Protein 150 mg/dL, Glucose 30 mg/dL, Cells 200 (lymphocytes).',
+        opts: ['A) Bacterial meningitis', 'B) TB meningitis', 'C) Viral meningitis', 'D) Fungal meningitis'],
+        ans: 1,
+        exp: 'Subacute presentation with lymphocytic pleocytosis, high protein, and low glucose is classic for TB meningitis.'
+      },
+      {
+        id: 114,
+        domain: 'ID',
+        cogLevel: 'Application',
+        caseId: 'Case 3',
+        questionType: 'Investigation',
+        text: 'Case 3: What is the most appropriate initial treatment?',
+        opts: ['A) IV ceftriaxone', 'B) HRZE + steroids', 'C) IV acyclovir', 'D) Amphotericin B'],
+        ans: 1,
+        exp: 'TB meningitis treatment: HRZE + dexamethasone (reduces mortality and neurological sequelae); start immediately.'
+      },
+      {
+        id: 115,
+        domain: 'ID',
+        cogLevel: 'Recall',
+        caseId: 'Case 3',
+        questionType: 'Management',
+        text: 'Case 3: What is the role of steroids in this condition?',
+        opts: ['A) No role', 'B) Reduces mortality and neurological deficits', 'C) Only for HIV patients', 'D) Contraindicated'],
+        ans: 1,
+        exp: 'Dexamethasone reduces mortality and neurological sequelae in TB meningitis; taper over 6-8 weeks.'
+      },
+
+      // Case 4: Cirrhosis with Variceal Bleed
+      {
+        id: 116,
+        domain: 'GI',
+        cogLevel: 'Analysis',
+        caseId: 'Case 4',
+        questionType: 'Diagnosis',
+        text: 'Case 4: A 50-year-old alcoholic presents with hematemesis. Exam: Spider angiomas, ascites, splenomegaly. BP 90/60, HR 120/min.',
+        opts: ['A) Peptic ulcer bleed', 'B) Esophageal variceal bleed', 'C) Mallory-Weiss tear', 'D) Gastritis'],
+        ans: 1,
+        exp: 'Stigmata of chronic liver disease with hematemesis suggests variceal bleed; most common cause of UGI bleed in cirrhosis.'
+      },
+      {
+        id: 117,
+        domain: 'GI',
+        cogLevel: 'Application',
+        caseId: 'Case 4',
+        questionType: 'Management',
+        text: 'Case 4: What is the next best step in management?',
+        opts: ['A) IV PPI only', 'B) IV octreotide + antibiotics + urgent endoscopy', 'C) Sengstaken-Blakemore tube immediately', 'D) Emergency surgery'],
+        ans: 1,
+        exp: 'Variceal bleed protocol: IV fluids, octreotide, ceftriaxone, PPI, and urgent endoscopy within 12 hours for banding.'
+      },
+      {
+        id: 118,
+        domain: 'GI',
+        cogLevel: 'Recall',
+        caseId: 'Case 4',
+        questionType: 'Management',
+        text: 'Case 4: Which antibiotic is recommended for prophylaxis?',
+        opts: ['A) Oral ciprofloxacin', 'B) IV ceftriaxone', 'C) IV vancomycin', 'D) No antibiotics needed'],
+        ans: 1,
+        exp: 'IV ceftriaxone reduces rebleeding and mortality in cirrhotics with GI bleed; continue for 5-7 days.'
+      },
+
+      // Case 5: Stroke
+      {
+        id: 119,
+        domain: 'Neuro',
+        cogLevel: 'Analysis',
+        caseId: 'Case 5',
+        questionType: 'Diagnosis',
+        text: 'Case 5: A 70-year-old presents with sudden right-sided weakness and aphasia. Symptoms started 90 minutes ago. CT head is normal.',
+        opts: ['A) Hemorrhagic stroke', 'B) Ischemic stroke', 'C) TIA', 'D) Brain tumor'],
+        ans: 1,
+        exp: 'Sudden focal deficits with normal CT (excludes hemorrhage) indicates acute ischemic stroke; within thrombolysis window.'
+      },
+      {
+        id: 120,
+        domain: 'Neuro',
+        cogLevel: 'Application',
+        caseId: 'Case 5',
+        questionType: 'Management',
+        text: 'Case 5: What is the most appropriate treatment?',
+        opts: ['A) Aspirin only', 'B) IV alteplase if no contraindications', 'C) Heparin', 'D) Conservative management'],
+        ans: 1,
+        exp: 'IV alteplase within 4.5 hours of symptom onset improves outcomes in ischemic stroke if no contraindications (bleeding risk, recent surgery).'
+      }
+    ];
+
+    let currentQuestion = 0;
+    let userAnswers = new Array(120).fill(null);
+    let score = 0;
+    let timeRemaining = 7200; // 2 hours in seconds
+    let timerInterval;
+    let examStarted = false;
+    let examCompleted = false;
+
+    function initExam() {
+      renderQuestion();
+      startTimer();
+      updateProgress();
+    }
+
+    function renderQuestion() {
+      const q = QUESTIONS[currentQuestion];
+      const container = document.getElementById('quizContainer');
+      
+      let caseInfo = q.caseId ? `<div class="case-id">${q.caseId} - ${q.questionType}</div>` : '';
+      
+      container.innerHTML = `
+        ${caseInfo}
+        <div class="question-meta">
+          <span class="badge badge-${q.domain.toLowerCase()}">${q.domain}</span>
+          <span class="badge badge-${q.cogLevel.toLowerCase()}">${q.cogLevel}</span>
+        </div>
+        <div class="question-text">${q.text}</div>
+        <div class="options">
+          ${q.opts.map((opt, i) => `
+            <div class="option ${userAnswers[currentQuestion] === i ? 'selected' : ''}" 
+                 onclick="selectOption(${i})">
+              ${opt}
+            </div>
+          `).join('')}
+        </div>
+        <div class="explanation" id="explanation">
+          <h4>Explanation:</h4>
+          <p>${q.exp}</p>
+          <p><strong>Correct Answer:</strong> ${q.opts[q.ans]}</p>
+        </div>
+      `;
+
+      document.getElementById('currentQ').textContent = currentQuestion + 1;
+      document.getElementById('prevBtn').disabled = currentQuestion === 0;
+      document.getElementById('nextBtn').disabled = currentQuestion === 119;
+      
+      if (userAnswers[currentQuestion] !== null) {
+        document.getElementById('showAnswerBtn').textContent = 'Answer Shown';
+        document.getElementById('showAnswerBtn').disabled = true;
+        showExplanation();
+      } else {
+        document.getElementById('showAnswerBtn').textContent = 'Show Answer';
+        document.getElementById('showAnswerBtn').disabled = false;
+      }
+    }
+
+    function selectOption(index) {
+      if (userAnswers[currentQuestion] !== null) return;
+      
+      userAnswers[currentQuestion] = index;
+      const options = document.querySelectorAll('.option');
+      options.forEach((opt, i) => {
+        opt.classList.remove('selected');
+        if (i === index) opt.classList.add('selected');
+      });
+    }
+
+    function showAnswer() {
+      if (userAnswers[currentQuestion] === null) return;
+      
+      const q = QUESTIONS[currentQuestion];
+      const options = document.querySelectorAll('.option');
+      
+      options.forEach((opt, i) => {
+        opt.classList.add('disabled');
+        if (i === q.ans) {
+          opt.classList.add('correct');
+        } else if (i === userAnswers[currentQuestion] && i !== q.ans) {
+          opt.classList.add('incorrect');
         }
+      });
 
-        function updateTimer() {
-            const elapsed = Date.now() - startTime;
-            const remaining = Math.max(0, EXAM_DURATION - elapsed);
-            const h = Math.floor(remaining / 3600000);
-            const m = Math.floor((remaining % 3600000) / 60000);
-            const s = Math.floor((remaining % 60000) / 1000);
-            timerDisplay.textContent = `${h}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+      if (userAnswers[currentQuestion] === q.ans) {
+        score++;
+        document.getElementById('scoreDisplay').textContent = score;
+      }
+
+      showExplanation();
+      document.getElementById('showAnswerBtn').disabled = true;
+      document.getElementById('showAnswerBtn').textContent = 'Answer Shown';
+    }
+
+    function showExplanation() {
+      document.getElementById('explanation').classList.add('show');
+    }
+
+    function nextQuestion() {
+      if (currentQuestion < 119) {
+        currentQuestion++;
+        renderQuestion();
+        updateProgress();
+      }
+    }
+
+    function prevQuestion() {
+      if (currentQuestion > 0) {
+        currentQuestion--;
+        renderQuestion();
+        updateProgress();
+      }
+    }
+
+    function updateProgress() {
+      const progress = ((currentQuestion + 1) / 120) * 100;
+      document.getElementById('progressFill').style.width = `${progress}%`;
+    }
+
+    function startTimer() {
+      timerInterval = setInterval(() => {
+        timeRemaining--;
+        
+        const hours = Math.floor(timeRemaining / 3600);
+        const minutes = Math.floor((timeRemaining % 3600) / 60);
+        const seconds = timeRemaining % 60;
+        
+        document.getElementById('timer').textContent = 
+          `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        
+        if (timeRemaining <= 300) {
+          document.getElementById('timer').classList.add('warning');
         }
-
-        function renderQuestion() {
-            const q = questions[currentQ];
-            const isCase = currentQ >= 80; // Q81-120 are case-based in logic
-            
-            let html = `
-                <div class="question-header">
-                    <div class="q-number">Question ${currentQ + 1} of 120</div>
-                    <div class="tags">
-                        <span class="tag ${q.type}">${q.type}</span>
-                        <span class="tag domain">${q.domain}</span>
-                    </div>
-                </div>
-            `;
-
-            if (isCase && q.case) {
-                html += `<div class="case-vignette">${q.case}</div>`;
-            }
-
-            html += `<div class="stem">${q.stem}</div><div class="options-grid">`;
-
-            q.options.forEach((opt, idx) => {
-                const selected = answers[currentQ] === idx ? 'selected' : '';
-                html += `
-                    <div class="option-card ${selected}" onclick="selectOption(${idx})">
-                        <div class="option-letter">${String.fromCharCode(65 + idx)}</div>
-                        <div>${opt}</div>
-                    </div>
-                `;
-            });
-
-            html += `</div>`;
-
-            if (answers[currentQ] !== null) {
-                const isCorrect = answers[currentQ] === q.correct;
-                const options = document.querySelectorAll('.option-card');
-                options[q.correct].classList.add('correct');
-                if (!isCorrect) options[answers[currentQ]].classList.add('incorrect');
-                
-                html += `
-                    <div class="explanation-box show">
-                        <div class="explanation-title">
-                            ${isCorrect ? '✅ Correct' : '❌ Incorrect'} — Explanation
-                        </div>
-                        <div style="color: var(--text-secondary)">${q.exp}</div>
-                    </div>
-                `;
-            } else {
-                html += `<button class="btn btn-reveal" onclick="revealAnswer()">💡 Reveal Answer</button>`;
-            }
-
-            questionContainer.innerHTML = html;
-            
-            // Update Progress
-            const answered = answers.filter(a => a !== null).length;
-            const pct = ((currentQ + 1) / 120) * 100;
-            document.getElementById('progressFill').style.width = `${pct}%`;
-            document.getElementById('progressPercent').textContent = `${Math.round(pct)}%`;
-            document.getElementById('qProgress').textContent = currentQ + 1;
-            
-            document.getElementById('prevBtn').disabled = currentQ === 0;
-            window.scrollTo(0, 0);
+        
+        if (timeRemaining <= 0) {
+          clearInterval(timerInterval);
+          submitExam();
         }
+      }, 1000);
+    }
 
-        window.selectOption = (idx) => {
-            if (answers[currentQ] === null) {
-                answers[currentQ] = idx;
-                renderQuestion();
-            }
-        };
+    function submitExam() {
+      clearInterval(timerInterval);
+      examCompleted = true;
+      
+      document.getElementById('quizContainer').style.display = 'none';
+      document.getElementById('navigation').style.display = 'none';
+      document.getElementById('summaryContainer').classList.add('show');
+      
+      calculateResults();
+    }
 
-        window.revealAnswer = () => {
-            if (answers[currentQ] === null) answers[currentQ] = -1; // Mark as seen but wrong
+    function calculateResults() {
+      document.getElementById('finalScore').textContent = `${score}/120`;
+      document.getElementById('finalPercentage').textContent = `${((score/120)*100).toFixed(1)}%`;
+      
+      const cognitiveBreakdown = { Recall: { correct: 0, total: 0 }, Application: { correct: 0, total: 0 }, Analysis: { correct: 0, total: 0 } };
+      const domainBreakdown = { Cardiology: { correct: 0, total: 0 }, Respiratory: { correct: 0, total: 0 }, ID: { correct: 0, total: 0 }, GI: { correct: 0, total: 0 }, Neuro: { correct: 0, total: 0 }, Renal: { correct: 0, total: 0 }, Rheum: { correct: 0, total: 0 }, Heme: { correct: 0, total: 0 } };
+      
+      QUESTIONS.forEach((q, i) => {
+        cognitiveBreakdown[q.cogLevel].total++;
+        domainBreakdown[q.domain].total++;
+        
+        if (userAnswers[i] === q.ans) {
+          cognitiveBreakdown[q.cogLevel].correct++;
+          domainBreakdown[q.domain].correct++;
+        }
+      });
+      
+      let cognitiveHTML = '';
+      for (const [level, data] of Object.entries(cognitiveBreakdown)) {
+        const pct = ((data.correct/data.total)*100).toFixed(1);
+        cognitiveHTML += `<tr><td>${level}</td><td>${data.correct}</td><td>${data.total}</td><td>${pct}%</td></tr>`;
+      }
+      document.getElementById('cognitiveBreakdown').innerHTML = cognitiveHTML;
+      
+      let domainHTML = '';
+      for (const [domain, data] of Object.entries(domainBreakdown)) {
+        const pct = ((data.correct/data.total)*100).toFixed(1);
+        domainHTML += `<tr><td>${domain}</td><td>${data.correct}</td><td>${data.total}</td><td>${pct}%</td></tr>`;
+      }
+      document.getElementById('domainBreakdown').innerHTML = domainHTML;
+    }
+
+    function reviewIncorrect() {
+      document.getElementById('summaryContainer').classList.remove('show');
+      document.getElementById('quizContainer').style.display = 'block';
+      document.getElementById('navigation').style.display = 'flex';
+      document.getElementById('domainFilter').style.display = 'flex';
+      
+      const incorrectIndices = QUESTIONS.map((q, i) => userAnswers[i] !== q.ans ? i : -1).filter(i => i !== -1);
+      
+      if (incorrectIndices.length > 0) {
+        currentQuestion = incorrectIndices[0];
+        renderQuestion();
+      }
+    }
+
+    function retakeExam() {
+      currentQuestion = 0;
+      userAnswers = new Array(120).fill(null);
+      score = 0;
+      timeRemaining = 7200;
+      examCompleted = false;
+      
+      document.getElementById('scoreDisplay').textContent = '0';
+      document.getElementById('timer').classList.remove('warning');
+      document.getElementById('summaryContainer').classList.remove('show');
+      document.getElementById('quizContainer').style.display = 'block';
+      document.getElementById('navigation').style.display = 'flex';
+      document.getElementById('domainFilter').style.display = 'none';
+      
+      renderQuestion();
+      updateProgress();
+      startTimer();
+    }
+
+    // Domain filter functionality
+    document.getElementById('domainFilter')?.addEventListener('click', (e) => {
+      if (e.target.classList.contains('filter-btn')) {
+        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+        e.target.classList.add('active');
+        
+        const domain = e.target.dataset.domain;
+        if (domain !== 'all') {
+          const firstInDomain = QUESTIONS.findIndex(q => q.domain === domain);
+          if (firstInDomain !== -1) {
+            currentQuestion = firstInDomain;
             renderQuestion();
-        };
-
-        function submitExam() {
-            clearInterval(timerInterval);
-            examScreen.classList.remove('active');
-            summaryScreen.classList.add('active');
-            calculateResults();
+          }
         }
+      }
+    });
 
-        function calculateResults() {
-            let totalCorrect = 0;
-            let stats = {
-                recall: {c:0, t:0}, app: {c:0, t:0}, analysis: {c:0, t:0},
-                cardio: {c:0, t:0}, resp: {c:0, t:0}, id: {c:0, t:0}, endo: {c:0, t:0}
-            };
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (examCompleted) return;
+      
+      if (e.key === 'ArrowRight' || e.key === 'n') {
+        nextQuestion();
+      } else if (e.key === 'ArrowLeft' || e.key === 'p') {
+        prevQuestion();
+      } else if (e.key === 'Enter' && !document.getElementById('showAnswerBtn').disabled) {
+        selectOption(0);
+      } else if (e.key >= '1' && e.key <= '5') {
+        selectOption(parseInt(e.key) - 1);
+      }
+    });
 
-            questions.forEach((q, i) => {
-                const isCorrect = answers[i] === q.correct;
-                if (isCorrect) totalCorrect++;
-
-                // Cognitive
-                if (q.type === 'recall') { stats.recall.t++; if(isCorrect) stats.recall.c++; }
-                else if (q.type === 'application') { stats.app.t++; if(isCorrect) stats.app.c++; }
-                else { stats.analysis.t++; if(isCorrect) stats.analysis.c++; }
-
-                // Domain
-                if (q.domain === 'Cardiology') { stats.cardio.t++; if(isCorrect) stats.cardio.c++; }
-                else if (q.domain === 'Respiratory') { stats.resp.t++; if(isCorrect) stats.resp.c++; }
-                else if (q.domain === 'Infectious Disease') { stats.id.t++; if(isCorrect) stats.id.c++; }
-                else if (q.domain === 'Endocrine') { stats.endo.t++; if(isCorrect) stats.endo.c++; }
-            });
-
-            const pct = Math.round((totalCorrect / 120) * 100);
-            document.getElementById('finalScore').textContent = `${pct}%`;
-            document.getElementById('scoreText').textContent = `${totalCorrect} / 120 Correct`;
-            document.getElementById('scoreCircle').style.background = `conic-gradient(var(--primary) ${pct}%, var(--border) ${pct}%)`;
-
-            document.getElementById('recallScore').textContent = `${stats.recall.c}/${stats.recall.t}`;
-            document.getElementById('appScore').textContent = `${stats.app.c}/${stats.app.t}`;
-            document.getElementById('analysisScore').textContent = `${stats.analysis.c}/${stats.analysis.t}`;
-            
-            document.getElementById('cardioScore').textContent = `${stats.cardio.c}/${stats.cardio.t}`;
-            document.getElementById('respScore').textContent = `${stats.resp.c}/${stats.resp.t}`;
-            document.getElementById('idScore').textContent = `${stats.id.c}/${stats.id.t}`;
-            document.getElementById('endoScore').textContent = `${stats.endo.c}/${stats.endo.t}`;
-        }
-
-        // Keyboard Navigation
-        document.addEventListener('keydown', (e) => {
-            if (examScreen.classList.contains('active')) {
-                if (e.key === 'ArrowLeft' && currentQ > 0) { currentQ--; renderQuestion(); }
-                if (e.key === 'ArrowRight' && currentQ < 119) { currentQ++; renderQuestion(); }
-            }
-        });
-    </script>
+    // Initialize exam
+    initExam();
+  </script>
 </body>
 </html>
