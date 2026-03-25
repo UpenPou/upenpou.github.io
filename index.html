@@ -11,6 +11,7 @@
             --secondary: #059669;
             --accent: #F59E0B;
             --danger: #DC2626;
+            --warning: #EA580C;
             --light: #F8FAFC;
             --dark: #1E293B;
             --gray: #64748B;
@@ -130,12 +131,45 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
         }
         
         .exam-title {
             font-size: 1.4rem;
             font-weight: 700;
             color: var(--primary);
+        }
+        
+        .timer-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--light);
+            padding: 8px 16px;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+        }
+        
+        .timer-display {
+            font-size: 1.2rem;
+            font-family: monospace;
+            color: var(--dark);
+        }
+        
+        .timer-warning {
+            color: var(--warning);
+            animation: pulse 1s infinite;
+        }
+        
+        .timer-critical {
+            color: var(--danger);
+            animation: pulse 0.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
         }
         
         .progress-container {
@@ -602,6 +636,61 @@
             box-shadow: var(--shadow);
         }
         
+        /* Timer Modal */
+        .timer-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .timer-modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            max-width: 500px;
+            animation: modalFadeIn 0.3s ease;
+        }
+        
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .timer-modal h2 {
+            color: var(--danger);
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        
+        .timer-modal p {
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+        }
+        
+        .modal-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .modal-btn:hover {
+            background: var(--primary-dark);
+        }
+        
         /* Print Styles */
         @media print {
             body {
@@ -609,7 +698,7 @@
                 padding: 0;
             }
             
-            #password-screen, header, .navigation, .action-buttons {
+            #password-screen, header, .navigation, .action-buttons, .timer-container {
                 display: none !important;
             }
             
@@ -686,6 +775,11 @@
                 flex-direction: column;
                 gap: 15px;
                 padding: 12px 15px;
+            }
+            
+            .timer-container {
+                width: 100%;
+                justify-content: center;
             }
             
             .progress-container {
@@ -803,9 +897,19 @@
             <h1>Nepal MD Exit & DM Entrance Exam</h1>
             <p>Internal Medicine - April 2026</p>
             <p>120 MCQs • Clinical Focus • Nepal Context</p>
+            <p><strong>⏱️ Exam Duration: 2 Hours</strong></p>
             <input type="password" id="exam-password" class="password-input" placeholder="Enter access password" aria-label="Exam password">
             <button id="enter-exam" class="enter-btn">Enter Exam</button>
             <div id="error-message" class="error-msg">Incorrect password. Please try again.</div>
+        </div>
+    </div>
+    
+    <!-- Timer Warning Modal -->
+    <div id="timer-modal" class="timer-modal">
+        <div class="timer-modal-content">
+            <h2>⏰ Time's Up!</h2>
+            <p>Your exam time has ended. Your answers will be submitted automatically.</p>
+            <button class="modal-btn" id="modal-ok">View Results</button>
         </div>
     </div>
     
@@ -813,6 +917,10 @@
     <div id="exam-interface">
         <header>
             <div class="exam-title">Internal Medicine Exam</div>
+            <div class="timer-container">
+                <span>⏱️ Time Remaining:</span>
+                <span class="timer-display" id="timer-display">02:00:00</span>
+            </div>
             <div class="progress-container">
                 <div class="progress-bar">
                     <div class="progress-fill" id="progress-fill"></div>
@@ -850,6 +958,7 @@
             <div class="score-display" id="final-score">0/120</div>
             <div class="score-label">Correct Answers</div>
             <div class="performance-badge" id="performance-badge">Needs Improvement</div>
+            <p id="time-taken" style="margin-top: 10px; color: var(--gray);"></p>
         </div>
         
         <div class="charts-container">
@@ -926,6 +1035,7 @@
             totalQuestions: 120,
             standaloneEnd: 80,
             caseStart: 81,
+            examDuration: 2 * 60 * 60 * 1000, // 2 hours in milliseconds
             domains: {
                 cardiology: { count: 24, color: '#dc2626' },
                 respiratory: { count: 16, color: '#2563eb' },
@@ -2984,7 +3094,9 @@
             flaggedQuestions: new Set(),
             answeredQuestions: new Set(),
             startTime: null,
-            completed: false
+            completed: false,
+            timerInterval: null,
+            timeRemaining: EXAM_CONFIG.examDuration
         };
 
         // DOM Elements
@@ -3002,9 +3114,35 @@
         const progressFill = document.getElementById('progress-fill');
         const questionCounter = document.getElementById('question-counter');
         const printBtn = document.getElementById('print-btn');
+        const timerDisplay = document.getElementById('timer-display');
+        const timerModal = document.getElementById('timer-modal');
+        const modalOk = document.getElementById('modal-ok');
 
-        // Initialize exam
+        // Fisher-Yates shuffle algorithm for randomizing questions
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        // Initialize exam with randomized standalone questions
         function initExam() {
+            // Separate standalone and case questions
+            const standaloneQuestions = QUESTIONS.filter(q => q.type === 'standalone');
+            const caseQuestions = QUESTIONS.filter(q => q.type === 'case');
+            
+            // Shuffle standalone questions (Q1-Q80)
+            const shuffledStandalone = shuffleArray(standaloneQuestions);
+            
+            // Combine: shuffled standalone + case questions in original order
+            const randomizedQuestions = [...shuffledStandalone, ...caseQuestions];
+            
+            // Update QUESTIONS array with randomized order
+            window.QUESTIONS_RANDOMIZED = randomizedQuestions;
+            
             // Password validation
             enterBtn.addEventListener('click', validatePassword);
             passwordInput.addEventListener('keypress', (e) => {
@@ -3017,6 +3155,12 @@
             showAnswerBtn.addEventListener('click', showAnswer);
             flagBtn.addEventListener('click', toggleFlag);
             
+            // Timer modal
+            modalOk.addEventListener('click', () => {
+                timerModal.style.display = 'none';
+                showResults();
+            });
+            
             // Results actions
             document.querySelector('.review-incorrect').addEventListener('click', reviewIncorrect);
             document.querySelector('.review-domain').addEventListener('click', reviewByDomain);
@@ -3026,16 +3170,20 @@
             // Keyboard navigation
             document.addEventListener('keydown', handleKeyboardNav);
             
-            // Initialize first question
+            // Initialize first question (will use randomized array)
             renderQuestion(0);
         }
 
-        // Password validation
+        // Password validation and timer start
         function validatePassword() {
             if (passwordInput.value === EXAM_CONFIG.password) {
                 passwordScreen.style.display = 'none';
                 examInterface.style.display = 'block';
                 examState.startTime = new Date();
+                
+                // Start 2-hour timer
+                startTimer();
+                
                 updateProgress();
             } else {
                 errorMessage.style.display = 'block';
@@ -3044,11 +3192,74 @@
             }
         }
 
-        // Render question
-        function renderQuestion(index) {
-            if (index < 0 || index >= EXAM_CONFIG.totalQuestions) return;
+        // Timer functions
+        function startTimer() {
+            examState.timeRemaining = EXAM_CONFIG.examDuration;
+            updateTimerDisplay();
             
-            const question = QUESTIONS[index];
+            examState.timerInterval = setInterval(() => {
+                examState.timeRemaining -= 1000;
+                
+                if (examState.timeRemaining <= 0) {
+                    examState.timeRemaining = 0;
+                    clearInterval(examState.timerInterval);
+                    showTimerModal();
+                    return;
+                }
+                
+                updateTimerDisplay();
+                
+                // Warning at 30 min, 15 min, 5 min, 1 min
+                const minutes = Math.floor(examState.timeRemaining / 60000);
+                if (minutes === 30 || minutes === 15 || minutes === 5 || minutes === 1) {
+                    showTimerWarning(minutes);
+                }
+                
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const hours = Math.floor(examState.timeRemaining / 3600000);
+            const minutes = Math.floor((examState.timeRemaining % 3600000) / 60000);
+            const seconds = Math.floor((examState.timeRemaining % 60000) / 1000);
+            
+            timerDisplay.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            // Update timer color based on remaining time
+            timerDisplay.className = 'timer-display';
+            if (examState.timeRemaining <= 300000) { // 5 minutes
+                timerDisplay.classList.add('timer-critical');
+            } else if (examState.timeRemaining <= 900000) { // 15 minutes
+                timerDisplay.classList.add('timer-warning');
+            }
+        }
+
+        function showTimerWarning(minutes) {
+            // Visual warning through timer color (handled in updateTimerDisplay)
+            // Could add toast notification here if needed
+        }
+
+        function showTimerModal() {
+            timerModal.style.display = 'flex';
+            // Auto-submit exam
+            showResults();
+        }
+
+        function stopTimer() {
+            if (examState.timerInterval) {
+                clearInterval(examState.timerInterval);
+                examState.timerInterval = null;
+            }
+        }
+
+        // Render question using randomized array
+        function renderQuestion(index) {
+            // Use randomized questions array
+            const questions = window.QUESTIONS_RANDOMIZED || QUESTIONS;
+            
+            if (index < 0 || index >= questions.length) return;
+            
+            const question = questions[index];
             examState.currentQuestion = index;
             
             // Update UI elements
@@ -3094,15 +3305,8 @@
             });
             html += `</div>`;
             
-            // Metadata
-            html += `
-                <div class="metadata">
-                    <div class="metadata-item"><span class="domain-tag domain-${question.domain}">${question.domain.charAt(0).toUpperCase() + question.domain.slice(1)}</span></div>
-                    <div class="metadata-item"><span class="cognitive-tag cognitive-${question.cognitive}">${EXAM_CONFIG.cognitiveLevels[question.cognitive].label}</span></div>
-                </div>
-            `;
-            
-            // Explanation (hidden initially)
+            // Metadata - HIDE domain during exam, show only in results
+            // We'll store the metadata but not display it during the exam
             html += `
                 <div class="explanation" id="explanation-${index}">
                     <div class="explanation-title">Explanation:</div>
@@ -3144,8 +3348,9 @@
 
         // Show answer and explanation
         function showAnswer() {
+            const questions = window.QUESTIONS_RANDOMIZED || QUESTIONS;
             const index = examState.currentQuestion;
-            const question = QUESTIONS[index];
+            const question = questions[index];
             const userAnswer = examState.userAnswers[index];
             
             // Show explanation
@@ -3223,12 +3428,16 @@
 
         // Show results dashboard
         function showResults() {
+            // Stop timer
+            stopTimer();
+            
             examInterface.style.display = 'none';
             resultsDashboard.style.display = 'block';
             
             // Calculate score
             let correctCount = 0;
-            QUESTIONS.forEach((q, i) => {
+            const questions = window.QUESTIONS_RANDOMIZED || QUESTIONS;
+            questions.forEach((q, i) => {
                 if (examState.userAnswers[i] === q.correct) {
                     correctCount++;
                 }
@@ -3254,10 +3463,21 @@
                 badge.className = 'performance-badge badge-needs-improvement';
             }
             
+            // Calculate time taken
+            if (examState.startTime) {
+                const endTime = new Date();
+                const timeTaken = endTime - examState.startTime;
+                const hours = Math.floor(timeTaken / 3600000);
+                const minutes = Math.floor((timeTaken % 3600000) / 60000);
+                const seconds = Math.floor((timeTaken % 60000) / 1000);
+                document.getElementById('time-taken').textContent = 
+                    `Time Taken: ${hours}h ${minutes}m ${seconds}s`;
+            }
+            
             // Generate charts
             renderCharts(correctCount);
             
-            // Populate summary table
+            // Populate summary table (with domain info now visible)
             renderSummaryTable();
         }
 
@@ -3300,21 +3520,25 @@
 
         // Helper functions for chart data
         function countCorrectByCognitive(level) {
-            return QUESTIONS.filter((q, i) => 
+            const questions = window.QUESTIONS_RANDOMIZED || QUESTIONS;
+            return questions.filter((q, i) => 
                 q.cognitive === level && examState.userAnswers[i] === q.correct
             ).length;
         }
         
         function countCorrectByDomain(domain) {
-            return QUESTIONS.filter((q, i) => 
+            const questions = window.QUESTIONS_RANDOMIZED || QUESTIONS;
+            return questions.filter((q, i) => 
                 q.domain === domain && examState.userAnswers[i] === q.correct
             ).length;
         }
         
         function calculateDomainScore(domain) {
-            const domainQuestions = QUESTIONS.filter(q => q.domain === domain);
+            const questions = window.QUESTIONS_RANDOMIZED || QUESTIONS;
+            const domainQuestions = questions.filter(q => q.domain === domain);
+            if (domainQuestions.length === 0) return 100;
             const correct = domainQuestions.filter((q, i) => 
-                examState.userAnswers[QUESTIONS.indexOf(q)] === q.correct
+                examState.userAnswers[questions.indexOf(q)] === q.correct
             ).length;
             return Math.round((correct / domainQuestions.length) * 100);
         }
@@ -3474,12 +3698,13 @@
             ctx.fillText('Domain Performance vs Average', width/2, 20);
         }
 
-        // Render summary table
+        // Render summary table (with domain info visible in results)
         function renderSummaryTable() {
             const tbody = document.getElementById('summary-body');
             tbody.innerHTML = '';
             
-            QUESTIONS.forEach((q, i) => {
+            const questions = window.QUESTIONS_RANDOMIZED || QUESTIONS;
+            questions.forEach((q, i) => {
                 const userAnswer = examState.userAnswers[i];
                 const isCorrect = userAnswer === q.correct;
                 
@@ -3554,8 +3779,9 @@
 
         // Review functions
         function reviewIncorrect() {
+            const questions = window.QUESTIONS_RANDOMIZED || QUESTIONS;
             // Filter to first incorrect question
-            const incorrectIndex = QUESTIONS.findIndex((q, i) => 
+            const incorrectIndex = questions.findIndex((q, i) => 
                 examState.userAnswers[i] !== q.correct && examState.userAnswers[i] !== null
             );
             if (incorrectIndex !== -1) {
@@ -3567,8 +3793,9 @@
         }
         
         function reviewByDomain() {
+            const questions = window.QUESTIONS_RANDOMIZED || QUESTIONS;
             // Simple implementation: go to first cardiology question
-            const cardioIndex = QUESTIONS.findIndex(q => q.domain === 'cardiology');
+            const cardioIndex = questions.findIndex(q => q.domain === 'cardiology');
             if (cardioIndex !== -1) {
                 resultsDashboard.style.display = 'none';
                 examInterface.style.display = 'block';
@@ -3584,13 +3811,28 @@
                     userAnswers: new Array(120).fill(null),
                     flaggedQuestions: new Set(),
                     answeredQuestions: new Set(),
-                    startTime: new Date(),
-                    completed: false
+                    startTime: null,
+                    completed: false,
+                    timerInterval: null,
+                    timeRemaining: EXAM_CONFIG.examDuration
                 };
+                
+                // Stop any existing timer
+                stopTimer();
+                
+                // Re-randomize questions for new attempt
+                const standaloneQuestions = QUESTIONS.filter(q => q.type === 'standalone');
+                const caseQuestions = QUESTIONS.filter(q => q.type === 'case');
+                const shuffledStandalone = shuffleArray(standaloneQuestions);
+                window.QUESTIONS_RANDOMIZED = [...shuffledStandalone, ...caseQuestions];
                 
                 // Return to start
                 resultsDashboard.style.display = 'none';
                 examInterface.style.display = 'block';
+                
+                // Restart timer
+                startTimer();
+                
                 renderQuestion(0);
                 updateProgress();
             }
@@ -3607,7 +3849,8 @@
             
             // Render all questions sequentially
             let printContent = '';
-            QUESTIONS.forEach((q, i) => {
+            const questions = window.QUESTIONS_RANDOMIZED || QUESTIONS;
+            questions.forEach((q, i) => {
                 printContent += `
                     <div class="question-card" style="page-break-inside: avoid; margin: 20px 0;">
                         <div style="font-weight: 600; margin-bottom: 10px;">Q${i+1}. ${q.stem}</div>
