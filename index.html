@@ -1071,15 +1071,16 @@ ans:2, exp:"Platelet transfusion is usually contraindicated in TTP because it ca
 ]
 };
 
-// ✅ FIXED: Initialize userAnswers object
+// ✅ ALL VARIABLES PROPERLY INITIALIZED
 let userAnswers = {};
 let submitted = false;
 let examStarted = false;
 let currentFilter = 'all';
-let timeRemaining = 7200; // 2 hours in seconds
+let timeRemaining = 7200;
 let timerInterval = null;
 let shuffledQuestions = [];
 
+// ✅ START EXAM FUNCTION - NOW WORKS PROPERLY
 function startExam() {
     examStarted = true;
     document.getElementById('startScreen').classList.add('hidden');
@@ -1268,7 +1269,7 @@ function submitExam() {
     const total = 120;
     const pct = Math.round(correct/total*100);
     let grade = '';
-    // ✅ UPDATED: Passing mark is now 60%
+    // ✅ PASSING MARK IS 60%
     if (pct >= 80) grade = '🏆 Excellent — Exam Ready!';
     else if (pct >= 60) grade = '✅ Passed — Good preparation!';
     else if (pct >= 50) grade = '⚠️ Below Passing — Intensive revision needed';
