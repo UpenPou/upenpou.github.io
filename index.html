@@ -31,7 +31,6 @@ background-image:
 radial-gradient(ellipse at 20% 50%, rgba(59,130,246,0.04) 0%, transparent 60%),
 radial-gradient(ellipse at 80% 20%, rgba(6,182,212,0.03) 0%, transparent 50%);
 }
-/* ── HEADER ── */
 .header {
 background: linear-gradient(135deg, #0d1b2e 0%, #0b1628 100%);
 border-bottom: 1px solid var(--border);
@@ -78,7 +77,6 @@ font-weight: 500;
 color: var(--accent2);
 }
 .score-label { font-size: 0.7rem; color: var(--muted); margin-top: 2px; }
-/* ── TABS ── */
 .tabs {
 display: flex;
 gap: 8px;
@@ -103,7 +101,6 @@ background: var(--accent);
 border-color: var(--accent);
 color: #fff;
 }
-/* ── PROGRESS BAR ── */
 .progress-wrap {
 background: var(--surface2);
 border-bottom: 1px solid var(--border);
@@ -132,9 +129,7 @@ font-size: 0.75rem;
 color: var(--muted);
 white-space: nowrap;
 }
-/* ── MAIN ── */
 .main { max-width: 900px; margin: 0 auto; padding: 32px 24px 80px; }
-/* ── QUESTION CARD ── */
 .q-card {
 background: var(--surface);
 border: 1px solid var(--border);
@@ -169,7 +164,6 @@ line-height: 1.55;
 color: var(--text);
 font-weight: 400;
 }
-/* ── OPTIONS ── */
 .options { display: flex; flex-direction: column; gap: 7px; }
 .option-btn {
 display: flex;
@@ -216,7 +210,6 @@ border-color: var(--red);
 color: #fca5a5;
 }
 .option-btn.wrong .option-letter { background: rgba(239,68,68,0.15); color: var(--red); }
-/* ── EXPLANATION ── */
 .explanation {
 display: none;
 margin-top: 12px;
@@ -230,7 +223,6 @@ color: #7dd3fc;
 }
 .explanation.show { display: block; }
 .explanation strong { color: var(--accent2); }
-/* ── RESULTS PANEL ── */
 .results-panel {
 display: none;
 background: var(--surface2);
@@ -271,7 +263,6 @@ text-align: center;
 }
 .rb-num { font-family: 'IBM Plex Mono', monospace; font-size: 1.4rem; color: var(--accent2); }
 .rb-label { font-size: 0.72rem; color: var(--muted); margin-top: 4px; }
-/* ── BUTTONS ── */
 .submit-btn {
 display: inline-block;
 margin: 40px 12px 0 0;
@@ -289,7 +280,6 @@ letter-spacing: 0.02em;
 }
 .submit-btn:hover { opacity: 0.9; transform: translateY(-1px); }
 .submit-btn:active { transform: translateY(0); }
-/* ── START SCREEN ── */
 .start-screen {
 display: flex;
 flex-direction: column;
@@ -329,7 +319,6 @@ letter-spacing: 0.02em;
 }
 .start-btn:hover { opacity: 0.9; transform: translateY(-1px); }
 .start-btn:active { transform: translateY(0); }
-/* ── HIDDEN CONTENT ── */
 .hidden { display: none !important; }
 @media (max-width: 640px) {
 .header { padding: 20px; }
@@ -369,13 +358,11 @@ letter-spacing: 0.02em;
 <div class="progress-text" id="progText">0 / 120 answered</div>
 </div>
 <div class="main">
-<!-- START SCREEN -->
 <div class="start-screen" id="startScreen">
 <h1>NMC Internal Medicine Mock Exam</h1>
 <p>120 MCQs · 2 Hours · Passing Mark: 60%<br>80 Standalone Questions + 40 Case-Based Questions<br>Immediate feedback after each answer</p>
 <button class="start-btn" onclick="startExam()">Start Exam</button>
 </div>
-<!-- EXAM CONTENT (hidden until start) -->
 <div id="examContent" class="hidden">
 <button class="submit-btn" id="submitBtn" onclick="submitExam()">Submit Exam & See Results</button>
 <div id="questionsContainer"></div>
@@ -396,682 +383,151 @@ letter-spacing: 0.02em;
 <script>
 const data = {
 standalone: [
-{ id:1, topic:"Cardiology", tag:"tag-cardio",
-q:"Pulsus paradoxus (>10 mmHg fall in systolic BP during inspiration) is characteristically ABSENT in:",
-opts:["A. Cardiac tamponade","B. Severe bronchial asthma","C. Constrictive pericarditis","D. Tension pneumothorax"],
-ans:2,
-exp:"Constrictive pericarditis causes Kussmaul's sign (paradoxical RISE in JVP on inspiration), NOT pulsus paradoxus. The rigid pericardium in constrictive pericarditis prevents the usual ventricular interdependence seen in tamponade. Tamponade, severe asthma, COPD, tension pneumothorax, and massive PE all cause pulsus paradoxus."
-},
-{ id:2, topic:"Cardiology", tag:"tag-cardio",
-q:"Water-hammer (Corrigan's) pulse is pathognomonic of:",
-opts:["A. Mitral stenosis","B. Aortic regurgitation","C. Aortic stenosis","D. Tricuspid regurgitation"],
-ans:1,
-exp:"Water-hammer pulse = rapidly rising and collapsing pulse due to wide pulse pressure. Classic in Aortic Regurgitation (AR) due to rapid forward stroke volume with rapid runoff back into LV during diastole. Other AR signs: De Musset's, Quincke's, Duroziez's, Traube's (pistol shot), Hill's sign."
-},
-{ id:3, topic:"Cardiology", tag:"tag-cardio",
-q:"Austin Flint murmur is best described as:",
-opts:["A. Systolic murmur at apex due to mitral regurgitation","B. Mid-diastolic rumble at apex in aortic regurgitation (functional MS)","C. Opening snap followed by diastolic murmur in MS","D. Continuous murmur in PDA"],
-ans:1,
-exp:"Austin Flint murmur is a mid-to-late diastolic apical rumble heard in severe Aortic Regurgitation. The regurgitant jet from aorta partially closes the anterior mitral leaflet, causing a functional mitral stenosis picture. Key differentiator from true MS: no opening snap in Austin Flint, and no presystolic accentuation."
-},
-{ id:4, topic:"Cardiology", tag:"tag-cardio",
-q:"Saddle-shaped (concave upward) ST elevation in ALL leads EXCEPT aVR and V1 is characteristic of:",
-opts:["A. Acute STEMI","B. Acute pericarditis","C. Prinzmetal's (vasospastic) angina","D. Left ventricular aneurysm"],
-ans:1,
-exp:"Acute pericarditis shows diffuse, saddle-shaped (concave upward) ST elevation in virtually all leads except aVR (depression) and V1. In contrast, STEMI shows convex/tombstone ST elevation in a specific vascular territory. PR depression (especially in II) is also a hallmark of pericarditis."
-},
-{ id:5, topic:"Cardiology", tag:"tag-cardio",
-q:"Beck's triad in cardiac tamponade consists of all EXCEPT:",
-opts:["A. Hypotension","B. Raised JVP (distended neck veins)","C. Muffled/distant heart sounds","D. Pulsus alternans"],
-ans:3,
-exp:"Beck's triad: (1) Hypotension, (2) Raised JVP, (3) Muffled heart sounds. Pulsus PARADOXUS (not alternans) is the hallmark of tamponade. Pulsus alternans (alternating strong and weak beats) is a sign of severe LV dysfunction (e.g., heart failure), not tamponade. Electrical alternans on ECG is also seen in tamponade."
-},
-{ id:6, topic:"Cardiology", tag:"tag-cardio",
-q:"Roth spots (oval hemorrhages with pale centre) are seen in:",
-opts:["A. Hypertensive retinopathy","B. Infective endocarditis","C. Diabetic retinopathy","D. Severe anemia"],
-ans:1,
-exp:"Roth spots are boat-shaped retinal hemorrhages with a pale (fibrin-platelet) center. Classically associated with Infective Endocarditis (IE). They can also be seen in leukemia, anemia, and HIV, but the classic association tested in NMC exams is IE. Other features of IE: Osler nodes, Janeway lesions, splinter hemorrhages, clubbing."
-},
-{ id:7, topic:"Cardiology", tag:"tag-cardio",
-q:"Which cardiac biomarker rises EARLIEST after acute myocardial infarction?",
-opts:["A. CK-MB","B. Troponin I","C. Myoglobin","D. LDH"],
-ans:2,
-exp:"Myoglobin rises within 1–3 hours (earliest), peaks at 6–9 hrs, returns to normal by 24 hrs. However, it is NOT cardiac-specific. Troponin I/T rises at 3–4 hrs, peaks at 24–48 hrs, and persists for 7–14 days (most sensitive AND specific overall). CK-MB rises at 4–6 hrs. LDH rises at 24 hrs. For 'earliest' = Myoglobin; for 'gold standard' = Troponin."
-},
-{ id:8, topic:"Cardiology", tag:"tag-cardio",
-q:"In STEMI, the ACC/AHA recommended door-to-balloon (D2B) time target for primary PCI is:",
-opts:["A. 30 minutes","B. 60 minutes","C. 90 minutes","D. 120 minutes"],
-ans:2,
-exp:"Door-to-balloon time for primary PCI in STEMI ≤90 minutes (≤60 min if directly transferred). Door-to-needle time for thrombolysis ≤30 minutes. Time from symptom onset to fibrinolysis ≤12 hours (ideally <3 hrs). This is a high-yield NMC fact."
-},
-{ id:9, topic:"Cardiology", tag:"tag-cardio",
-q:"Dressler's syndrome (post-MI pericarditis) characteristically occurs:",
-opts:["A. Within 24–48 hours of MI","B. 3–7 days post-MI (early pericarditis)","C. 2–10 weeks post-MI","D. Only after cardiac surgery"],
-ans:2,
-exp:"Dressler's syndrome is autoimmune pericarditis occurring 2–10 weeks (classically 4–8 weeks) after MI. It is distinct from: (1) early pericarditis (days 1–3, from direct myocardial necrosis), and (2) pericarditis from cardiac surgery. Dressler's presents with fever, pleuritic chest pain, pericardial/pleural effusion, elevated ESR, and responds to NSAIDs."
-},
-{ id:10, topic:"Cardiology", tag:"tag-cardio",
-q:"Most common cause of secondary hypertension:",
-opts:["A. Primary hyperaldosteronism (Conn's syndrome)","B. Renal parenchymal disease","C. Pheochromocytoma","D. Coarctation of aorta"],
-ans:1,
-exp:"Renal parenchymal disease (CKD, glomerulonephritis, polycystic kidneys) is the MOST COMMON cause of secondary hypertension (~75–80% of secondary HTN cases). Primary hyperaldosteronism is the most common ENDOCRINE cause. Pheochromocytoma and coarctation are rarer. Renovascular hypertension (renal artery stenosis) is the most common correctable cause."
-},
-{ id:11, topic:"Cardiology", tag:"tag-cardio",
-q:"The most common arrhythmia immediately following acute myocardial infarction is:",
-opts:["A. Atrial fibrillation","B. Ventricular premature beats (PVCs)","C. Ventricular fibrillation","D. Complete heart block"],
-ans:1,
-exp:"Ventricular premature beats (VPBs/PVCs) are the MOST COMMON arrhythmia post-MI, occurring in >90% of patients. Ventricular fibrillation (VF) is the most common cause of DEATH in the first hour post-MI. Atrial fibrillation occurs in 10–15%. Complete heart block is more common in inferior MI (RCA territory)."
-},
-{ id:12, topic:"Cardiology", tag:"tag-cardio",
-q:"Which of the following statements about Infective Endocarditis (IE) is FALSE?",
-opts:["A. Most common organism in native valve IE is Streptococcus viridans","B. IV drug use-associated IE most commonly affects the tricuspid valve","C. Staphylococcus aureus is most common in prosthetic valve IE <60 days","D. Osler nodes are painless, Janeway lesions are painful"],
-ans:3,
-exp:"Osler nodes are PAINFUL (immune complex deposition on fingertips/toe pads); Janeway lesions are PAINLESS (septic emboli on palms/soles). This is a classic reversal trap. Memory: Osler = Ouch (painful), Janeway = Just there (painless). Native valve: Strep viridans most common (dental). IVDU: S. aureus, tricuspid valve. Prosthetic <60 days: S. aureus/CoNS."
-},
-{ id:13, topic:"Cardiology", tag:"tag-cardio",
-q:"In complete heart block, the ventricular rate is maintained by:",
-opts:["A. SA node (rate ~70/min)","B. AV nodal escape rhythm (~40–60/min)","C. Idioventricular (His-Purkinje) pacemaker (~20–40/min)","D. Internodal tracts"],
-ans:2,
-exp:"In complete (3rd degree) AV block, the SA node and AV node fire independently. The ventricles are driven by an idioventricular (His-Purkinje) escape pacemaker at 20–40/min with WIDE QRS. If the escape is junctional (above His bifurcation), rate may be 40–60/min with narrow QRS. Treatment: temporary/permanent pacemaker. Inferior MI → Junctional escape (may recover); Anterior MI → Idioventricular (poor prognosis)."
-},
-{ id:14, topic:"Cardiology", tag:"tag-cardio",
-q:"Which murmur increases in intensity on SQUATTING?",
-opts:["A. HOCM (Hypertrophic Obstructive Cardiomyopathy)","B. Mitral valve prolapse","C. Valvular aortic stenosis","D. Tricuspid stenosis"],
-ans:2,
-exp:"Squatting increases preload (venous return) and afterload → INCREASES LV volume → DECREASES HOCM and MVP murmurs. Conversely, standing and Valsalva decrease LV volume → INCREASE HOCM and MVP murmurs. Valvular AS murmur is relatively fixed. Key NMC memory: HOCM/MVP murmurs behave OPPOSITE to other murmurs with volume changes."
-},
-{ id:15, topic:"Cardiology", tag:"tag-cardio",
-q:"Drug of choice for Wolff-Parkinson-White (WPW) syndrome with atrial fibrillation:",
-opts:["A. Digoxin","B. Verapamil","C. Adenosine","D. Procainamide (or DC cardioversion)"],
-ans:3,
-exp:"In WPW with AF, AVOID AV nodal blocking drugs (digoxin, verapamil, diltiazem, adenosine) — they block the AV node and force ALL conduction through the accessory pathway → VF risk. Use Procainamide (preferred) or DC cardioversion. For stable WPW without AF: adenosine can terminate SVT by blocking AV node (the accessory pathway is not involved in SVT circuit). High-yield: D-V-A are DANGEROUS in WPW+AF."
-},
-{ id:16, topic:"Pulmonology", tag:"tag-pulm",
-q:"Spirometry in COPD characteristically shows:",
-opts:["A. FEV1/FVC >0.70, reduced FVC","B. FEV1/FVC <0.70, FEV1 reduced, not fully reversible","C. Normal FEV1/FVC, reduced TLC","D. Increased FEV1/FVC ratio"],
-ans:1,
-exp:"COPD hallmark: Post-bronchodilator FEV1/FVC <0.70 (fixed airflow obstruction). GOLD severity based on post-BD FEV1% predicted: GOLD 1 ≥80%, GOLD 2 50–79%, GOLD 3 30–49%, GOLD 4 <30%. In asthma, obstruction is REVERSIBLE (FEV1 improves ≥12% AND ≥200mL with bronchodilator). COPD = irreversible."
-},
-{ id:17, topic:"Pulmonology", tag:"tag-pulm",
-q:"Klebsiella pneumoniae pneumonia classically presents with:",
-opts:["A. Bilateral interstitial infiltrates","B. Upper lobe lobar consolidation with 'currant jelly' sputum, bulging fissure","C. Pleural effusion only","D. Lower lobe cavitation only"],
-ans:1,
-exp:"Klebsiella pneumonia: Upper lobe (especially RUL), lobar consolidation, 'bulging fissure' sign, currant jelly sputum (blood + mucus), affects alcoholics and diabetics. Cavitation common. High mortality. Strep pneumoniae: rusty sputum, lobar. Mycoplasma: atypical, patchy infiltrates. Staph aureus: multilobar, cavitation, post-influenza."
-},
-{ id:18, topic:"Pulmonology", tag:"tag-pulm",
-q:"Light's criteria for exudative pleural effusion: which single criterion is sufficient to classify as EXUDATE?",
-opts:["A. Pleural protein/serum protein ratio >0.5","B. Pleural protein >2.5 g/dL only","C. Pleural glucose <60 mg/dL","D. Pleural WBC >1000/mm³"],
-ans:0,
-exp:"Light's criteria (any ONE of three = exudate): (1) Pleural/serum protein >0.5; (2) Pleural/serum LDH >0.6; (3) Pleural LDH >2/3 upper limit of normal serum LDH. Transudates: CHF, cirrhosis, nephrotic syndrome, hypoalbuminemia. Exudates: pneumonia, malignancy, TB, PE. If pleural protein >2.9 g/dL and serum-pleural albumin gradient <1.2: exudate."
-},
-{ id:19, topic:"Pulmonology", tag:"tag-pulm",
-q:"'Golden S sign' on chest X-ray is characteristic of:",
-opts:["A. Pulmonary embolism","B. Right upper lobe collapse due to central obstruction (e.g., lung cancer)","C. Cardiac tamponade","D. Pleural effusion"],
-ans:1,
-exp:"Golden S sign (or reverse S sign): S-shaped configuration of the right horizontal fissure in RUL collapse, with the outer limb concave (fissure) and inner limb convex (hilar mass). Pathognomonic of central bronchial obstruction — the classic teaching is Lung Cancer causing RUL collapse. Not PE (Hampton hump, Westermark sign) or tamponade."
-},
-{ id:20, topic:"Pulmonology", tag:"tag-pulm",
-q:"Drug of choice for Pneumocystis jirovecii pneumonia (PCP) in an AIDS patient:",
-opts:["A. Amphotericin B","B. Trimethoprim-sulfamethoxazole (Co-trimoxazole)","C. Fluconazole","D. Atovaquone"],
-ans:1,
-exp:"TMP-SMX (Co-trimoxazole) is DOC for both treatment AND prophylaxis of PCP. Treatment: high-dose TMP-SMX for 21 days ± steroids if PaO2 <70 mmHg. Prophylaxis: start when CD4 <200 cells/μL. Alternative if sulfa-allergic: Atovaquone, dapsone + trimethoprim, pentamidine. Amphotericin B is for fungal infections (Candida, Aspergillus, Cryptococcus). PCP is NOT a true fungus."
-},
-{ id:21, topic:"Pulmonology", tag:"tag-pulm",
-q:"Which of the following is NOT a feature of pulmonary embolism on imaging?",
-opts:["A. Hampton's hump (wedge-shaped peripheral opacity)","B. Westermark sign (oligemia distal to embolus)","C. S1Q3T3 pattern on ECG","D. 'Bat-wing' or 'butterfly' pattern on CXR"],
-ans:3,
-exp:"Bat-wing/butterfly CXR pattern is characteristic of Pulmonary EDEMA (cardiogenic — bilateral perihilar ground-glass), NOT PE. PE signs: Hampton's hump (pleural-based infarct), Westermark sign (focal oligemia), elevated hemidiaphragm. ECG: S1Q3T3 (S wave Lead I, Q wave + T inversion Lead III), sinus tachycardia (most common). CTPA is gold standard for PE diagnosis."
-},
-{ id:22, topic:"Pulmonology", tag:"tag-pulm",
-q:"All of the following are features of obstructive sleep apnea (OSA) EXCEPT:",
-opts:["A. Loud snoring with witnessed apneic episodes","B. Excessive daytime sleepiness (EDS)","C. Morning headaches","D. Low BMI and thin neck"],
-ans:3,
-exp:"OSA is strongly associated with obesity (BMI >30), thick neck (>17 inches in men, >16 in women), male sex, middle age, and large tonsils. Low BMI is AGAINST OSA diagnosis. OSA risk factors: obesity, large neck, retrognathia, hypothyroidism, acromegaly, alcohol. Diagnosis: polysomnography (gold standard). Treatment: weight loss + CPAP."
-},
-{ id:23, topic:"Pulmonology", tag:"tag-pulm",
-q:"Allergic Bronchopulmonary Aspergillosis (ABPA) is associated with all EXCEPT:",
-opts:["A. Elevated serum IgE (total and Aspergillus-specific)","B. Central bronchiectasis","C. Peripheral blood eosinophilia","D. Normal or low IgE"],
-ans:3,
-exp:"ABPA features: (1) Very high total IgE (>1000 IU/mL), (2) Aspergillus-specific IgE/IgG, (3) Peripheral eosinophilia, (4) Central bronchiectasis (pathognomonic), (5) Fleeting pulmonary infiltrates, (6) Type I and III hypersensitivity. Underlying condition: almost always in Asthma or Cystic Fibrosis patients. Treatment: oral prednisolone ± itraconazole."
-},
-{ id:24, topic:"Pulmonology", tag:"tag-pulm",
-q:"In pulmonary tuberculosis, which sputum sample for AFB smear is most diagnostic?",
-opts:["A. Any random sample taken at hospital","B. First morning sputum (collected before eating)","C. 24-hour pooled sputum","D. Post-bronchodilator sample"],
-ans:1,
-exp:"For AFB smear/culture: first morning sputum (early morning, deep cough before eating) yields highest bacillary load. WHO recommends 2 spot samples or 1 morning sample. AFB smear is positive when >5,000 bacilli/mL. Culture (gold standard) detects >10–100 bacilli/mL. CBNAAT/GeneXpert: detects M. tuberculosis AND rifampicin resistance within 2 hours."
-},
-{ id:25, topic:"Pulmonology", tag:"tag-pulm",
-q:"Tension pneumothorax — all the following are true EXCEPT:",
-opts:["A. Tracheal deviation AWAY from affected side","B. Absent breath sounds on affected side","C. Hypotension and raised JVP","D. Chest X-ray must be performed before emergency needle decompression"],
-ans:3,
-exp:"Tension pneumothorax is a clinical diagnosis — do NOT wait for CXR. Immediate emergency treatment: needle decompression (2nd intercostal space, mid-clavicular line) THEN chest drain (4th/5th ICS, mid-axillary line). Clinical features: severe respiratory distress, tracheal deviation AWAY from the lesion, absent breath sounds, hypotension, raised JVP (obstructive shock). Cardiac arrest imminent."
-},
-{ id:26, topic:"Neurology", tag:"tag-neuro",
-q:"Most common site of hypertensive intracerebral hemorrhage:",
-opts:["A. Pons","B. Putamen / basal ganglia","C. Cerebellum","D. Thalamus"],
-ans:1,
-exp:"Hypertensive ICH locations by frequency: (1) Putamen/basal ganglia ~50–60% (lenticulostriate arteries), (2) Thalamus ~15–25%, (3) Pons ~10–15%, (4) Cerebellum ~10%. Key: Putamen bleed = contralateral hemiplegia + eyes deviated TOWARD the lesion. Thalamic bleed = 'wrong way' eyes. Pontine bleed = pin-point pupils, quadriplegia, hyperthermia."
-},
-{ id:27, topic:"Neurology", tag:"tag-neuro",
-q:"Internuclear ophthalmoplegia (INO) — which diagnosis should be FIRST suspected in a young patient with bilateral INO?",
-opts:["A. Myasthenia gravis","B. Multiple sclerosis","C. Wernicke's encephalopathy","D. Brainstem glioma"],
-ans:1,
-exp:"INO = lesion in the MLF (medial longitudinal fasciculus). On attempted horizontal gaze: ipsilateral eye cannot adduct fully, contralateral eye shows nystagmus. BILATERAL INO in a YOUNG patient = Multiple Sclerosis until proven otherwise (demyelination of MLF). Unilateral INO in an elderly patient → think PONTINE STROKE. Myasthenia causes fatigable ptosis/ophthalmoplegia but not true INO."
-},
-{ id:28, topic:"Neurology", tag:"tag-neuro",
-q:"Drug of choice for absence (petit mal) seizures:",
-opts:["A. Phenytoin","B. Carbamazepine","C. Ethosuximide","D. Phenobarbitone"],
-ans:2,
-exp:"Absence seizures DOC: Ethosuximide (if ONLY absence seizures) OR Valproate (if absence + other seizure types). Critical: Phenytoin and Carbamazepine can WORSEN absence seizures. Carbamazepine is DOC for partial/complex partial and trigeminal neuralgia. Phenytoin for status epilepticus and focal seizures. Valproate: broad spectrum, preferred if generalized epilepsy with multiple seizure types."
-},
-{ id:29, topic:"Neurology", tag:"tag-neuro",
-q:"Myasthenia gravis — which single test is MOST SPECIFIC for diagnosis?",
-opts:["A. Tensilon (edrophonium) test","B. Anti-acetylcholine receptor (anti-AChR) antibodies","C. CT thorax for thymoma","D. Repetitive nerve stimulation (RNS)"],
-ans:1,
-exp:"Anti-AChR antibodies: positive in ~85% of generalized MG (most specific test). Seronegative MG: check anti-MuSK antibodies. Edrophonium (Tensilon) test: dramatic improvement in ptosis within 30-60 seconds (sensitive but not specific). RNS: decremental response >10% at 3 Hz (characteristic). EMG: single-fiber EMG most sensitive (>95%). All thymoma patients should have MG screening; 10–15% of MG have thymoma."
-},
-{ id:30, topic:"Neurology", tag:"tag-neuro",
-q:"Brown-Séquard syndrome is caused by:",
-opts:["A. Complete transection of spinal cord","B. Lateral hemisection of spinal cord","C. Central cord syndrome","D. Cauda equina compression"],
-ans:1,
-exp:"Brown-Séquard (hemisection): IPSILATERAL loss of motor (corticospinal) and fine touch/proprioception/vibration (dorsal column); CONTRALATERAL loss of pain and temperature (spinothalamic — crosses 1–2 levels above). Central cord syndrome (most common incomplete): arms>legs weakness (central gray matter). Anterior cord: bilateral motor + pain/temp loss, preserved proprioception."
-},
-{ id:31, topic:"Neurology", tag:"tag-neuro",
-q:"Pathological hallmark of Parkinson's disease:",
-opts:["A. Neurofibrillary tangles in hippocampus","B. Loss of dopaminergic neurons in substantia nigra pars compacta with Lewy bodies","C. Prion proteins in cortex","D. TDP-43 inclusions in motor neurons"],
-ans:1,
-exp:"PD: Degeneration of dopaminergic neurons in SUBSTANTIA NIGRA PARS COMPACTA → depletes dopamine in striatum → dopamine:acetylcholine imbalance. Lewy bodies (eosinophilic intracytoplasmic inclusions containing α-synuclein). Clinical: TRAP (Tremor at rest, Rigidity, Akinesia, Postural instability). Treatment: Levodopa+Carbidopa (gold standard). Diagnosis requires ≥2 of 3 cardinal signs."
-},
-{ id:32, topic:"Neurology", tag:"tag-neuro",
-q:"Drug of first choice for trigeminal neuralgia (tic douloureux):",
-opts:["A. Gabapentin","B. Carbamazepine","C. Amitriptyline","D. Phenytoin"],
-ans:1,
-exp:"Carbamazepine is DOC for trigeminal neuralgia — it blocks sodium channels and reduces neuronal firing. Efficacy ~70–80%. Check CBC and LFTs (aplastic anemia, hepatotoxicity). If intolerant: oxcarbazepine, gabapentin, or baclofen. Surgical: microvascular decompression (MVD) — best long-term relief. Trigeminal neuralgia: lancinating, electric shock-like pain in V2/V3 distribution, triggered by chewing/touching face."
-},
-{ id:33, topic:"Neurology", tag:"tag-neuro",
-q:"Trousseau's sign (carpal spasm with BP cuff) and Chvostek's sign (facial twitch with tapping) are signs of:",
-opts:["A. Hyperkalemia","B. Hypocalcemia","C. Hypernatremia","D. Hypermagnesemia"],
-ans:1,
-exp:"Hypocalcemia manifestations — tetany: Trousseau's sign (inflate BP cuff above systolic → carpal spasm within 3 min) and Chvostek's sign (tap facial nerve → facial muscle twitch). Causes of hypocalcemia: hypoparathyroidism, vitamin D deficiency, CKD, pancreatitis, hypomagnesemia. ECG: prolonged QTc. Treatment: IV calcium gluconate (symptomatic) or oral calcium + Vit D."
-},
-{ id:34, topic:"Neurology", tag:"tag-neuro",
-q:"Lumbar puncture is CONTRAINDICATED in all EXCEPT:",
-opts:["A. Papilledema with focal neurological deficits","B. Posterior fossa mass lesion","C. Suspected bacterial meningitis WITHOUT papilledema or focal deficits","D. Coagulopathy (INR >1.5)"],
-ans:2,
-exp:"LP is NOT contraindicated in suspected meningitis if there is no papilledema and no focal neurological deficit. Start empirical antibiotics (do NOT delay) → then LP. CT head before LP if: papilledema, altered consciousness, focal deficits, immunocompromised, new-onset seizure, age >60. Absolute contraindications: raised ICP with herniation risk, posterior fossa lesion, skin infection at LP site, coagulopathy."
-},
-{ id:35, topic:"Neurology", tag:"tag-neuro",
-q:"Glasgow Coma Scale (GCS) total minimum and maximum scores:",
-opts:["A. Min 0, Max 15","B. Min 3, Max 15","C. Min 1, Max 12","D. Min 5, Max 15"],
-ans:1,
-exp:"GCS: Eye (1–4) + Verbal (1–5) + Motor (1–6) = Total 3–15. Minimum = 3 (all '1s'), NOT zero (each component has minimum of 1). GCS ≤8 = severe brain injury → consider intubation. GCS 9–12 = moderate. GCS 13–15 = mild. Key: GCS 3 = no response in any category. GCS is NOT used for intubated patients for verbal component (documented as '1T')."
-},
-{ id:36, topic:"Neurology", tag:"tag-neuro",
-q:"Subacute combined degeneration of the spinal cord is caused by deficiency of:",
-opts:["A. Vitamin D","B. Vitamin B12 (cobalamin)","C. Vitamin B1 (thiamine)","D. Vitamin C"],
-ans:1,
-exp:"Vitamin B12 deficiency → demyelination of: (1) Posterior columns (loss of proprioception/vibration), (2) Lateral corticospinal tracts (UMN weakness), (3) Peripheral nerves (LMN + sensory neuropathy). Result: combination of BOTH UMN + LMN signs simultaneously. Also causes megaloblastic anemia, glossitis, psychiatric symptoms (megaloblastic madness). Treat: IM hydroxocobalamin. Causes: pernicious anemia (anti-IF Ab), strict veganism."
-},
-{ id:37, topic:"Neurology", tag:"tag-neuro",
-q:"Which of the following is TRUE about Guillain-Barré syndrome (GBS)?",
-opts:["A. Ascending sensorimotor paralysis, hyperreflexia, albuminocytologic dissociation","B. Descending paralysis starting from cranial nerves, spares tendon reflexes","C. Ascending paralysis, AREFLEXIA, albumino-cytologic dissociation (high protein, normal cells) in CSF","D. Purely sensory, normal CSF"],
-ans:2,
-exp:"GBS (AIDP): Acute ascending MOTOR > sensory demyelinating neuropathy. Features: (1) Ascending weakness, starts distally, (2) AREFLEXIA (key), (3) CSF: albuminocytologic dissociation = HIGH protein (>45 mg/dL), NORMAL cell count (<10 cells), (4) Autonomic dysfunction, (5) Respiratory failure (Miller Fisher variant: ophthalmoplegia + ataxia + areflexia). Trigger: Campylobacter (most common). Treatment: IVIG or plasmapheresis."
-},
-{ id:38, topic:"Nephrology", tag:"tag-nephro",
-q:"Most common cause of nephrotic syndrome in adults (non-diabetic):",
-opts:["A. Minimal change disease (MCD)","B. Membranous nephropathy","C. Focal segmental glomerulosclerosis","D. IgA nephropathy"],
-ans:1,
-exp:"Adults (non-diabetic): Membranous nephropathy (idiopathic or secondary) is most common cause of nephrotic syndrome. Children (<15 yr): MCD most common (80%). Young adults 15–40: FSGS (especially in Black patients). Secondary membranous: HBV, SLE, malignancy, drugs (NSAIDs, gold, penicillamine). Anti-PLA2R antibody is specific for primary membranous nephropathy."
-},
-{ id:39, topic:"Nephrology", tag:"tag-nephro",
-q:"Nephrotic syndrome consists of all EXCEPT:",
-opts:["A. Proteinuria >3.5 g/day (or >3.5 g/1.73m²/day)","B. Hypoalbuminemia (<3 g/dL)","C. Gross hematuria (macroscopic blood in urine)","D. Hyperlipidemia and lipiduria"],
-ans:2,
-exp:"Nephrotic syndrome triad: (1) Heavy proteinuria >3.5 g/day, (2) Hypoalbuminemia, (3) Edema; + hyperlipidemia and lipiduria. Hematuria is NOT a feature (it's nephrITIC). Nephritic syndrome: hematuria, hypertension, azotemia, mild proteinuria, oliguria. Mixed picture: MPGN, lupus nephritis. Pearl: proteinuria = nephrotic; blood = nephritic."
-},
-{ id:40, topic:"Nephrology", tag:"tag-nephro",
-q:"Urinary cast DIAGNOSTIC of glomerulonephritis / nephritic syndrome:",
-opts:["A. Hyaline cast (normal finding)","B. Granular cast","C. RBC cast (red cell cast)","D. Waxy cast"],
-ans:2,
-exp:"RBC casts = pathognomonic of GLOMERULONEPHRITIS. They form when RBCs pass through damaged glomerular basement membrane and become entrapped in tubular matrix. Other casts: Hyaline (normal, dehydration), Granular (tubular injury, nonspecific), WBC casts (pyelonephritis/interstitial nephritis), Muddy-brown granular (ATN), Waxy/Broad (CKD, poor prognosis), Fatty casts (nephrotic syndrome)."
-},
-{ id:41, topic:"Nephrology", tag:"tag-nephro",
-q:"Distal (Type I) Renal Tubular Acidosis (dRTA) is characterized by all EXCEPT:",
-opts:["A. Inability to acidify urine below pH 5.5","B. Normal anion gap (hyperchloremic) metabolic acidosis","C. Hypokalemia","D. Proximal tubular bicarbonate wasting with low serum threshold"],
-ans:3,
-exp:"Type I (distal) RTA: (1) Urine pH always >5.5 (cannot acidify), (2) Normal anion gap metabolic acidosis, (3) Hypokalemia, (4) Nephrocalcinosis and nephrolithiasis (calcium phosphate stones). Proximal tubular bicarbonate wasting describes Type II (proximal) RTA — associated with Fanconi syndrome. Type IV RTA: hyperkalemia, low aldosterone or resistance, commonly seen in diabetes and CKD."
-},
-{ id:42, topic:"Nephrology", tag:"tag-nephro",
-q:"Best SCREENING test for early diabetic nephropathy:",
-opts:["A. Serum creatinine","B. Routine urine dipstick for protein","C. Spot urine albumin:creatinine ratio (ACR) — microalbuminuria","D. 24-hour urine protein"],
-ans:2,
-exp:"Microalbuminuria (30–300 mg/g ACR) is the earliest detectable marker of diabetic nephropathy. Routine dipstick is negative (detects macroalbuminuria >300 mg/day). Screen annually from: diagnosis in T2DM; 5 years after diagnosis in T1DM. ACR >300 = macroalbuminuria (overt nephropathy). ACR>30+any two readings over 3–6 months = confirmed microalbuminuria. Treatment: RAS blockade (ACEi/ARB)."
-},
-{ id:43, topic:"Nephrology", tag:"tag-nephro",
-q:"Indications for URGENT dialysis (AEIOU): All are classic indications EXCEPT:",
-opts:["A. Acidosis (pH <7.1, refractory to bicarbonate)","B. Electrolyte abnormality (K+ >6.5 mEq/L refractory)","C. Serum creatinine >5 mg/dL without any symptoms","D. Uremic pericarditis or encephalopathy"],
-ans:2,
-exp:"AEIOU dialysis indications: A = Acidosis (severe refractory), E = Electrolytes (K+ refractory hyperkalemia), I = Intoxication (salicylate, methanol, lithium, ethylene glycol), O = Overload (pulmonary edema refractory to diuretics), U = Uremia (pericarditis, encephalopathy, bleeding). Creatinine level ALONE is NOT an indication — it must be symptomatic. Even creatinine 10 mg/dL without symptoms = may not need dialysis yet."
-},
-{ id:44, topic:"Nephrology", tag:"tag-nephro",
-q:"Autosomal Dominant Polycystic Kidney Disease (ADPKD) — which extrarenal complication causes the most significant mortality?",
-opts:["A. Liver cysts","B. Intracranial (berry) aneurysms → subarachnoid hemorrhage","C. Mitral valve prolapse","D. Pancreatic cysts"],
-ans:1,
-exp:"ADPKD extrarenal manifestations: Intracranial berry aneurysms (10–40% prevalence) → SAH is the most LETHAL complication. Liver cysts (most common extrarenal finding, usually benign). MVP and other cardiac valve abnormalities. Pancreatic, splenic, seminal vesicle cysts. PKD1 gene (chromosome 16) = 85% cases, more severe; PKD2 = 15%, milder. Screen relatives with USS at risk."
-},
-{ id:45, topic:"Nephrology", tag:"tag-nephro",
-q:"In acute tubular necrosis (ATN), the characteristic urine finding is:",
-opts:["A. RBC casts","B. Muddy-brown granular casts","C. WBC casts","D. Fatty casts"],
-ans:1,
-exp:"ATN: Ischemic or nephrotoxic injury to renal tubules. Urine: muddy-brown granular casts (degenerating tubular cells), renal tubular epithelial cell (RTEC) casts. Urine sodium >40 mEq/L, FENa >2% (vs prerenal: FENa <1%, urine Na <20). ATN course: oliguric phase (1–2 weeks) → diuretic phase → recovery. Most common intrinsic AKI in hospitalized patients."
-},
-{ id:46, topic:"Nephrology", tag:"tag-nephro",
-q:"Hematuria, hypertension, and mild proteinuria in a young male after an URTI 1–2 days prior — most likely diagnosis:",
-opts:["A. Post-streptococcal GN (2–3 weeks post-pharyngitis)","B. IgA nephropathy (Berger's disease)","C. Henoch-Schönlein purpura nephritis","D. Membranous nephropathy"],
-ans:1,
-exp:"Synpharyngitic hematuria (concurrent with or within 1–3 days of URTI) = IgA nephropathy. Recurrent macroscopic hematuria with URTI is the classic presentation. Post-streptococcal GN: hematuria 2–3 WEEKS after pharyngitis/impetigo (latent period). IgA: IgA deposits in mesangium, elevated serum IgA in 50%. Biopsy: IgA mesangial deposits on immunofluorescence."
-},
-{ id:47, topic:"Nephrology", tag:"tag-nephro",
-q:"Which of the following is used to calculate corrected calcium in hypoalbuminemia?",
-opts:["A. Add 0.5 mg/dL per 1 g/dL drop in albumin below 4 g/dL","B. Add 0.8 mg/dL per 1 g/dL drop in albumin below 4 g/dL","C. Subtract 0.8 mg/dL per 1 g/dL above 4 g/dL","D. No correction needed"],
-ans:1,
-exp:"Corrected Ca²⁺ = Measured Ca²⁺ + 0.8 × (4 – patient albumin g/dL). Example: albumin 2 g/dL, Ca²⁺ 7.2 → Corrected = 7.2 + 0.8×(4–2) = 7.2 + 1.6 = 8.8 mg/dL (mildly low, not severely low). Critical for avoiding misdiagnosis of hypocalcemia in nephrotic syndrome/CKD. When in doubt, measure ionized calcium (most accurate)."
-},
-{ id:48, topic:"Gastroenterology", tag:"tag-gastro",
-q:"Most common site of peptic ulcer disease:",
-opts:["A. Gastric body (lesser curvature)","B. First part of duodenum (duodenal bulb)","C. Pyloric antrum","D. Esophagogastric junction"],
-ans:1,
-exp:"Duodenal ulcers (DU) are 4× more common than gastric ulcers (GU). DU: almost always H. pylori related (95%), first part of duodenum (anterior wall most common — risk of perforation into peritoneum; posterior wall — risk of erosion into gastroduodenal artery → massive hemorrhage). GU: Lesser curvature of antrum. GU vs DU: GU pain relieved by food initially; DU pain relieved by food and recurs 2–3 hours later."
-},
-{ id:49, topic:"Gastroenterology", tag:"tag-gastro",
-q:"Standard first-line H. pylori eradication therapy (triple therapy):",
-opts:["A. PPI + Amoxicillin + Clarithromycin for 7–14 days","B. PPI + Metronidazole + Tetracycline + Bismuth","C. H2 blocker + Amoxicillin + Clarithromycin","D. PPI alone for 4 weeks"],
-ans:0,
-exp:"Triple therapy: PPI (omeprazole/pantoprazole) + Amoxicillin 1g BD + Clarithromycin 500 mg BD for 14 days (7 days in some guidelines, but 14 days preferred for higher eradication rates). Quadruple therapy (PPI + bismuth + metronidazole + tetracycline) for clarithromycin-resistant areas or failed triple therapy. Confirm eradication: urea breath test or stool antigen test ≥4 weeks after completing treatment."
-},
-{ id:50, topic:"Gastroenterology", tag:"tag-gastro",
-q:"Ranson's criteria — which criterion is assessed at 48 HOURS (NOT on admission)?",
-opts:["A. Age >55 years","B. WBC >16,000/mm³","C. Serum glucose >200 mg/dL","D. Serum calcium <8 mg/dL"],
-ans:3,
-exp:"Ranson's ON ADMISSION (5): Age >55, WBC >16k, Glucose >200, LDH >350, AST >250. Ranson's at 48 HOURS (6): Hct fall >10%, BUN rise >5 mg/dL, Calcium <8 mg/dL, PaO2 <60 mmHg, Base deficit >4 mEq/L, Fluid sequestration >6L. Score interpretation: 0–2 = mild; 3–4 = moderate (15% mortality); 5–6 = severe (40%); 7–8 = near 100% mortality. Memory: at admission 'WAGLA'; at 48h 'HOBCBF'."
-},
-{ id:51, topic:"Gastroenterology", tag:"tag-gastro",
-q:"Which feature DIFFERENTIATES Crohn's disease from Ulcerative Colitis?",
-opts:["A. Bloody diarrhea","B. Skip lesions, transmural inflammation, rectal sparing, perianal disease","C. Endoscopic ulceration","D. Elevated ESR and CRP"],
-ans:1,
-exp:"Crohn's vs UC: Crohn's — any part of GI (mouth to anus), SKIP lesions, TRANSMURAL inflammation, cobblestoning, fistulae/sinuses, RECTAL SPARING (50%), string sign on barium, perianal disease, granulomas. UC — only colon/rectum, CONTINUOUS, mucosal/submucosal only, always involves RECTUM (95%), crypt abscesses, no granulomas. Risk of CRC: UC>Crohn's (continuous vs. skip)."
-},
-{ id:52, topic:"Gastroenterology", tag:"tag-gastro",
-q:"Most common cause of upper GI bleeding:",
-opts:["A. Esophageal varices","B. Peptic ulcer disease (duodenal/gastric)","C. Mallory-Weiss tear","D. Angiodysplasia"],
-ans:1,
-exp:"Peptic ulcer disease (PUD) accounts for ~40–50% of all upper GI bleeds (most common). Esophageal varices: most common cause of MASSIVE upper GI bleed (mortality >30%). Mallory-Weiss tear: after forceful vomiting (alcoholics). Dieulafoy's lesion: pulsatile arterial bleed without ulcer. Angiodysplasia: common in elderly, lower GI but can be upper. All UGI bleeds: Coffee-ground emesis, hematemesis, melena."
-},
-{ id:53, topic:"Gastroenterology", tag:"tag-gastro",
-q:"Achalasia cardia — which investigation is GOLD STANDARD?",
-opts:["A. Barium swallow (bird-beak deformity)","B. Upper GI endoscopy","C. Esophageal manometry","D. CT thorax"],
-ans:2,
-exp:"Esophageal manometry is the GOLD STANDARD for achalasia. Findings: elevated LES resting pressure, incomplete LES relaxation with swallowing, absent peristalsis. Barium swallow: bird-beak (rat-tail) narrowing at GEJ, dilated esophagus — useful screening tool. Endoscopy: exclude pseudoachalasia (cancer at cardia). Treatment: pneumatic dilatation, Heller myotomy (laparoscopic), or Botox injection (elderly/unfit). POEM (per-oral endoscopic myotomy) is now preferred."
-},
-{ id:54, topic:"Gastroenterology", tag:"tag-gastro",
-q:"Carcinoid syndrome occurs when carcinoid tumors metastasize to the:",
-opts:["A. Local lymph nodes","B. Liver","C. Lung","D. Bone"],
-ans:1,
-exp:"Carcinoid tumors secrete serotonin and other vasoactive substances. When primary tumor is in the GI tract, its secretions are metabolized by the liver (first-pass), so no systemic effects. Once LIVER METASTASES develop, serotonin enters systemic circulation → carcinoid syndrome: FLUSHING, DIARRHEA, BRONCHOSPASM, RIGHT HEART VALVE LESIONS (tricuspid regurgitation, pulmonary stenosis). Marker: 24-hr urine 5-HIAA. Treatment: octreotide (somatostatin analogue)."
-},
-{ id:55, topic:"Gastroenterology", tag:"tag-gastro",
-q:"Which of the following is TRUE regarding irritable bowel syndrome (IBS)?",
-opts:["A. It is characterized by elevated inflammatory markers on colonoscopy","B. Rome IV criteria require recurrent abdominal pain at least 1 day per week for the last 3 months","C. It always presents with bloody diarrhea","D. It is diagnosed by positive celiac serology"],
-ans:1,
-exp:"IBS diagnosis: Rome IV criteria — recurrent abdominal pain, on average ≥1 day/week in last 3 months, associated with two of: improvement with defecation, onset associated with change in stool frequency, onset associated with change in stool form. No red flags (weight loss, anemia, bleeding, night symptoms). Normal labs, normal endoscopy. Management: dietary (low FODMAP), fiber, antispasmodics, 5-HT3/4 agents, gut-brain therapy."
-},
-{ id:56, topic:"Hepatology", tag:"tag-hepato",
-q:"Most common cause of cirrhosis and portal hypertension in Nepal:",
-opts:["A. Hepatitis B virus (HBV)","B. Hepatitis C virus (HCV)","C. Alcoholic liver disease","D. Non-alcoholic fatty liver disease (NAFLD)"],
-ans:0,
-exp:"Nepal is a high HBV endemic country. HBV is the most common cause of cirrhosis and portal hypertension in Nepal and much of South/East Asia. HBsAg carrier rate in Nepal ~0.9–2%. HCV is more prevalent in Western countries and Egypt. NAFLD is the most common liver disease in developed nations. Alcohol is a major cause globally but in Nepal, HBV predominates."
-},
-{ id:57, topic:"Hepatology", tag:"tag-hepato",
-q:"Serum-ascites albumin gradient (SAAG) is calculated as:",
-opts:["A. Ascitic fluid albumin – Serum albumin","B. Serum albumin – Ascitic fluid albumin","C. Ascitic fluid protein – Serum protein","D. Serum globulin – Ascitic fluid globulin"],
-ans:1,
-exp:"SAAG = Serum albumin – Ascites albumin. SAAG ≥1.1 g/dL indicates portal hypertension with 97% accuracy (cirrhosis, cardiac ascites, Budd-Chiari, hepatic metastases). SAAG <1.1 suggests non-portal hypertension causes: malignancy, TB peritonitis, pancreatitis, nephrotic syndrome. The gradient corrects for serum albumin level, improving upon simple exudate/transudate classification."
-},
-{ id:58, topic:"Hepatology", tag:"tag-hepato",
-q:"First-line primary prophylaxis for variceal bleeding in a cirrhotic with medium/large varices:",
-opts:["A. Non-selective beta-blocker (propranolol/nadolol) or endoscopic variceal ligation (EVL)","B. Isosorbide mononitrate","C. Octreotide infusion","D. Transjugular intrahepatic portosystemic shunt (TIPS)"],
-ans:0,
-exp:"Primary prophylaxis (preventing 1st bleed): Non-selective beta-blockers (propranolol, nadolol) OR endoscopic variceal ligation (EVL). Carvedilol may be more effective than propranolol. Choice depends on patient factors, local availability. Octreotide/vasopressin are for ACUTE bleeding, not prophylaxis. TIPS is for secondary prophylaxis or salvage when medical/endoscopic fails."
-},
-{ id:59, topic:"Hepatology", tag:"tag-hepato",
-q:"Spontaneous bacterial peritonitis (SBP) diagnosis is confirmed by ascitic fluid:",
-opts:["A. Positive culture only","B. PMN count ≥250 cells/mm³ (with or without positive culture)","C. Ascitic glucose <50 mg/dL","D. Ascitic protein <1 g/dL"],
-ans:1,
-exp:"SBP diagnosis: ascitic fluid polymorphonuclear leukocyte (PMN) count ≥250 cells/mm³ is sufficient to start empirical antibiotics, even if culture negative (culture-negative SBP). Positive culture confirms but only 40% positive. Most common organisms: E. coli, Klebsiella. Treatment: IV cefotaxime or ceftriaxone ± IV albumin to prevent hepatorenal syndrome."
-},
-{ id:60, topic:"Hepatology", tag:"tag-hepato",
-q:"Hepatorenal syndrome (HRS) is best treated with:",
-opts:["A. Acute hemodialysis","B. Norepinephrine + albumin","C. Terlipressin + albumin","D. Furosemide only"],
-ans:2,
-exp:"HRS: functional renal failure in advanced liver disease with severe portal hypertension. Type 1 HRS = rapid progression, AKI; Type 2 = refractory ascites. Treatment: vasoconstrictors (terlipressin preferred) + IV albumin. Norepinephrine is an alternative in ICU. Long-term: liver transplantation. Avoid nephrotoxic drugs, diuretics, NSAIDs. Key: serum creatinine improves with therapy."
-},
-{ id:61, topic:"Hepatology", tag:"tag-hepato",
-q:"Which finding on ultrasound is MOST suggestive of non-alcoholic steatohepatitis (NASH)?",
-opts:["A. Homogeneous increased echogenicity","B. coarse, nodular liver surface with signs of portal hypertension","C. gallbladder polyp","D. Hepatocellular carcinoma"],
-ans:1,
-exp:"Simple steatosis (fatty liver) on ultrasound: homogeneous increased echogenicity (bright liver). NASH (steatohepatitis with fibrosis/cirrhosis) may show a coarse, nodular surface and signs of portal hypertension, indicating advanced fibrosis. The presence of nodularity and portal hypertension suggests cirrhosis, which can result from NASH. NAFLD ranges from simple steatosis → NASH → cirrhosis → HCC."
-},
-{ id:62, topic:"Hepatology", tag:"tag-hepato",
-q:"Priority intervention immediately following a large-volume paracentesis (>5 L):",
-opts:["A. Give IV ceftriaxone","B. Give IV albumin 6-8 g per liter removed","C. Fluid restrict to 1 L/day","D. Administer propranolol"],
-ans:1,
-exp:"Large-volume paracentesis can cause circulatory dysfunction. Administer IV albumin 6–8 g per liter of fluid removed to prevent post-paracentesis circulatory dysfunction and HRS. For diagnostic paracentesis, no albumin needed. If tense ascites causing respiratory compromise, paracentesis with albumin cover is indicated. Antibiotics only if SBP suspected."
-},
-{ id:63, topic:"Hepatology", tag:"tag-hepato",
-q:"Most common extrahepatic manifestation of chronic HBV infection:",
-opts:["A. Immune thrombocytopenic purpura (ITP)","B. Polyarteritis nodosa (PAN)","C. Membranous nephropathy","D. lichen planus"],
-ans:1,
-exp:"Chronic HBV extrahepatic: polyarteritis nodosa (PAN) is the classic association: necrotizing inflammation of medium-sized arteries, presenting with livedo reticularis, neuropathy, renal involvement (HTN, not glomerulonephritis), abdominal pain. HBV also associated with glomerulonephritis (membranous or MPGN), ITP. Cryoglobulinemia more with HCV. Treatment: antivirals for PAN."
-},
-{ id:64, topic:"Hematology", tag:"tag-hemato",
-q:"Most specific test for iron deficiency anemia:",
-opts:["A. Serum ferritin","B. Serum iron","C. Total iron-binding capacity (TIBC)","D. Bone marrow iron staining"],
-ans:0,
-exp:"Serum ferritin is the most specific test for iron deficiency; it first becomes low before other changes. Ferritin is an acute phase reactant, so it can be normal/elevated in inflammation despite coexisting iron deficiency. Bone marrow iron staining is gold standard but invasive. In anemia of chronic disease, ferritin is normal/high, TIBC low, serum iron low."
-},
-{ id:65, topic:"Hematology", tag:"tag-hemato",
-q:"Peripheral blood smear finding diagnostic of megaloblastic anemia:",
-opts:["A. Microcytosis, hypochromia","B. Hypersegmented neutrophils (≥5 lobes)","C. Schistocytes","D. Spherocytes"],
-ans:1,
-exp:"Megaloblastic anemia (B12/folate deficiency): macro-ovalocytes and hypersegmented neutrophils (≥5 lobes). Hypersegmentation is diagnostic. Microcytosis/hypochromia → iron deficiency. Schistocytes → microangiopathic hemolysis (TTP, HUS, DIC). Spherocytes → hereditary spherocytosis or autoimmune hemolysis."
-},
-{ id:66, topic:"Hematology", tag:"tag-hemato",
-q:"Which is the most common acute leukemia in adults?",
-opts:["A. Acute lymphoblastic leukemia (ALL)","B. Acute myeloid leukemia (AML)","C. Chronic myeloid leukemia (CML)","D. Chronic lymphocytic leukemia (CLL)"],
-ans:1,
-exp:"AML is the most common acute leukemia in adults (median age 65). ALL is more common in children. CLL is the most common leukemia overall in adults in Western countries (but chronic, not acute). CML is a chronic myeloproliferative disorder."
-},
-{ id:67, topic:"Hematology", tag:"tag-hemato",
-q:"CRAB criteria are used to diagnose:",
-opts:["A. Multiple myeloma","B. Waldenstrom macroglobulinemia","C. Hodgkin lymphoma","D. Hairy cell leukemia"],
-ans:0,
-exp:"CRAB = hyperCalcemia, Renal failure, Anemia, Bone lesions (lytic). Utilized to identify end-organ damage in Multiple Myeloma. Additional criteria: ≥10% clonal plasma cells on bone marrow biopsy or biopsy-proven plasmacytoma. Waldenström: IgM M-spike, hyperviscosity, lymphadenopathy."
-},
-{ id:68, topic:"Hematology", tag:"tag-hemato",
-q:"Treatment of choice for immune thrombocytopenic purpura (ITP) with platelets <30,000/µL:",
-opts:["A. Immediate splenectomy","B. High-dose corticosteroids","C. IVIG or anti-D (in Rh+ non-splenectomized)","D. Thrombopoietin receptor agonist (eltrombopag)"],
-ans:1,
-exp:"First-line for ITP with significant thrombocytopenia: high-dose corticosteroids (prednisone 1 mg/kg/day or dexamethasone 40 mg daily × 4 days). IVIG or anti-D immunoglobulin for rapid rise in platelets (e.g., before surgery or active bleeding). Splenectomy reserved for chronic refractory cases. TPO-RA for second-line."
-},
-{ id:69, topic:"Hematology", tag:"tag-hemato",
-q:"Most common cause of microangiopathic hemolytic anemia (MAHA):",
-opts:["A. Autoimmune hemolytic anemia","B. Thalassemia","C. Thrombotic thrombocytopenic purpura (TTP)","D. G6PD deficiency"],
-ans:2,
-exp:"MAHA (schistocytes on smear) occurs when RBCs are sheared by abnormal blood flow or fibrin strands. Causes: TTP, HUS, DIC, severe hypertension, HELLP syndrome, antiphospholipid syndrome, mechanical valve. Among these, TTP is the most classic and frequently tested. AIHA is extravascular, spherocytes not schistocytes."
-},
-{ id:70, topic:"Hematology", tag:"tag-hemato",
-q:"Definitive therapy for TTP (thrombotic thrombocytopenic purpura):",
-opts:["A. Aspirin","B. Plasma exchange (PLEX)","C. Intravenous immunoglobulin (IVIG)","D. Rituximab"],
-ans:1,
-exp:"Urgent therapeutic plasma exchange (PLEX) with fresh frozen plasma is the definitive first-line treatment for TTP, along with high-dose steroids. PLEX removes anti-ADAMTS13 antibodies and supplies functional enzyme. Rituximab (anti-CD20) is added for refractory/relapsing or upfront in severe cases. Caplacizumab (anti-vWF) is newer adjunct. Without PLEX, mortality >90%."
-},
-{ id:71, topic:"Hematology", tag:"tag-hemato",
-q:"Coagulopathy in DIC is characterized by:",
-opts:["A. Isolated thrombocytopenia","B. Prolonged PT/APTT, low fibrinogen, elevated D-dimer","C. Normal PT/APTT","D. Isolated prolonged bleeding time"],
-ans:1,
-exp:"DIC: widespread activation of coagulation → consumption of platelets and clotting factors → bleeding. Lab: prolonged PT and APTT, low fibrinogen, elevated D-dimer (or fibrin degradation products), thrombocytopenia. Distinguish from TTP where PT/APTT are normal. Treat underlying cause; supportive with FFP, platelets, cryoprecipitate."
-},
-{ id:72, topic:"Endocrinology", tag:"tag-endo",
-q:"Single best test for evaluating thyroid function:",
-opts:["A. Free T4","B. Free T3","C. TSH","D. Thyroid peroxidase antibodies"],
-ans:2,
-exp:"TSH is the SINGLE BEST TEST for thyroid function. In primary hypothyroidism: TSH elevated even before T4 falls (subclinical hypothyroidism). In hyperthyroidism: TSH suppressed. TSH is not useful for assessing thyroid function in secondary (pituitary) hypothyroidism — use Free T4. Most common cause of hypothyroidism worldwide = iodine deficiency. In iodine-sufficient areas = Hashimoto's thyroiditis."
-},
-{ id:73, topic:"Endocrinology", tag:"tag-endo",
-q:"Which is the most common cause of Cushing's syndrome?",
-opts:["A. Adrenal adenoma","B. ACTH-secreting pituitary adenoma (Cushing disease)","C. Ectopic ACTH production","D. Exogenous glucocorticoid therapy"],
-ans:3,
-exp:"Exogenous glucocorticoid therapy is by far the most common cause of Cushing's syndrome (iatrogenic). ACTH-secreting pituitary adenoma (Cushing disease) is the most common endogenous cause (~70% of endogenous). Adrenal adenoma (~20%), ectopic ACTH (~10%). Always consider exogenous steroids first."
-},
-{ id:74, topic:"Endocrinology", tag:"tag-endo",
-q:"First-line treatment for toxic multinodular goiter:",
-opts:["A. Radioactive iodine (RAI) ablation","B. Propylthiouracil (PTU)","C. Methimazole","D. Thyroidectomy"],
-ans:0,
-exp:"For toxic multinodular goiter (autonomous nodules), first-line is usually radioactive iodine (RAI) ablation because it targets functionally autonomous tissue. Antithyroid drugs (methimazole) are less effective because nodules are not driven by TSH. Subtotal thyroidectomy is also an option, especially with large goiter or suspicion of cancer. PTU is not first-line; methimazole preferred if using drugs."
-},
-{ id:75, topic:"Endocrinology", tag:"tag-endo",
-q:"Which hormone deficiency is most commonly associated with adrenal crisis in primary adrenal insufficiency?",
-opts:["A. Aldosterone only","B. Cortisol and aldosterone","C. Cortisol only","D. Androgens (DHEA)"],
-ans:1,
-exp:"In primary adrenal insufficiency (Addison's disease), both cortisol and aldosterone production are impaired because the adrenal cortex is destroyed. Aldosterone deficiency leads to salt wasting, hyperkalemia, hyponatremia, hypotension. Secondary adrenal insufficiency (pituitary) preserves aldosterone (RAAS intact) → no salt wasting. Thus adrenal crisis more common and severe in primary AI."
-},
-{ id:76, topic:"Endocrinology", tag:"tag-endo",
-q:"Management of diabetic ketoacidosis (DKA) includes all EXCEPT:",
-opts:["A. IV isotonic saline","B. IV insulin infusion","C. Immediate potassium replacement only after insulin started","D. IV sodium bicarbonate for all pH <7.0"],
-ans:3,
-exp:"DKA treatment: fluids (0.9% NaCl), insulin (IV regular insulin 0.1 U/kg/h after initial bolus), potassium replacement (insulin drives K into cells, leading to hypokalemia; give KCl once level >3.3), treat underlying cause. Bicarbonate only if pH <6.9 (controversial). Avoid stopping insulin prematurely; transition to subcutaneous once acidosis resolved and patient eating."
-},
-{ id:77, topic:"Endocrinology", tag:"tag-endo",
-q:"Best initial test for primary hypoparathyroidism:",
-opts:["A. Serum calcium","B. Serum phosphate","C. Parathyroid hormone (PTH) level","D. 25-hydroxyvitamin D"],
-ans:2,
-exp:"In hypoparathyroidism: low calcium, high phosphate, low or inappropriately normal PTH. PTH measurement distinguishes from vitamin D deficiency (where PTH is elevated). Causes: post-surgical (most common), autoimmune, genetic, infiltration. Treatment: calcium + active vitamin D (calcitriol). PTH replacement for refractory cases."
-},
-{ id:78, topic:"Endocrinology", tag:"tag-endo",
-q:"Which test is used to diagnose growth hormone (GH) deficiency in adults?",
-opts:["A. Random GH level","B. Insulin tolerance test (ITT)","C. Oral glucose tolerance test for GH suppression","D. IGF-1 level alone"],
-ans:1,
-exp:"Insulin tolerance test (ITT) is the gold standard for diagnosing GH deficiency in adults (and ACTH reserve). Inducing hypoglycemia (blood glucose <40 mg/dL) should provoke increase in GH and cortisol. Lack of response indicates deficiency. IGF-1 is a screening marker (low in GH deficiency) but not diagnostic alone. Oral glucose tolerance test for GH suppression is used to diagnose acromegaly (failure to suppress)."
-},
-{ id:79, topic:"Endocrinology", tag:"tag-endo",
-q:"Most common cause of primary adrenal insufficiency (Addison's disease) in DEVELOPING COUNTRIES including Nepal:",
-opts:["A. Autoimmune adrenalitis","B. Tuberculosis","C. Malignancy (adrenal metastases)","D. Antifungal therapy"],
-ans:1,
-exp:"Addison's disease causes: DEVELOPED world = autoimmune (most common, ~80% in West, anti-21-hydroxylase antibodies). DEVELOPING world including Nepal = Tuberculosis (TB destroys the adrenal cortex — bilateral adrenal enlargement/calcification on CT). Nepal is TB-endemic, making TB the predominant cause. Other causes: HIV (CMV, fungal), bilateral adrenalectomy, waterhouse-Friderichsen (meningococcal sepsis). Treat crisis: hydrocortisone IV."
-},
-{ id:80, topic:"Infectious Diseases", tag:"tag-id",
-q:"Which organism is the most common cause of community-acquired meningitis in adults?",
-opts:["A. Streptococcus pneumoniae","B. Neisseria meningitidis","C. Haemophilus influenzae","D. Listeria monocytogenes"],
-ans:0,
-exp:"Streptococcus pneumoniae is the most common cause of bacterial meningitis in adults (non-neonatal). N. meningitidis is common in children/adolescents and outbreaks. H. influenzae type b now rare due to vaccination. Listeria in neonates, elderly, immunocompromised, pregnant. Empiric therapy in adults: vancomycin + third-gen cephalosporin (ceftriaxone/cefotaxime) ± ampicillin if Listeria risk."
-}
+{ id:1, topic:"Cardiology", q:"Pulsus paradoxus (>10 mmHg fall in systolic BP during inspiration) is characteristically ABSENT in:", opts:["A. Cardiac tamponade","B. Severe bronchial asthma","C. Constrictive pericarditis","D. Tension pneumothorax"], ans:2, exp:"Constrictive pericarditis causes Kussmaul's sign (paradoxical RISE in JVP on inspiration), NOT pulsus paradoxus." },
+{ id:2, topic:"Cardiology", q:"Water-hammer (Corrigan's) pulse is pathognomonic of:", opts:["A. Mitral stenosis","B. Aortic regurgitation","C. Aortic stenosis","D. Tricuspid regurgitation"], ans:1, exp:"Water-hammer pulse = rapidly rising and collapsing pulse due to wide pulse pressure. Classic in Aortic Regurgitation." },
+{ id:3, topic:"Cardiology", q:"Austin Flint murmur is best described as:", opts:["A. Systolic murmur at apex due to mitral regurgitation","B. Mid-diastolic rumble at apex in aortic regurgitation (functional MS)","C. Opening snap followed by diastolic murmur in MS","D. Continuous murmur in PDA"], ans:1, exp:"Austin Flint murmur is a mid-to-late diastolic apical rumble heard in severe Aortic Regurgitation." },
+{ id:4, topic:"Cardiology", q:"Saddle-shaped (concave upward) ST elevation in ALL leads EXCEPT aVR and V1 is characteristic of:", opts:["A. Acute STEMI","B. Acute pericarditis","C. Prinzmetal's (vasospastic) angina","D. Left ventricular aneurysm"], ans:1, exp:"Acute pericarditis shows diffuse, saddle-shaped ST elevation in virtually all leads except aVR and V1." },
+{ id:5, topic:"Cardiology", q:"Beck's triad in cardiac tamponade consists of all EXCEPT:", opts:["A. Hypotension","B. Raised JVP (distended neck veins)","C. Muffled/distant heart sounds","D. Pulsus alternans"], ans:3, exp:"Beck's triad: Hypotension, Raised JVP, Muffled heart sounds. Pulsus PARADOXUS (not alternans) is the hallmark of tamponade." },
+{ id:6, topic:"Cardiology", q:"Roth spots (oval hemorrhages with pale centre) are seen in:", opts:["A. Hypertensive retinopathy","B. Infective endocarditis","C. Diabetic retinopathy","D. Severe anemia"], ans:1, exp:"Roth spots are retinal hemorrhages with pale center. Classically associated with Infective Endocarditis." },
+{ id:7, topic:"Cardiology", q:"Which cardiac biomarker rises EARLIEST after acute myocardial infarction?", opts:["A. CK-MB","B. Troponin I","C. Myoglobin","D. LDH"], ans:2, exp:"Myoglobin rises within 1-3 hours (earliest). Troponin is most specific. CK-MB rises at 4-6 hrs." },
+{ id:8, topic:"Cardiology", q:"In STEMI, the ACC/AHA recommended door-to-balloon (D2B) time target for primary PCI is:", opts:["A. 30 minutes","B. 60 minutes","C. 90 minutes","D. 120 minutes"], ans:2, exp:"Door-to-balloon time for primary PCI in STEMI ≤90 minutes. Door-to-needle for thrombolysis ≤30 minutes." },
+{ id:9, topic:"Cardiology", q:"Dressler's syndrome (post-MI pericarditis) characteristically occurs:", opts:["A. Within 24-48 hours of MI","B. 3-7 days post-MI","C. 2-10 weeks post-MI","D. Only after cardiac surgery"], ans:2, exp:"Dressler's syndrome occurs 2-10 weeks (classically 4-8 weeks) after MI. Autoimmune pericarditis." },
+{ id:10, topic:"Cardiology", q:"Most common cause of secondary hypertension:", opts:["A. Primary hyperaldosteronism","B. Renal parenchymal disease","C. Pheochromocytoma","D. Coarctation of aorta"], ans:1, exp:"Renal parenchymal disease is MOST COMMON cause of secondary hypertension (~75-80%)." },
+{ id:11, topic:"Cardiology", q:"The most common arrhythmia immediately following acute myocardial infarction is:", opts:["A. Atrial fibrillation","B. Ventricular premature beats (PVCs)","C. Ventricular fibrillation","D. Complete heart block"], ans:1, exp:"Ventricular premature beats (PVCs) are MOST COMMON post-MI (>90%). VF is most common cause of death in first hour." },
+{ id:12, topic:"Cardiology", q:"Which statement about Infective Endocarditis (IE) is FALSE?", opts:["A. Most common organism in native valve IE is Streptococcus viridans","B. IV drug use-associated IE most commonly affects tricuspid valve","C. Staphylococcus aureus is most common in prosthetic valve IE <60 days","D. Osler nodes are painless, Janeway lesions are painful"], ans:3, exp:"Osler nodes are PAINFUL; Janeway lesions are PAINLESS. Memory: Osler = Ouch." },
+{ id:13, topic:"Cardiology", q:"In complete heart block, the ventricular rate is maintained by:", opts:["A. SA node","B. AV nodal escape rhythm","C. Idioventricular (His-Purkinje) pacemaker","D. Internodal tracts"], ans:2, exp:"Idioventricular pacemaker at 20-40/min with WIDE QRS. Junctional escape may be 40-60/min with narrow QRS." },
+{ id:14, topic:"Cardiology", q:"Which murmur increases in intensity on SQUATTING?", opts:["A. HOCM","B. Mitral valve prolapse","C. Valvular aortic stenosis","D. Tricuspid stenosis"], ans:2, exp:"Squatting increases LV volume → DECREASES HOCM and MVP murmurs. AS murmur is relatively fixed." },
+{ id:15, topic:"Cardiology", q:"Drug of choice for WPW syndrome with atrial fibrillation:", opts:["A. Digoxin","B. Verapamil","C. Adenosine","D. Procainamide (or DC cardioversion)"], ans:3, exp:"AVOID AV nodal blockers (digoxin, verapamil, adenosine) in WPW+AF. Use Procainamide or DC cardioversion." },
+{ id:16, topic:"Pulmonology", q:"Spirometry in COPD characteristically shows:", opts:["A. FEV1/FVC >0.70","B. FEV1/FVC <0.70, not fully reversible","C. Normal FEV1/FVC","D. Increased FEV1/FVC ratio"], ans:1, exp:"COPD: Post-bronchodilator FEV1/FVC <0.70 (fixed airflow obstruction). Asthma is reversible." },
+{ id:17, topic:"Pulmonology", q:"Klebsiella pneumoniae pneumonia classically presents with:", opts:["A. Bilateral interstitial infiltrates","B. Upper lobe consolidation with currant jelly sputum, bulging fissure","C. Pleural effusion only","D. Lower lobe cavitation only"], ans:1, exp:"Klebsiella: Upper lobe, bulging fissure, currant jelly sputum, affects alcoholics/diabetics." },
+{ id:18, topic:"Pulmonology", q:"Light's criteria for exudative pleural effusion - which is sufficient?", opts:["A. Pleural protein/serum protein ratio >0.5","B. Pleural protein >2.5 g/dL only","C. Pleural glucose <60 mg/dL","D. Pleural WBC >1000/mm³"], ans:0, exp:"Light's criteria (any ONE = exudate): Pleural/serum protein >0.5, Pleural/serum LDH >0.6, Pleural LDH >2/3 upper limit serum LDH." },
+{ id:19, topic:"Pulmonology", q:"Golden S sign on chest X-ray is characteristic of:", opts:["A. Pulmonary embolism","B. Right upper lobe collapse due to central obstruction","C. Cardiac tamponade","D. Pleural effusion"], ans:1, exp:"Golden S sign = RUL collapse with central obstruction (lung cancer). S-shaped fissure configuration." },
+{ id:20, topic:"Pulmonology", q:"Drug of choice for Pneumocystis jirovecii pneumonia (PCP) in AIDS:", opts:["A. Amphotericin B","B. Trimethoprim-sulfamethoxazole","C. Fluconazole","D. Atovaquone"], ans:1, exp:"TMP-SMX is DOC for treatment AND prophylaxis of PCP. Start prophylaxis when CD4 <200." },
+{ id:21, topic:"Pulmonology", q:"Which is NOT a feature of pulmonary embolism on imaging?", opts:["A. Hampton's hump","B. Westermark sign","C. S1Q3T3 pattern on ECG","D. Bat-wing pattern on CXR"], ans:3, exp:"Bat-wing pattern = Pulmonary EDEMA, NOT PE. PE signs: Hampton's hump, Westermark sign, S1Q3T3." },
+{ id:22, topic:"Pulmonology", q:"All are features of OSA EXCEPT:", opts:["A. Loud snoring with witnessed apnea","B. Excessive daytime sleepiness","C. Morning headaches","D. Low BMI and thin neck"], ans:3, exp:"OSA associated with obesity, thick neck. Low BMI is AGAINST OSA diagnosis." },
+{ id:23, topic:"Pulmonology", q:"ABPA is associated with all EXCEPT:", opts:["A. Elevated serum IgE","B. Central bronchiectasis","C. Peripheral eosinophilia","D. Normal or low IgE"], ans:3, exp:"ABPA: Very high IgE (>1000), central bronchiectasis, eosinophilia. In asthma/CF patients." },
+{ id:24, topic:"Pulmonology", q:"In pulmonary TB, which sputum sample for AFB smear is most diagnostic?", opts:["A. Any random sample","B. First morning sputum","C. 24-hour pooled sputum","D. Post-bronchodilator sample"], ans:1, exp:"First morning sputum yields highest bacillary load. WHO recommends 2 spot or 1 morning sample." },
+{ id:25, topic:"Pulmonology", q:"Tension pneumothorax - all true EXCEPT:", opts:["A. Tracheal deviation AWAY from affected side","B. Absent breath sounds on affected side","C. Hypotension and raised JVP","D. CXR must be done before needle decompression"], ans:3, exp:"Tension pneumothorax is CLINICAL diagnosis - do NOT wait for CXR. Immediate needle decompression." },
+{ id:26, topic:"Neurology", q:"Most common site of hypertensive intracerebral hemorrhage:", opts:["A. Pons","B. Putamen/basal ganglia","C. Cerebellum","D. Thalamus"], ans:1, exp:"Putamen/basal ganglia ~50-60% (lenticulostriate arteries). Thalamus 15-25%, Pons 10-15%, Cerebellum 10%." },
+{ id:27, topic:"Neurology", q:"Bilateral INO in young patient - FIRST suspect:", opts:["A. Myasthenia gravis","B. Multiple sclerosis","C. Wernicke's encephalopathy","D. Brainstem glioma"], ans:1, exp:"Bilateral INO in YOUNG = Multiple Sclerosis. Unilateral INO in elderly = Pontine stroke." },
+{ id:28, topic:"Neurology", q:"Drug of choice for absence seizures:", opts:["A. Phenytoin","B. Carbamazepine","C. Ethosuximide","D. Phenobarbitone"], ans:2, exp:"Ethosuximide (if only absence) or Valproate (if absence + other types). Phenytoin/Carbamazepine can WORSEN absence." },
+{ id:29, topic:"Neurology", q:"Myasthenia gravis - MOST SPECIFIC test:", opts:["A. Tensilon test","B. Anti-AChR antibodies","C. CT thorax","D. Repetitive nerve stimulation"], ans:1, exp:"Anti-AChR antibodies positive in ~85% generalized MG (most specific). Tensilon is sensitive but not specific." },
+{ id:30, topic:"Neurology", q:"Brown-Séquard syndrome is caused by:", opts:["A. Complete transection","B. Lateral hemisection","C. Central cord syndrome","D. Cauda equina compression"], ans:1, exp:"Hemisection: IPSILATERAL motor/proprioception loss, CONTRALATERAL pain/temp loss." },
+{ id:31, topic:"Neurology", q:"Pathological hallmark of Parkinson's disease:", opts:["A. Neurofibrillary tangles","B. Loss of dopaminergic neurons in substantia nigra with Lewy bodies","C. Prion proteins","D. TDP-43 inclusions"], ans:1, exp:"PD: Substantia nigra pars compacta degeneration, Lewy bodies (α-synuclein). TRAP symptoms." },
+{ id:32, topic:"Neurology", q:"Drug of first choice for trigeminal neuralgia:", opts:["A. Gabapentin","B. Carbamazepine","C. Amitriptyline","D. Phenytoin"], ans:1, exp:"Carbamazepine is DOC (~70-80% efficacy). Blocks sodium channels. Check CBC/LFTs." },
+{ id:33, topic:"Neurology", q:"Trousseau's and Chvostek's signs are signs of:", opts:["A. Hyperkalemia","B. Hypocalcemia","C. Hypernatremia","D. Hypermagnesemia"], ans:1, exp:"Hypocalcemia tetany signs. Trousseau = carpal spasm with BP cuff. Chvostek = facial twitch with tapping." },
+{ id:34, topic:"Neurology", q:"LP is CONTRAINDICATED in all EXCEPT:", opts:["A. Papilledema with focal deficits","B. Posterior fossa mass","C. Suspected bacterial meningitis WITHOUT papilledema","D. Coagulopathy"], ans:2, exp:"LP NOT contraindicated in meningitis if no papilledema/focal deficits. Start antibiotics first." },
+{ id:35, topic:"Neurology", q:"GCS total minimum and maximum scores:", opts:["A. Min 0, Max 15","B. Min 3, Max 15","C. Min 1, Max 12","D. Min 5, Max 15"], ans:1, exp:"GCS: Eye(1-4) + Verbal(1-5) + Motor(1-6) = 3-15. Minimum is 3, NOT zero." },
+{ id:36, topic:"Neurology", q:"Subacute combined degeneration of spinal cord caused by deficiency of:", opts:["A. Vitamin D","B. Vitamin B12","C. Vitamin B1","D. Vitamin C"], ans:1, exp:"B12 deficiency: Posterior columns + lateral corticospinal tracts + peripheral nerves. UMN + LMN signs." },
+{ id:37, topic:"Neurology", q:"Which is TRUE about Guillain-Barré syndrome?", opts:["A. Ascending paralysis, hyperreflexia","B. Descending paralysis","C. Ascending paralysis, AREFLEXIA, albuminocytologic dissociation","D. Purely sensory"], ans:2, exp:"GBS: Ascending weakness, AREFLEXIA, high protein/normal cells in CSF. Trigger: Campylobacter." },
+{ id:38, topic:"Nephrology", q:"Most common cause of nephrotic syndrome in adults (non-diabetic):", opts:["A. MCD","B. Membranous nephropathy","C. FSGS","D. IgA nephropathy"], ans:1, exp:"Adults: Membranous nephropathy. Children: MCD (80%). Young adults 15-40: FSGS." },
+{ id:39, topic:"Nephrology", q:"Nephrotic syndrome consists of all EXCEPT:", opts:["A. Proteinuria >3.5 g/day","B. Hypoalbuminemia","C. Gross hematuria","D. Hyperlipidemia"], ans:2, exp:"Nephrotic: Proteinuria, hypoalbuminemia, edema, hyperlipidemia. Hematuria is nephritic." },
+{ id:40, topic:"Nephrology", q:"Urinary cast DIAGNOSTIC of glomerulonephritis:", opts:["A. Hyaline cast","B. Granular cast","C. RBC cast","D. Waxy cast"], ans:2, exp:"RBC casts = pathognomonic of glomerulonephritis. Form when RBCs pass through damaged GBM." },
+{ id:41, topic:"Nephrology", q:"Distal (Type I) RTA is characterized by all EXCEPT:", opts:["A. Urine pH >5.5","B. Normal anion gap metabolic acidosis","C. Hypokalemia","D. Proximal bicarbonate wasting"], ans:3, exp:"Type I RTA: Cannot acidify urine, normal AG acidosis, hypokalemia, nephrocalcinosis. Proximal wasting = Type II." },
+{ id:42, topic:"Nephrology", q:"Best SCREENING test for early diabetic nephropathy:", opts:["A. Serum creatinine","B. Urine dipstick","C. Spot urine ACR (microalbuminuria)","D. 24-hour urine protein"], ans:2, exp:"Microalbuminuria (30-300 mg/g ACR) is earliest marker. Dipstick negative at this stage." },
+{ id:43, topic:"Nephrology", q:"Indications for URGENT dialysis (AEIOU) - all EXCEPT:", opts:["A. Acidosis pH <7.1","B. K+ >6.5 refractory","C. Creatinine >5 without symptoms","D. Uremic pericarditis"], ans:2, exp:"Creatinine ALONE is NOT indication. Must be symptomatic. AEIOU: Acidosis, Electrolytes, Intoxication, Overload, Uremia." },
+{ id:44, topic:"Nephrology", q:"ADPKD - which extrarenal complication causes most mortality?", opts:["A. Liver cysts","B. Intracranial aneurysms → SAH","C. MVP","D. Pancreatic cysts"], ans:1, exp:"Intracranial berry aneurysms (10-40%) → SAH is most LETHAL. Liver cysts most common but benign." },
+{ id:45, topic:"Nephrology", q:"In ATN, characteristic urine finding:", opts:["A. RBC casts","B. Muddy-brown granular casts","C. WBC casts","D. Fatty casts"], ans:1, exp:"ATN: Muddy-brown granular casts, RTEC casts. Urine Na >40, FENa >2%." },
+{ id:46, topic:"Nephrology", q:"Hematuria, HTN, mild proteinuria after URTI 1-2 days - diagnosis:", opts:["A. Post-strep GN","B. IgA nephropathy","C. HSP nephritis","D. Membranous"], ans:1, exp:"Synpharyngitic hematuria (within 1-3 days of URTI) = IgA nephropathy. Post-strep GN = 2-3 weeks later." },
+{ id:47, topic:"Nephrology", q:"Corrected calcium formula in hypoalbuminemia:", opts:["A. Add 0.5 per 1 g/dL drop","B. Add 0.8 per 1 g/dL drop below 4","C. Subtract 0.8 per 1 g/dL above 4","D. No correction"], ans:1, exp:"Corrected Ca = Measured Ca + 0.8 × (4 - albumin). Critical in nephrotic syndrome/CKD." },
+{ id:48, topic:"Gastroenterology", q:"Most common site of peptic ulcer disease:", opts:["A. Gastric body","B. First part of duodenum","C. Pyloric antrum","D. EG junction"], ans:1, exp:"Duodenal ulcers 4× more common than gastric. DU: H. pylori 95%, anterior wall perforation, posterior wall bleeding." },
+{ id:49, topic:"Gastroenterology", q:"Standard first-line H. pylori eradication therapy:", opts:["A. PPI + Amoxicillin + Clarithromycin 7-14 days","B. PPI + Metronidazole + Tetracycline + Bismuth","C. H2 blocker + Amoxicillin + Clarithromycin","D. PPI alone"], ans:0, exp:"Triple therapy: PPI + Amoxicillin 1g BD + Clarithromycin 500mg BD for 14 days. Confirm eradication ≥4 weeks after." },
+{ id:50, topic:"Gastroenterology", q:"Ranson's criteria - assessed at 48 HOURS:", opts:["A. Age >55","B. WBC >16,000","C. Glucose >200","D. Calcium <8 mg/dL"], ans:3, exp:"48 hours: Hct fall >10%, BUN rise >5, Calcium <8, PaO2 <60, Base deficit >4, Fluid sequestration >6L." },
+{ id:51, topic:"Gastroenterology", q:"Feature DIFFERENTIATING Crohn's from UC:", opts:["A. Bloody diarrhea","B. Skip lesions, transmural, rectal sparing, perianal disease","C. Endoscopic ulceration","D. Elevated ESR/CRP"], ans:1, exp:"Crohn's: Skip lesions, transmural, rectal sparing, granulomas, any GI part. UC: Continuous, mucosal, always rectum." },
+{ id:52, topic:"Gastroenterology", q:"Most common cause of upper GI bleeding:", opts:["A. Esophageal varices","B. Peptic ulcer disease","C. Mallory-Weiss tear","D. Angiodysplasia"], ans:1, exp:"PUD ~40-50% of all UGI bleeds. Varices = most common cause of MASSIVE UGI bleed." },
+{ id:53, topic:"Gastroenterology", q:"Achalasia - GOLD STANDARD investigation:", opts:["A. Barium swallow","B. Upper GI endoscopy","C. Esophageal manometry","D. CT thorax"], ans:2, exp:"Manometry is gold standard. Barium: bird-beak. Endoscopy: exclude pseudoachalasia." },
+{ id:54, topic:"Gastroenterology", q:"Carcinoid syndrome occurs when metastasis to:", opts:["A. Local lymph nodes","B. Liver","C. Lung","D. Bone"], ans:1, exp:"Liver metastases → serotonin enters systemic circulation. Flushing, diarrhea, bronchospasm, right heart lesions." },
+{ id:55, topic:"Gastroenterology", q:"TRUE about IBS:", opts:["A. Elevated inflammatory markers","B. Rome IV: pain ≥1 day/week for 3 months","C. Always bloody diarrhea","D. Positive celiac serology"], ans:1, exp:"Rome IV: Recurrent pain ≥1 day/week in last 3 months + 2 of: defecation improvement, frequency change, form change." },
+{ id:56, topic:"Hepatology", q:"Most common cause of cirrhosis in Nepal:", opts:["A. HBV","B. HCV","C. Alcohol","D. NAFLD"], ans:0, exp:"Nepal is HBV endemic. HBV most common cause of cirrhosis/portal HTN in Nepal/South Asia." },
+{ id:57, topic:"Hepatology", q:"SAAG is calculated as:", opts:["A. Ascites albumin - Serum albumin","B. Serum albumin - Ascites albumin","C. Ascites protein - Serum protein","D. Serum globulin - Ascites globulin"], ans:1, exp:"SAAG = Serum - Ascites albumin. ≥1.1 = portal HTN (97% accuracy). <1.1 = non-portal causes." },
+{ id:58, topic:"Hepatology", q:"Primary prophylaxis for variceal bleeding:", opts:["A. Non-selective beta-blocker or EVL","B. Isosorbide mononitrate","C. Octreotide","D. TIPS"], ans:0, exp:"Propranolol/nadolol OR endoscopic variceal ligation. Octreotide for ACUTE bleeding, not prophylaxis." },
+{ id:59, topic:"Hepatology", q:"SBP diagnosis confirmed by ascitic fluid:", opts:["A. Positive culture only","B. PMN ≥250 cells/mm³","C. Glucose <50","D. Protein <1 g/dL"], ans:1, exp:"PMN ≥250 cells/mm³ sufficient to start antibiotics even if culture negative. E. coli, Klebsiella common." },
+{ id:60, topic:"Hepatology", q:"HRS best treated with:", opts:["A. Hemodialysis","B. Norepinephrine + albumin","C. Terlipressin + albumin","D. Furosemide"], ans:2, exp:"Terlipressin + IV albumin. Type 1 = rapid AKI, Type 2 = refractory ascites. Liver transplant definitive." },
+{ id:61, topic:"Hepatology", q:"Ultrasound finding suggestive of NASH:", opts:["A. Homogeneous increased echogenicity","B. Coarse, nodular surface with portal HTN signs","C. Gallbladder polyp","D. HCC"], ans:1, exp:"Simple steatosis = bright liver. NASH/cirrhosis = coarse, nodular surface with portal HTN signs." },
+{ id:62, topic:"Hepatology", q:"After large-volume paracentesis (>5L):", opts:["A. IV ceftriaxone","B. IV albumin 6-8 g per liter removed","C. Fluid restrict 1 L/day","D. Propranolol"], ans:1, exp:"Albumin 6-8 g per liter removed prevents post-paracentesis circulatory dysfunction and HRS." },
+{ id:63, topic:"Hepatology", q:"Most common extrahepatic manifestation of chronic HBV:", opts:["A. ITP","B. Polyarteritis nodosa","C. Membranous nephropathy","D. Lichen planus"], ans:1, exp:"PAN = classic HBV association. Necrotizing medium artery inflammation. Cryoglobulinemia more with HCV." },
+{ id:64, topic:"Hematology", q:"Most specific test for iron deficiency:", opts:["A. Serum ferritin","B. Serum iron","C. TIBC","D. Bone marrow iron"], ans:0, exp:"Ferritin most specific (first to drop). Acute phase reactant - can be normal/high in inflammation." },
+{ id:65, topic:"Hematology", q:"Peripheral smear finding diagnostic of megaloblastic anemia:", opts:["A. Microcytosis","B. Hypersegmented neutrophils (≥5 lobes)","C. Schistocytes","D. Spherocytes"], ans:1, exp:"Hypersegmented neutrophils diagnostic. Macro-ovalocytes also seen. B12/folate deficiency." },
+{ id:66, topic:"Hematology", q:"Most common acute leukemia in adults:", opts:["A. ALL","B. AML","C. CML","D. CLL"], ans:1, exp:"AML most common acute leukemia in adults (median age 65). ALL more common in children." },
+{ id:67, topic:"Hematology", q:"CRAB criteria used to diagnose:", opts:["A. Multiple myeloma","B. Waldenstrom","C. Hodgkin lymphoma","D. Hairy cell leukemia"], ans:0, exp:"CRAB: Calcium elevated, Renal failure, Anemia, Bone lesions. + ≥10% plasma cells or plasmacytoma." },
+{ id:68, topic:"Hematology", q:"ITP treatment with platelets <30,000/µL:", opts:["A. Splenectomy","B. High-dose corticosteroids","C. IVIG or anti-D","D. TPO-RA"], ans:1, exp:"First-line: Prednisone 1mg/kg/day or Dexamethasone 40mg × 4 days. IVIG for rapid rise if needed." },
+{ id:69, topic:"Hematology", q:"Most common cause of MAHA:", opts:["A. AIHA","B. Thalassemia","C. TTP","D. G6PD deficiency"], ans:2, exp:"MAHA = schistocytes. TTP, HUS, DIC, severe HTN, HELLP. TTP most classic/tested." },
+{ id:70, topic:"Hematology", q:"Definitive therapy for TTP:", opts:["A. Aspirin","B. Plasma exchange","C. IVIG","D. Rituximab"], ans:1, exp:"PLEX + steroids definitive. Removes anti-ADAMTS13 antibodies. Without PLEX mortality >90%." },
+{ id:71, topic:"Hematology", q:"Coagulopathy in DIC:", opts:["A. Isolated thrombocytopenia","B. Prolonged PT/APTT, low fibrinogen, elevated D-dimer","C. Normal PT/APTT","D. Isolated prolonged bleeding time"], ans:1, exp:"DIC: Prolonged PT/APTT, low fibrinogen, elevated D-dimer, thrombocytopenia. TTP has normal PT/APTT." },
+{ id:72, topic:"Endocrinology", q:"Single best test for thyroid function:", opts:["A. Free T4","B. Free T3","C. TSH","D. TPO antibodies"], ans:2, exp:"TSH is SINGLE BEST test. Elevated in primary hypothyroidism before T4 falls. Suppressed in hyperthyroidism." },
+{ id:73, topic:"Endocrinology", q:"Most common cause of Cushing's syndrome:", opts:["A. Adrenal adenoma","B. ACTH pituitary adenoma","C. Ectopic ACTH","D. Exogenous glucocorticoids"], ans:3, exp:"Exogenous steroids MOST COMMON (iatrogenic). Pituitary adenoma = most common endogenous cause." },
+{ id:74, topic:"Endocrinology", q:"First-line treatment for toxic multinodular goiter:", opts:["A. RAI ablation","B. PTU","C. Methimazole","D. Thyroidectomy"], ans:0, exp:"RAI preferred for toxic MNG (targets autonomous tissue). Antithyroid drugs less effective." },
+{ id:75, topic:"Endocrinology", q:"Hormone deficiency in adrenal crisis (primary AI):", opts:["A. Aldosterone only","B. Cortisol and aldosterone","C. Cortisol only","D. Androgens"], ans:1, exp:"Primary AI: Both cortisol AND aldosterone impaired. Secondary AI: Aldosterone preserved (RAAS intact)." },
+{ id:76, topic:"Endocrinology", q:"DKA management includes all EXCEPT:", opts:["A. IV saline","B. IV insulin","C. Potassium replacement after insulin","D. IV bicarbonate for all pH <7.0"], ans:3, exp:"Bicarbonate only if pH <6.9 (controversial). Fluids, insulin, K+ replacement, treat underlying cause." },
+{ id:77, topic:"Endocrinology", q:"Best initial test for primary hypoparathyroidism:", opts:["A. Serum calcium","B. Serum phosphate","C. PTH level","D. 25-OH Vitamin D"], ans:2, exp:"Low calcium, high phosphate, LOW/inappropriately normal PTH. Distinguishes from Vit D deficiency." },
+{ id:78, topic:"Endocrinology", q:"Test to diagnose GH deficiency in adults:", opts:["A. Random GH","B. Insulin tolerance test","C. OGTT for GH suppression","D. IGF-1 alone"], ans:1, exp:"ITT is gold standard. Hypoglycemia should provoke GH/cortisol increase. IGF-1 is screening only." },
+{ id:79, topic:"Endocrinology", q:"Most common cause of Addison's in DEVELOPING countries:", opts:["A. Autoimmune","B. Tuberculosis","C. Malignancy","D. Antifungal therapy"], ans:1, exp:"Developing world (Nepal): TB destroys adrenal cortex. Developed world: Autoimmune (80%)." },
+{ id:80, topic:"Infectious Diseases", q:"Most common cause of community-acquired meningitis in adults:", opts:["A. S. pneumoniae","B. N. meningitidis","C. H. influenzae","D. Listeria"], ans:0, exp:"S. pneumoniae most common in adults. N. meningitidis in children/adolescents. Empiric: Vanco + 3rd gen cephalosporin." }
 ],
 cases: [
-{
-id: "C1",
-title: "Case 1: A 45-Year-Old Man with Dyspnea and Hypotension",
-text: "A 45-year-old male presents with 3 days of progressive dyspnea, now in severe respiratory distress. He had a flu-like illness 2 weeks ago. On examination: BP 80/60 mmHg, HR 118/min, RR 28/min, JVP markedly elevated, heart sounds muffled and distant, no murmurs heard. Bilateral breath sounds equal. Chest X-ray shows a globular enlarged cardiac silhouette ('water bottle' heart). ECG shows sinus tachycardia with alternating QRS amplitude.",
-questions: [
-{ id:81, q:"What is the MOST likely diagnosis?",
-opts:["A. Constrictive pericarditis","B. Cardiac tamponade","C. Tension pneumothorax","D. Acute decompensated heart failure"],
-ans:1, exp:"Cardiac tamponade: Beck's triad (hypotension + raised JVP + muffled heart sounds) + recent viral illness (pericarditis → effusion) + globular cardiac silhouette on CXR + electrical alternans on ECG. Tension pneumothorax would have absent breath sounds on one side with tracheal deviation. Constrictive pericarditis is chronic, not acute." },
-{ id:82, q:"ECG finding of 'alternating QRS amplitude' is called:",
-opts:["A. Pulsus alternans","B. Electrical alternans","C. Delta wave","D. Epsilon wave"],
-ans:1, exp:"Electrical alternans (alternating QRS amplitude beat-to-beat) = pathognomonic of CARDIAC TAMPONADE (swinging heart in large effusion). Pulsus alternans is a clinical finding of alternating strong/weak pulses = severe LV dysfunction. Delta wave = WPW. Epsilon wave = ARVC." },
-{ id:83, q:"MOST immediate bedside investigation to confirm diagnosis:",
-opts:["A. Repeat ECG","B. Bedside echocardiography","C. CT thorax","D. Cardiac catheterization"],
-ans:1, exp:"Bedside point-of-care echocardiography is the fastest and most accurate way to confirm pericardial effusion causing tamponade. Echo shows: large effusion, right atrial/ventricular DIASTOLIC COLLAPSE (first sign), respiratory variation in mitral/tricuspid flow >25%. CT gives more detail but takes time. In extremis, clinical diagnosis is sufficient to proceed to treatment." },
-{ id:84, q:"DEFINITIVE emergency treatment:",
-opts:["A. IV furosemide (loop diuretic)","B. Pericardiocentesis (needle drainage)","C. IV beta-blockers to slow heart rate","D. Steroids alone"],
-ans:1, exp:"Pericardiocentesis (needle aspiration): subxiphoid approach, echo-guided preferred. Even removing 50–100 mL dramatically improves hemodynamics. Diuretics are CONTRAINDICATED — tamponade is managed by increasing preload (fluids as bridge), NOT reducing it. Steroids help underlying pericarditis but do NOT immediately relieve tamponade. Surgical pericardial window for recurrent tamponade." }
-]
-},
-{
-id: "C2",
-title: "Case 2: Fever, Productive Cough, and Consolidation",
-text: "A 62-year-old diabetic male presents with 4 days of high-grade fever (39.5°C), productive cough with rusty-brown sputum, right-sided pleuritic chest pain, and breathlessness. He is a non-smoker. Vitals: BP 110/70, HR 104, RR 30/min, SpO2 90% on room air. Examination reveals dullness to percussion and bronchial breathing at the right lower zone. CXR confirms right lower lobe consolidation. No recent hospital admission.",
-questions: [
-{ id:85, q:"Most likely causative organism:",
-opts:["A. Klebsiella pneumoniae","B. Streptococcus pneumoniae","C. Mycoplasma pneumoniae","D. Staphylococcus aureus"],
-ans:1, exp:"Classic lobar pneumonia with rusty sputum in a diabetic = Streptococcus pneumoniae (most common CAP organism overall, ~30–40%). Klebsiella: upper lobe, currant jelly sputum, alcoholics. Mycoplasma: 'walking pneumonia', bilateral interstitial, younger patients, extra-pulmonary features. Staph aureus: post-influenza, cavitation, bilateral. Rusty sputum + lobar consolidation + fever + pleurisy = pneumococcal CAP." },
-{ id:86, q:"Which severity scoring system guides site-of-care decision in Community-Acquired Pneumonia?",
-opts:["A. APACHE II score","B. CURB-65 score","C. SOFA score","D. PSI/PORT score (both B and D are acceptable)"],
-ans:3, exp:"CURB-65: C=Confusion, U=Urea>7mmol/L (BUN>20mg/dL), R=RR≥30/min, B=BP<90 systolic or ≤60 diastolic, 65=Age≥65. Score 0–1: outpatient; 2: hospital; ≥3: ICU consideration. PSI (Pneumonia Severity Index) is also validated and perhaps more comprehensive. Both are widely used. SOFA/APACHE = ICU severity scores for sepsis/multi-organ failure." },
-{ id:87, q:"This patient's CURB-65 score (Confusion: No, Urea elevated: Yes, RR ≥30: Yes, BP <90: No, Age ≥65: No) is:",
-opts:["A. 0 — outpatient treatment","B. 2 — inpatient treatment","C. 3 — consider ICU","D. 5 — immediate ICU"],
-ans:1, exp:"CURB-65 calculation: U (urea elevated) = 1 + R (RR 30/min) = 1 → Total = 2. Score 2 = recommended INPATIENT treatment. Had he been confused OR older ≥65 OR had BP <90, score would be 3+ and ICU evaluation would be warranted. SpO2 90% also supports inpatient decision." },
-{ id:88, q:"Empirical antibiotic of choice for non-severe CAP in a hospitalized patient:",
-opts:["A. Azithromycin alone (macrolide monotherapy)","B. Beta-lactam (amoxicillin-clavulanate or ceftriaxone) ± macrolide/doxycycline","C. Vancomycin + piperacillin-tazobactam","D. Antivirals (oseltamivir)"],
-ans:1, exp:"Non-severe hospitalized CAP: Beta-lactam (amoxicillin 1g TDS or ceftriaxone 1g IV) + macrolide (azithromycin) or doxycycline. This covers atypicals (Mycoplasma, Legionella, Chlamydophila) which mono beta-lactam would miss. Severe CAP/ICU: antipseudomonal beta-lactam + azithromycin OR respiratory fluoroquinolone. Azithromycin monotherapy is only for mild outpatient CAP without comorbidities." }
-]
-},
-{
-id: "C3",
-title: "Case 3: Crushing Chest Pain in a Hypertensive Diabetic",
-text: "A 56-year-old hypertensive, diabetic, 30-pack-year smoker presents with sudden onset crushing central chest pain radiating to the left arm and jaw, with diaphoresis, nausea, and vomiting for 90 minutes. BP 150/90 mmHg, HR 92/min regular. ECG shows 3 mm ST elevation in leads II, III, and aVF with reciprocal ST depression in aVL and V1-V2.",
-questions: [
-{ id:89, q:"Which coronary artery territory is most likely involved?",
-opts:["A. Left anterior descending (LAD) — anterior wall","B. Left circumflex (LCx) — lateral wall","C. Right coronary artery (RCA) — inferior wall","D. Left main (LM) — diffuse"],
-ans:2, exp:"ST elevation in II, III, aVF = INFERIOR STEMI = RCA occlusion (right coronary artery in 85% of people, LCx in 15%). Reciprocal changes in aVL confirm inferior STEMI. LAD = anterior/septal (V1-V4). LCx = lateral (I, aVL, V5-V6). Inferior STEMI → check right-sided leads (V3R, V4R) to rule out right ventricular MI (RV MI occurs in ~40% of inferior MI)." },
-{ id:90, q:"Immediate management of STEMI includes all EXCEPT:",
-opts:["A. Aspirin 300 mg chewable (loading dose)","B. Clopidogrel 300–600 mg loading dose","C. IV morphine for pain (with caution)","D. IV beta-blockers given ROUTINELY to all STEMI patients immediately"],
-ans:3, exp:"IV beta-blockers are NOT routine in STEMI. Avoid if: HR<60, SBP<100, PR interval>0.24s, severe LV dysfunction, cardiogenic shock, severe bronchospasm. MONA-B doesn't mean give B always: Morphine (controversy now), Oxygen (only if SpO2<90%), Nitrates (avoid if RV infarct/hypotension), Aspirin (always), P2Y12 inhibitor + anticoagulation + reperfusion therapy (PCI/thrombolysis). Oral beta-blockers can be started within 24 hrs if stable." },
-{ id:91, q:"Additional leads ESSENTIAL in this patient to detect right ventricular infarction:",
-opts:["A. Standard leads V1–V6 already sufficient","B. Posterior leads V7, V8, V9","C. Right-sided leads V3R and V4R","D. Repeat standard 12-lead ECG after 6 hours"],
-ans:2, exp:"Right ventricular MI: right-sided leads V3R and V4R (electrode on right side of chest mirror positions). ST elevation ≥1mm in V4R is diagnostic of RV infarction. CRITICAL: in RV MI, avoid nitrates and diuretics (preload-dependent). Treat with IV fluids (volume loading). Posterior STEMI: ST elevation in V7-V9 (posterior leads), reciprocal ST depression V1-V3 (dominant R wave)." },
-{ id:92, q:"Most feared early complication in the first 48 hours post-STEMI:",
-opts:["A. Dressler's syndrome","B. Ventricular fibrillation (VF)","C. Papillary muscle rupture (days 3–7)","D. Ventricular free wall rupture (days 5–14)"],
-ans:1, exp:"VF is the leading cause of death in the FIRST HOUR post-STEMI (before hospital arrival). In hospital: VF treated with immediate defibrillation. Other arrhythmias: PVCs (most common), accelerated idioventricular rhythm (reperfusion arrhythmia — benign), VT. Dressler's = 2–10 weeks. Papillary muscle dysfunction = days 2–7 (MR murmur). Free wall rupture = 3–14 days (sudden death). Septal rupture = days 3–5 (new harsh PSM)." }
-]
-},
-{
-id: "C4",
-title: "Case 4: Type 1 Diabetic with Vomiting and Altered Sensorium",
-text: "A 22-year-old female with known type 1 diabetes presents with 2 days of vomiting, polyuria, polydipsia, and now drowsiness. Physical: BP 100/70 mmHg, HR 120/min, RR deep and rapid (Kussmaul breathing), breath smells of acetone. Point-of-care glucose: 450 mg/dL. Urine: ++++ glucose, ++ ketones. She is dehydrated with dry mucous membranes.",
-questions: [
-{ id:93, q:"Anion Gap in this patient (Na – [Cl + HCO3]):",
-opts:["A. Normal (8-12)","B. Elevated (>12)","C. Low (<8)","D. Cannot calculate without HCO3"],
-ans:1, exp:"DKA causes high anion gap metabolic acidosis due to ketoacids. Typical Na 140, Cl 100, HCO3 12 → AG = 28 (elevated). The anion gap helps distinguish causes: high AG = ketoacidosis, lactic acidosis, renal failure, toxins (methanol, ethylene glycol, salicylates). Normal AG = diarrhea, RTA, hyperalimentation." },
-{ id:94, q:"Corrected serum sodium (using the formula: add 1.6 mEq/L per 100 mg/dL glucose above 100):",
-opts:["A. Lower than measured sodium","B. Higher than measured sodium","C. Same as measured sodium","D. Sodium does not need correction"],
-ans:1, exp:"Hyperglycemia causes a false hyponatremia (water shifts from ICF to ECF diluting sodium). Corrected Na = measured Na + 1.6 × ((glucose – 100)/100). If glucose 450, correction = 1.6×((450-100)/100)=1.6×3.5=5.6. If measured Na 130 → corrected ~136 (actually normal). Corrected sodium helps differentiate true hyponatremia from dilutional." },
-{ id:95, q:"Despite serum K+ of 6.1 mEq/L on presentation, what will happen to potassium with insulin treatment?",
-opts:["A. Potassium will rise further","B. Potassium will drop rapidly","C. Potassium stays unchanged","D. Potassium will fluctuate randomly"],
-ans:1, exp:"Insulin drives potassium into cells, causing a rapid drop in serum potassium. In DKA, total body K+ is depleted due to urinary losses, but serum K+ may be normal/high due to acidosis and lack of insulin. Starting insulin can cause severe hypokalemia; thus if K+ <3.3, delay insulin and give KCl. If K+ 3.3-5.0, give KCl; if >5.0, still monitor closely." },
-{ id:96, q:"When to switch from 0.9% NaCl to dextrose-containing fluids in DKA management:",
-opts:["A. When glucose falls below 250 mg/dL","B. When pH >7.2","C. When bicarbonate normalizes","D. Never; always use saline"],
-ans:0, exp:"Once glucose reaches ~200-250 mg/dL, switch from 0.9% NaCl to D5W (5% dextrose in water) or D5NS to prevent hypoglycemia while continuing insulin to correct ketosis and acidosis. Continue insulin until anion gap normalizes. Fluid choice depends on corrected Na and glucose trends." }
-]
-},
-{
-id: "C5",
-title: "Case 5: Frothy Urine and Bilateral Edema",
-text: "A 34-year-old previously healthy male presents with 3 weeks of periorbital swelling in the morning and bilateral pitting edema of both ankles. He reports frothy urine. No history of diabetes, hypertension, or recent infections. BP 120/78 mmHg. Urine dipstick: protein ++++, no blood. Serum albumin 1.8 g/dL, creatinine 1.2 mg/dL.",
-questions: [
-{ id:97, q:"Most likely diagnosis in this 34-year-old with classic nephrotic syndrome and no secondary cause:",
-opts:["A. Minimal change disease (MCD)","B. Membranous nephropathy","C. Focal segmental glomerulosclerosis (FSGS)","D. IgA nephropathy"],
-ans:1, exp:"In an adult with nephrotic syndrome (heavy proteinuria, hypoalbuminemia, edema) and no secondary cause, membranous nephropathy is the most common primary cause (ages 30-60). MCD is most common in children. FSGS occurs in younger adults, especially Black patients, HIV, obesity. IgA nephropathy typically presents with synpharyngitic hematuria, not isolated nephrotic syndrome." },
-{ id:98, q:"Kidney biopsy in membranous nephropathy would show (on electron microscopy):",
-opts:["A. Effacement of foot processes","B. Subepithelial immune complex deposits","C. Mesangial IgA deposition","D. Double contour (tram-track) appearance"],
-ans:1, exp:"Membranous nephropathy: subepithelial immune complex deposits along the glomerular basement membrane, creating 'spike and dome' appearance on EM after silver stain. This distinguishes from other nephrotic syndromes: MCD = foot process effacement (podocyte injury), FSGS = segmental sclerosis/adhesion, MPGN = double contour (tram-track)." },
-{ id:99, q:"Most feared thromboembolic complication in nephrotic syndrome:",
-opts:["A. Deep venous thrombosis (DVT)","B. Cerebral venous thrombosis","C. Pulmonary embolism","D. Renal vein thrombosis"],
-ans:3, exp:"Nephrotic syndrome causes hypercoagulability due to loss of antithrombin III, protein C/S in urine, increased fibrinogen, and platelet activation. Renal vein thrombosis is the most feared and common venous thrombosis in nephrotic patients, presenting with flank pain and hematuria. It can lead to loss of renal function. DVT/PE also occur but renal vein thrombosis is specifically associated." },
-{ id:100, q:"Treatment for primary membranous nephropathy — first-line immunosuppressive therapy:",
-opts:["A. High-dose oral prednisolone alone","B. Cyclic alternating months of steroids + alkylating agents (chlorambucil/cyclophosphamide)","C. Rituximab (anti-CD20)","D. Calcineurin inhibitors (cyclosporine/tacrolimus)"],
-ans:2, exp:"Current first-line for primary membranous nephropathy with persistent nephrotic-range proteinuria and high risk: Rituximab (anti-CD20) is preferred as it targets B cells producing anti-PLA2R antibodies. It has similar efficacy to Ponticelli regimen (steroids+chlorambucil) with fewer side effects. Cyclic regimen is still acceptable. High-dose steroids alone are not effective." }
-]
-},
-{
-id: "C6",
-title: "Case 6: HBsAg-Positive Male with Hematemesis",
-text: "A 48-year-old man with known chronic liver disease (HBsAg positive, not on regular follow-up) is brought with 3 episodes of massive hematemesis (each ~200 mL). He is Panting, BP 90/60 mmHg, HR 118/min. He has tense ascites and hepatomegaly. No stigmata of chronic liver disease on skin. Labs: Hb 8.2 g/dL, bilirubin 4.2 mg/dL, albumin 2.4 g/dL, INR 2.1, creatinine 1.8 mg/dL (baseline 1.0). USG: coarse liver, splenomegaly, moderate ascites, portal vein diameter 14 mm.",
-questions: [
-{ id:101, q:"This patient's Child-Pugh class (Bilirubin >3mg/dL=3pts, Albumin <2.8g/dL=3pts, INR>2.2=3pts, Ascites present=2-3pts, No encephalopathy=1pt):",
-opts:["A. Class A (5-6)","B. Class B (7-9)","C. Class C (10-15)","D. Class C cannot be determined without encephalopathy grade"],
-ans:2, exp:"Calculate: Bilirubin 4.2 (>3) = 3 pts, Albumin 2.4 (<2.8) = 3 pts, INR 2.1 (actually >1.7 is 3 pts? Child-Pugh INR: >1.7=3 pts, 1.7-1.3=2 pts, <1.3=1 pt. Here 2.1 >1.7 → 3 pts), Ascites moderate = 2-3 pts (moderate = 2 points if controlled with diuretics? Usually tense ascites = 3 pts). Encephalopathy absent = 1 pt. Sum ~11-12 → Class C. Class C indicates severe liver disease, high surgical risk, poor prognosis." },
-{ id:102, q:"Immediate management of acute variceal hemorrhage:",
-opts:["A. Octreotide infusion + ceftriaxone + endoscopic band ligation","B. Transjugular intrahepatic portosystemic shunt (TIPS) immediately","C. Propranolol before endoscopy","D. Fresh frozen plasma only"],
-ans:0, exp:"Acute variceal bleed: vasoactive drugs (octreotide/terlipressin) + IV antibiotics (ceftriaxone) + urgent endoscopy (<12h) for band ligation or sclerotherapy. TIPS reserved for failures or as preemptive in high-risk. Propranolol used for prophylaxis, not acute bleed. FFP not indicated unless coagulopathy with active bleeding and procedure planned." },
-{ id:103, q:"In this patient with creatinine 1.8 mg/dL (elevated from baseline 1.0) after large-volume paracentesis — the most likely complication is:",
-opts:["A. Hepatorenal syndrome (HRS)","B. Hypovolemic shock","C. Bacterial peritonitis","D. Coagulopathy"],
-ans:0, exp:"Large-volume paracentesis without albumin replacement can precipitate post-paracentesis circulatory dysfunction, worsening renal perfusion, and hepatorenal syndrome in cirrhotics. The rise in creatinine indicates HRS. Prevention: give albumin 6-8 g per liter removed. HRS: functional renal failure in advanced liver disease, treat with albumin + vasoconstrictor (terlipressin)." },
-{ id:104, q:"SAAG of this patient's ascitic fluid is 2.4 g/dL. This confirms:",
-opts:["A. Portal hypertension (cirrhosis)","B. Peritoneal carcinomatosis","C. Tuberculous peritonitis","D. Pancreatitis"],
-ans:0, exp:"SAAG = Serum albumin – Ascites albumin. A gradient ≥1.1 indicates portal hypertension with ~97% accuracy (e.g., cirrhosis, cardiac ascites, Budd-Chiari). This patient's SAAG 2.4 clearly indicates portal hypertension, consistent with cirrhosis causing variceal bleeding." }
-]
-},
-{
-id: "C7",
-title: "Case 7: Young Student with Fever, Headache, and Rash",
-text: "A 20-year-old university student presents with 2 days of high fever, severe headache, neck stiffness, and a non-blanching petechial rash over trunk and limbs. He is alert but grimacing with pain. No recent travel. Vitals: Temp 39.2°C, BP 120/80, HR 110, RR 22, SpO2 97%. No focal neurological deficits.",
-questions: [
-{ id:105, q:"Most likely causative organism:",
-opts:["A. Neisseria meningitidis","B. Streptococcus pneumoniae","C. Haemophilus influenzae","D. Listeria monocytogenes"],
-ans:0, exp:"Petechial (purpuric) rash in meningitis is pathognomonic of meningococcal sepsis (N. meningitidis). This indicates disseminated intravascular coagulation and high fatality risk. Immediate empirical antibiotics: ceftriaxone/cefotaxime + vancomycin until sensitivities. Public health: prophylaxis for close contacts with rifampin/ceftriaxone/ciprofloxacin and vaccination." },
-{ id:106, q:"What is the CORRECT management sequence in suspected bacterial meningitis?",
-opts:["A. CT head → LP → antibiotics","B. Blood cultures → immediate antibiotics → CT/LP if stable","C. Dexamethasone before antibiotics → antibiotics → LP","D. Antibiotics → LP → CT"],
-ans:1, exp:"Do NOT delay antibiotics for imaging. Blood cultures first (<5 min). If no contraindications (papilledema, focal deficits, GCS<8, new seizures), LP can be done after antibiotics (antibiotics within 1 hour). Dexamethasone before or with first antibiotic dose to reduce neurological complications (especially in S. pneumoniae)." },
-{ id:107, q:"Empirical antibiotic of choice for bacterial meningitis in this immunocompetent 20-year-old:",
-opts:["A. Vancomycin + ceftriaxone","B. Ampicillin + gentamicin","C. Meropenem only","D. Penicillin G only"],
-ans:0, exp:"Adults <50: vancomycin + third-gen cephalosporin (ceftriaxone/cefotaxime) to cover for penicillin-resistant S. pneumoniae and N. meningitidis. Add ampicillin if Listeria risk (age >50, immunocompromised, pregnancy). Dexamethasone should be given just before or with first dose." },
-{ id:108, q:"CSF analysis in bacterial meningitis would show:",
-opts:["A. High glucose, low protein, lymphocytic pleocytosis","B. Low glucose, high protein, neutrophilic pleocytosis","C. Normal glucose, normal protein, normal cells","D. Low glucose, high protein, eosinophils"],
-ans:1, exp:"Bacterial meningitis CSF: very low glucose (<40 mg/dL or CSF:serum ratio <0.4), high protein (>100 mg/dL), neutrophilic pleocytosis (>1000 cells, mostly PMNs). Viral: lymphocytic, normal glucose, mild protein rise. TB: lymphocytic, very low glucose, very high protein. Fungal: similar to TB but may see organisms on India ink (Cryptococcus)." }
-]
-},
-{
-id: "C8",
-title: "Case 8: Post-Surgical Patient with Sudden Breathlessness",
-text: "A 55-year-old man, 3 days post-total knee replacement, suddenly develops pleuritic chest pain, dyspnea, and hemoptysis. BP 118/72 mmHg, HR 112/min, RR 26, SpO2 92% on RA. ECG: sinus tachycardia, S1Q3T3. Chest X-ray: clear lungs, normal cardiac size.",
-questions: [
-{ id:109, q:"Pre-test probability using Wells score: prior DVT/PE (No=0), HR>100 (Yes=1.5), surgery within 4 weeks (Yes=1.5), clinical DVT signs (Yes=3), hemoptysis (No=0), malignancy (No=0), alternative diagnosis less likely (Yes=3). Total Wells score:",
-opts:["A. 3.0 (PE likely)","B. 4.5 (PE likely)","C. 6.0 (PE likely)","D. 7.5 (PE likely)"],
-ans:0, exp:"Wells: HR>100=1.5, recent surgery=1.5, alternative dx less likely=3 → total 6.0. Wells ≥4 = 'PE likely' (high probability ~60%). Wells <4 = 'PE unlikely' (low probability ~10%). CTPA is gold standard for diagnosis. A high probability warrants immediate imaging/anticoagulation." },
-{ id:110, q:"GOLD STANDARD investigation for pulmonary embolism:",
-opts:["A. D-dimer test","B. Ventilation/perfusion (V/Q) scan","C. CT pulmonary angiography (CTPA)","D. Doppler ultrasound of lower limbs"],
-ans:2, exp:"CTPA is the gold standard for diagnosing PE, providing direct visualization of emboli in pulmonary arteries. V/Q scan is an alternative when CTPA contraindicated (contrast allergy, renal failure). D-dimer is useful to rule out PE in low-probability patients; elevated non-specific. Doppler US for DVT if CTPA unavailable." },
-{ id:111, q:"This patient is hemodynamically stable (BP 118/72). Correct treatment:",
-opts:["A. No anticoagulation; wait for confirmatory imaging","B. Start therapeutic low molecular weight heparin (LMWH) immediately","C. Give tPA (alteplase) thrombolysis","D. Insert an IVC filter"],
-ans:1, exp:"In hemodynamically stable patient with high suspicion, start anticoagulation immediately (LMWH or UFH) while awaiting confirmatory testing. Do not delay anticoagulation for imaging if suspicion is high. Thrombolysis reserved for massive PE with shock/hypotension. IVC filter if anticoagulation contraindicated or fails." },
-{ id:112, q:"Which anticoagulant is RELATIVELY CONTRAINDICATED in the immediate post-operative period (<24-48hrs) for PE treatment?",
-opts:["A. Unfractionated heparin (UFH)","B. Low molecular weight heparin (LMWH)","C. Direct oral anticoagulant (DOAC) like rivaroxaban","D. All are equally safe"],
-ans:2, exp:"DOACs (rivaroxaban, apixaban, dabigatran) have higher bleeding risk in the early postoperative period compared to UFH or LMWH. LMWH is preferred after major surgery once hemostasis secured (usually 12-24 hrs). UFH has rapid reversal if needed. DOACs are typically started later (5-10 days post-op) or after bridging." }
-]
-},
-{
-id: "C9",
-title: "Case 9: Chronic Bloody Diarrhea in a Young Woman",
-text: "A 28-year-old female presents with 6 months of recurrent episodes of bloody diarrhea, abdominal cramping, and urgency. Colonoscopy shows continuous colonic inflammation from rectum to descending colon with mucosal granularity and superficial ulcers. Biopsy: crypt abscesses, no granulomas. She also complains of intermittent asymmetric oligoarticular arthritis affecting knees and ankles that improves with diarrhea flares.",
-questions: [
-{ id:113, q:"Most likely diagnosis based on clinical and endoscopic findings:",
-opts:["A. Ulcerative colitis (UC)","B. Crohn's disease","C. Infectious colitis (Shigella)","D. Ischemic colitis"],
-ans:0, exp:"Ulcerative colitis: continuous inflammation starting from rectum (always), limited to colon, with mucosal/submucosal involvement. Bloody diarrhea common. Extraintestinal: arthropathy that parallels bowel activity. Crohn's: skip lesions, transmural, can affect any GI part, perianal disease, granulomas on biopsy. Distribution and biopsy (no granulomas) point to UC." },
-{ id:114, q:"The joint symptoms (episodic polyarthritis) in this patient represent:",
-opts:["A. Septic arthritis requiring joint aspiration","B. A peripheral arthropathy — IBD extraintestinal manifestation that parallels bowel disease activity","C. Rheumatoid arthritis coincidentally","D. Psoriatic arthritis — unrelated to IBD"],
-ans:1, exp:"Arthropathy associated with IBD is a peripheral, asymmetric, pauci-articular arthritis that typically parallels the activity of the bowel disease. It's an extraintestinal manifestation. Does not require joint aspiration unless septic arthritis is suspected (fever, hot joint)." },
-{ id:115, q:"First-line treatment for mild-to-moderate active UC:",
-opts:["A. IV corticosteroids","B. Oral 5-aminosalicylic acid (5-ASA) agents (mesalamine/sulfasalazine)","C. Infliximab (anti-TNF)","D. Total proctocolectomy"],
-ans:1, exp:"Mild-moderate UC: oral 5-ASA (mesalamine) ± topical (enemas/suppositories). Moderate-severe: oral corticosteroids. Severe/fulminant: IV steroids ± rescue therapy (infliximab/cyclosporine). Surgery for refractory or complications. 5-ASA also for maintenance." },
-{ id:116, q:"Risk of colorectal cancer in UC significantly increases after:",
-opts:["A. 1 year of disease","B. 5 years of disease","C. 8-10 years of disease","D. 20 years of disease"],
-ans:2, exp:"Colorectal cancer risk in UC increases with disease duration, extent (pancolitis highest), severity, and primary sclerosing cholangitis. Surveillance colonoscopy with biopsies should begin 8-10 years after diagnosis for pancolitis or left-sided colitis, and earlier if PSC. Risk escalates significantly after a decade." }
-]
-},
-{
-id: "C10",
-title: "Case 10: Confusion, Fever, Petechiae, and Renal Impairment",
-text: "A 38-year-old previously healthy woman presents with 5 days of flu-like symptoms, now with confusion, fever 38.9°C, and a petechial rash over lower limbs. BP 130/80, HR 100, RR 24. Labs: Hb 9.8 g/dL (down from baseline 13), platelets 18,000/µL, creatinine 2.4 mg/dL (baseline 0.8), bilirubin 2.8 mg/dL, LDH 900 U/L. PT and APTT normal.",
-questions: [
-{ id:117, q:"The NORMAL PT and APTT in this patient with severe thrombocytopenia distinguishes this condition from:",
-opts:["A. ITP","B. DIC","C. Aplastic anemia","D. Heparin-induced thrombocytopenia"],
-ans:1, exp:"Normal PT/APTT indicates coagulation cascade is intact, ruling out DIC (where PT/APTT are prolonged due to consumption). This is a key differentiator: TTP/HUS has normal coagulation tests; DIC has prolonged. ITP also has normal PT/APTT, but RBCs are normal (no hemolysis). Aplastic pancytopenia shows low counts across all lines." },
-{ id:118, q:"Most likely diagnosis in this patient (pentad: MAHA + thrombocytopenia + fever + neurological symptoms + renal failure):",
-opts:["A. Thrombotic thrombocytopenic purpura (TTP)","B. Hemolytic-uremic syndrome (HUS)","C. Disseminated intravascular coagulation (DIC)","D. Severe pre-eclampsia/HELLP"],
-ans:0, exp:"Classic pentad of TTP: microangiopathic hemolytic anemia (MAHA), thrombocytopenia, neurological symptoms, renal dysfunction, fever. Normal PT/APTT supports TTP over DIC. HUS has more renal involvement and typically follows diarrheal illness (E. coli) in children; adults often have TTP. Prompt plasma exchange is life-saving." },
-{ id:119, q:"Pathophysiology of TTP involves:",
-opts:["A. Antiphospholipid antibody-mediated coagulation activation","B. Deficiency/inhibition of ADAMTS13 → ultra-large vWF multimers → platelet microthrombi","C. Factor VIII antibody formation","D. Complement activation (C3/C5 pathway)"],
-ans:1, exp:"TTP pathophysiology: ADAMTS13 normally cleaves ultra-large von Willebrand factor multimers. In TTP, ADAMTS13 is deficient (often due to autoantibodies) → ULvWF multimers accumulate → spontaneous platelet aggregation → widespread platelet microthrombi in small vessels → MAHA + organ ischemia. Complement activation constitutes atypical HUS." },
-{ id:120, q:"Treatment of TTP — which of the following is ABSOLUTELY CONTRAINDICATED?",
-opts:["A. Plasma exchange","B. High-dose corticosteroids","C. platelet transfusion","D. Rituximab"],
-ans:2, exp:"Platelet transfusion is usually contraindicated in TTP because it can fuel microthrombi formation and worsen outcomes, unless there is life-threatening bleeding or need for invasive procedure. Mainstay: plasma exchange (PLEX) + steroids. Rituximab is adjunct for refractory/relapsing. Avoid DDAVP, which may worsen." }
-]
-}
+{ id:"C1", title:"Case 1: 45M with Dyspnea and Hypotension", text:"45M, 3 days progressive dyspnea, severe distress. Flu-like illness 2 weeks ago. BP 80/60, HR 118, RR 28, JVP elevated, heart sounds muffled. CXR: globular cardiac silhouette. ECG: alternating QRS amplitude.", questions:[
+{ id:81, q:"MOST likely diagnosis?", opts:["A. Constrictive pericarditis","B. Cardiac tamponade","C. Tension pneumothorax","D. Acute decompensated HF"], ans:1, exp:"Tamponade: Beck's triad + viral illness + globular heart + electrical alternans." },
+{ id:82, q:"ECG finding of alternating QRS amplitude:", opts:["A. Pulsus alternans","B. Electrical alternans","C. Delta wave","D. Epsilon wave"], ans:1, exp:"Electrical alternans = pathognomonic of cardiac tamponade (swinging heart)." },
+{ id:83, q:"MOST immediate bedside investigation:", opts:["A. Repeat ECG","B. Bedside echocardiography","C. CT thorax","D. Cardiac catheterization"], ans:1, exp:"Echo fastest/most accurate. Shows effusion, RA/RV diastolic collapse." },
+{ id:84, q:"DEFINITIVE emergency treatment:", opts:["A. IV furosemide","B. Pericardiocentesis","C. IV beta-blockers","D. Steroids alone"], ans:1, exp:"Pericardiocentesis removes fluid, improves hemodynamics. Diuretics CONTRAINDICATED." }
+]},
+{ id:"C2", title:"Case 2: Fever, Cough, Consolidation", text:"62M diabetic, 4 days fever 39.5°C, rusty sputum, pleuritic pain. BP 110/70, HR 104, RR 30, SpO2 90%. RLL consolidation on CXR.", questions:[
+{ id:85, q:"Most likely organism:", opts:["A. Klebsiella","B. S. pneumoniae","C. Mycoplasma","D. S. aureus"], ans:1, exp:"Rusty sputum + lobar consolidation = S. pneumoniae (most common CAP)." },
+{ id:86, q:"Severity scoring system for CAP:", opts:["A. APACHE II","B. CURB-65","C. SOFA","D. PSI/PORT"], ans:3, exp:"CURB-65 and PSI both used for CAP severity/site-of-care decisions." },
+{ id:87, q:"CURB-65 score (Urea↑, RR≥30):", opts:["A. 0 - outpatient","B. 2 - inpatient","C. 3 - ICU","D. 5 - ICU"], ans:1, exp:"U(1) + R(1) = 2. Score 2 = INPATIENT treatment recommended." },
+{ id:88, q:"Empirical antibiotic for hospitalized CAP:", opts:["A. Azithromycin alone","B. Beta-lactam ± macrolide/doxycycline","C. Vanco + Zosyn","D. Oseltamivir"], ans:1, exp:"Beta-lactam + macrolide/doxycycline covers atypicals. Azithro monotherapy only for mild outpatient." }
+]},
+{ id:"C3", title:"Case 3: Crushing Chest Pain", text:"56M HTN, DM, smoker. Crushing chest pain 90 min, diaphoresis, nausea. ECG: ST elevation II, III, aVF with reciprocal depression aVL, V1-V2.", questions:[
+{ id:89, q:"Coronary artery involved:", opts:["A. LAD","B. LCx","C. RCA","D. Left main"], ans:2, exp:"II, III, aVF = INFERIOR STEMI = RCA (85%) or LCx (15%)." },
+{ id:90, q:"STEMI management includes all EXCEPT:", opts:["A. Aspirin 300mg","B. Clopidogrel loading","C. IV morphine","D. IV beta-blockers ROUTINELY"], ans:3, exp:"IV beta-blockers NOT routine. Avoid if HR<60, SBP<100, shock, bronchospasm." },
+{ id:91, q:"Additional leads for RV infarction:", opts:["A. V1-V6 sufficient","B. V7-V9","C. V3R, V4R","D. Repeat ECG 6 hrs"], ans:2, exp:"Right-sided leads V3R, V4R. ST elevation ≥1mm in V4R = RV MI. Avoid nitrates/diuretics." },
+{ id:92, q:"Most feared complication first 48 hours:", opts:["A. Dressler's","B. Ventricular fibrillation","C. Papillary rupture","D. Free wall rupture"], ans:1, exp:"VF = leading cause of death in FIRST HOUR post-STEMI. Defibrillate immediately." }
+]},
+{ id:"C4", title:"Case 4: T1DM with Vomiting", text:"22F T1DM, 2 days vomiting, polyuria, drowsiness. Kussmaul breathing, acetone breath. Glucose 450, urine ++++ glucose, ++ ketones.", questions:[
+{ id:93, q:"Anion Gap:", opts:["A. Normal","B. Elevated","C. Low","D. Cannot calculate"], ans:1, exp:"DKA = high anion gap metabolic acidosis (ketoacids)." },
+{ id:94, q:"Corrected sodium:", opts:["A. Lower than measured","B. Higher than measured","C. Same","D. No correction"], ans:1, exp:"Hyperglycemia causes dilutional hyponatremia. Corrected = measured + 1.6×((glucose-100)/100)." },
+{ id:95, q:"Potassium with insulin treatment:", opts:["A. Rise further","B. Drop rapidly","C. Unchanged","D. Fluctuate"], ans:1, exp:"Insulin drives K+ into cells → rapid drop. Total body K+ depleted in DKA despite normal/high serum." },
+{ id:96, q:"Switch to dextrose fluids when:", opts:["A. Glucose <250 mg/dL","B. pH >7.2","C. Bicarbonate normal","D. Never"], ans:0, exp:"Switch to D5W when glucose ~200-250 to prevent hypoglycemia while continuing insulin." }
+]},
+{ id:"C5", title:"Case 5: Frothy Urine, Edema", text:"34M, 3 weeks periorbital swelling, bilateral edema, frothy urine. BP 120/78. Protein ++++, albumin 1.8, Cr 1.2.", questions:[
+{ id:97, q:"Most likely diagnosis:", opts:["A. MCD","B. Membranous nephropathy","C. FSGS","D. IgA"], ans:1, exp:"Adult nephrotic syndrome = Membranous most common. MCD = children." },
+{ id:98, q:"Biopsy finding (EM):", opts:["A. Foot process effacement","B. Subepithelial immune deposits","C. Mesangial IgA","D. Tram-track"], ans:1, exp:"Membranous: Subepithelial deposits, spike and dome on silver stain." },
+{ id:99, q:"Most feared thromboembolic complication:", opts:["A. DVT","B. Cerebral venous thrombosis","C. PE","D. Renal vein thrombosis"], ans:3, exp:"Renal vein thrombosis most feared in nephrotic syndrome. Loss of antithrombin III." },
+{ id:100, q:"First-line immunosuppression:", opts:["A. Prednisolone alone","B. Steroids + alkylating agents","C. Rituximab","D. Calcineurin inhibitors"], ans:2, exp:"Rituximab (anti-CD20) preferred first-line. Targets anti-PLA2R antibodies." }
+]},
+{ id:"C6", title:"Case 6: HBsAg+ with Hematemesis", text:"48M chronic liver disease, HBsAg+. Massive hematemesis. BP 90/60, HR 118. Tense ascites. Hb 8.2, Bili 4.2, Alb 2.4, INR 2.1, Cr 1.8.", questions:[
+{ id:101, q:"Child-Pugh class:", opts:["A. Class A","B. Class B","C. Class C","D. Cannot determine"], ans:2, exp:"Bili(3) + Alb(3) + INR(3) + Ascites(2-3) + Enceph(1) = 11-12 → Class C." },
+{ id:102, q:"Immediate management:", opts:["A. Octreotide + ceftriaxone + band ligation","B. TIPS immediately","C. Propranolol","D. FFP only"], ans:0, exp:"Vasoactive + antibiotics + urgent endoscopy (<12h). TIPS for failures." },
+{ id:103, q:"Creatinine elevated after paracentesis:", opts:["A. HRS","B. Hypovolemic shock","C. SBP","D. Coagulopathy"], ans:0, exp:"Large-volume paracentesis without albumin → HRS. Give 6-8g albumin per liter removed." },
+{ id:104, q:"SAAG 2.4 confirms:", opts:["A. Portal HTN","B. Carcinomatosis","C. TB peritonitis","D. Pancreatitis"], ans:0, exp:"SAAG ≥1.1 = portal HTN (97% accuracy). 2.4 clearly indicates cirrhosis." }
+]},
+{ id:"C7", title:"Case 7: Fever, Headache, Rash", text:"20M student, 2 days fever, headache, neck stiffness, petechial rash. Temp 39.2°C, HR 110. No focal deficits.", questions:[
+{ id:105, q:"Most likely organism:", opts:["A. N. meningitidis","B. S. pneumoniae","C. H. influenzae","D. Listeria"], ans:0, exp:"Petechial rash = meningococcal sepsis (N. meningitidis). High fatality risk." },
+{ id:106, q:"Correct management sequence:", opts:["A. CT → LP → antibiotics","B. Blood cultures → antibiotics → CT/LP","C. Dexamethasone → antibiotics → LP","D. Antibiotics → LP → CT"], ans:1, exp:"Blood cultures first, then antibiotics within 1 hour. Don't delay for imaging." },
+{ id:107, q:"Empirical antibiotic:", opts:["A. Vanco + ceftriaxone","B. Ampicillin + gentamicin","C. Meropenem","D. Penicillin G"], ans:0, exp:"Adults <50: Vanco + 3rd gen cephalosporin. Add ampicillin if Listeria risk (age>50, immunocompromised)." },
+{ id:108, q:"CSF in bacterial meningitis:", opts:["A. High glucose, low protein, lymphocytes","B. Low glucose, high protein, neutrophils","C. Normal all","D. Low glucose, high protein, eosinophils"], ans:1, exp:"Bacterial: Low glucose (<40), high protein (>100), neutrophilic pleocytosis (>1000)." }
+]},
+{ id:"C8", title:"Case 8: Post-Op Breathlessness", text:"55M, 3 days post-knee replacement. Sudden pleuritic pain, dyspnea, hemoptysis. HR 112, RR 26, SpO2 92%. ECG: S1Q3T3.", questions:[
+{ id:109, q:"Wells score (HR>100, surgery, alternative less likely):", opts:["A. 3.0","B. 4.5","C. 6.0","D. 7.5"], ans:0, exp:"HR>100(1.5) + surgery(1.5) + alternative less likely(3) = 6.0. ≥4 = PE likely." },
+{ id:110, q:"Gold standard for PE:", opts:["A. D-dimer","B. V/Q scan","C. CTPA","D. Doppler US"], ans:2, exp:"CTPA is gold standard. Direct visualization of emboli. V/Q if contrast contraindicated." },
+{ id:111, q:"Treatment (hemodynamically stable):", opts:["A. Wait for imaging","B. Start LMWH immediately","C. tPA","D. IVC filter"], ans:1, exp:"Start anticoagulation immediately if high suspicion. Don't delay for imaging." },
+{ id:112, q:"Contraindicated anticoagulant post-op:", opts:["A. UFH","B. LMWH","C. DOAC","D. All equal"], ans:2, exp:"DOACs have higher bleeding risk early post-op. LMWH preferred after hemostasis secured." }
+]},
+{ id:"C9", title:"Case 9: Bloody Diarrhea", text:"28F, 6 months bloody diarrhea, cramping, urgency. Colonoscopy: continuous inflammation rectum to descending colon. Crypt abscesses, no granulomas. Arthritis improves with flares.", questions:[
+{ id:113, q:"Most likely diagnosis:", opts:["A. UC","B. Crohn's","C. Infectious colitis","D. Ischemic colitis"], ans:0, exp:"UC: Continuous from rectum, mucosal, crypt abscesses, no granulomas. Crohn's = skip, transmural, granulomas." },
+{ id:114, q:"Joint symptoms represent:", opts:["A. Septic arthritis","B. Peripheral arthropathy - IBD extraintestinal","C. RA","D. Psoriatic arthritis"], ans:1, exp:"IBD arthropathy parallels bowel activity. Peripheral, asymmetric, pauci-articular." },
+{ id:115, q:"First-line for mild-moderate UC:", opts:["A. IV steroids","B. Oral 5-ASA","C. Infliximab","D. Colectomy"], ans:1, exp:"5-ASA (mesalamine) ± topical. Steroids for moderate-severe. Surgery for refractory." },
+{ id:116, q:"CRC risk increases after:", opts:["A. 1 year","B. 5 years","C. 8-10 years","D. 20 years"], ans:2, exp:"Surveillance colonoscopy begins 8-10 years after diagnosis for pancolitis/left-sided colitis." }
+]},
+{ id:"C10", title:"Case 10: Confusion, Petechiae, Renal", text:"38F, 5 days flu-like, now confusion, fever, petechiae. Hb 9.8, Plt 18,000, Cr 2.4, Bili 2.8, LDH 900. PT/APTT normal.", questions:[
+{ id:117, q:"Normal PT/APTT distinguishes from:", opts:["A. ITP","B. DIC","C. Aplastic anemia","D. HIT"], ans:1, exp:"Normal PT/APTT rules out DIC (prolonged in DIC). TTP/HUS have normal coagulation." },
+{ id:118, q:"Most likely diagnosis (pentad):", opts:["A. TTP","B. HUS","C. DIC","D. HELLP"], ans:0, exp:"TTP pentad: MAHA, thrombocytopenia, fever, neuro symptoms, renal dysfunction. Normal PT/APTT." },
+{ id:119, q:"Pathophysiology:", opts:["A. Antiphospholipid antibodies","B. ADAMTS13 deficiency → ULvWF → microthrombi","C. Factor VIII antibody","D. Complement activation"], ans:1, exp:"ADAMTS13 deficiency → ultra-large vWF multimers → platelet microthrombi → MAHA + ischemia." },
+{ id:120, q:"ABSOLUTELY CONTRAINDICATED:", opts:["A. Plasma exchange","B. Steroids","C. Platelet transfusion","D. Rituximab"], ans:2, exp:"Platelet transfusion contraindicated (fuels microthrombi) unless life-threatening bleeding." }
+]}
 ]
 };
 
-// ✅ ALL VARIABLES PROPERLY INITIALIZED
 let userAnswers = {};
 let submitted = false;
 let examStarted = false;
@@ -1080,7 +536,6 @@ let timeRemaining = 7200;
 let timerInterval = null;
 let shuffledQuestions = [];
 
-// ✅ START EXAM FUNCTION - NOW WORKS PROPERLY
 function startExam() {
     examStarted = true;
     document.getElementById('startScreen').classList.add('hidden');
@@ -1094,7 +549,7 @@ function startExam() {
 
 function startTimer() {
     updateTimerDisplay();
-    timerInterval = setInterval(() => {
+    timerInterval = setInterval(function() {
         timeRemaining--;
         updateTimerDisplay();
         if (timeRemaining <= 900) {
@@ -1122,39 +577,67 @@ function updateTimerDisplay() {
     const hStr = hrs.toString().padStart(2, '0');
     const mStr = mins.toString().padStart(2, '0');
     const sStr = secs.toString().padStart(2, '0');
-    document.getElementById('timerDisplay').textContent = `${hStr}:${mStr}:${sStr}`;
+    document.getElementById('timerDisplay').textContent = hStr + ':' + mStr + ':' + sStr;
 }
 
 function prepareShuffledQuestions() {
     const all = [];
-    data.standalone.forEach(q => {
-        all.push({ ...q, isCase: false, originalId: q.id });
+    data.standalone.forEach(function(q) {
+        all.push({ 
+            id: q.id, 
+            topic: q.topic, 
+            q: q.q, 
+            opts: q.opts, 
+            ans: q.ans, 
+            exp: q.exp, 
+            isCase: false, 
+            originalId: q.id 
+        });
     });
-    data.cases.forEach(cs => {
-        cs.questions.forEach(q => {
-            all.push({ ...q, isCase: true, originalId: q.id });
+    data.cases.forEach(function(cs) {
+        cs.questions.forEach(function(q) {
+            all.push({ 
+                id: q.id, 
+                q: q.q, 
+                opts: q.opts, 
+                ans: q.ans, 
+                exp: q.exp, 
+                isCase: true, 
+                originalId: q.id 
+            });
         });
     });
     for (let i = all.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [all[i], all[j]] = [all[j], all[i]];
+        const temp = all[i];
+        all[i] = all[j];
+        all[j] = temp;
     }
-    shuffledQuestions = all.map((q, idx) => ({
-        ...q,
-        displayId: idx + 1
-    }));
+    shuffledQuestions = all.map(function(q, idx) {
+        return {
+            id: q.id,
+            topic: q.topic,
+            q: q.q,
+            opts: q.opts,
+            ans: q.ans,
+            exp: q.exp,
+            isCase: q.isCase,
+            originalId: q.originalId,
+            displayId: idx + 1
+        };
+    });
 }
 
 function buildQuestions() {
     const container = document.getElementById('questionsContainer');
     container.innerHTML = '';
-    const questionsToShow = shuffledQuestions.filter(q => {
+    const questionsToShow = shuffledQuestions.filter(function(q) {
         if (currentFilter === 'all') return true;
         if (currentFilter === 'standalone') return !q.isCase;
         if (currentFilter === 'case') return q.isCase;
         return true;
     });
-    questionsToShow.forEach(q => {
+    questionsToShow.forEach(function(q) {
         const card = createQCard(q);
         container.appendChild(card);
     });
@@ -1164,24 +647,27 @@ function buildQuestions() {
 function createQCard(q) {
     const card = document.createElement('div');
     card.className = 'q-card';
-    card.id = `qcard-${q.displayId}`;
+    card.id = 'qcard-' + q.displayId;
     card.dataset.qid = q.originalId;
     card.dataset.ans = q.ans;
-    card.innerHTML = `
-<div class="q-header">
-<span class="q-num">Q${q.displayId}</span>
-<p class="q-text">${q.q}</p>
-</div>
-<div class="options" id="opts-${q.displayId}">
-${q.opts.map((opt, i) => `
-<button class="option-btn" onclick="selectAnswer(${q.displayId}, ${i}, this)" data-idx="${i}">
-<span class="option-letter">${String.fromCharCode(65+i)}</span>
-<span>${opt.substring(opt.indexOf('.')+1).trim()}</span>
-</button>
-`).join('')}
-</div>
-<div class="explanation" id="exp-${q.displayId}"><strong>✓ Explanation:</strong> ${q.exp}</div>
-`;
+    
+    let optionsHtml = '';
+    for (let i = 0; i < q.opts.length; i++) {
+        const optText = q.opts[i].substring(q.opts[i].indexOf('.') + 1).trim();
+        const letter = String.fromCharCode(65 + i);
+        optionsHtml += '<button class="option-btn" onclick="selectAnswer(' + q.displayId + ', ' + i + ', this)" data-idx="' + i + '">' +
+            '<span class="option-letter">' + letter + '</span>' +
+            '<span>' + optText + '</span>' +
+            '</button>';
+    }
+    
+    card.innerHTML = '<div class="q-header">' +
+        '<span class="q-num">Q' + q.displayId + '</span>' +
+        '<p class="q-text">' + q.q + '</p>' +
+        '</div>' +
+        '<div class="options" id="opts-' + q.displayId + '">' + optionsHtml + '</div>' +
+        '<div class="explanation" id="exp-' + q.displayId + '"><strong>✓ Explanation:</strong> ' + q.exp + '</div>';
+    
     const originalId = q.originalId;
     if (userAnswers[originalId] !== undefined) {
         const chosenIdx = userAnswers[originalId];
@@ -1190,22 +676,24 @@ ${q.opts.map((opt, i) => `
             buttons[chosenIdx].classList.add('selected');
         }
         const correctIdx = q.ans;
-        buttons.forEach((btn, i) => {
-            btn.disabled = true;
-            if (i === correctIdx) btn.classList.add('correct');
-            if (i === chosenIdx && chosenIdx !== correctIdx) btn.classList.add('wrong');
-        });
+        for (let i = 0; i < buttons.length; i++) {
+            buttons[i].disabled = true;
+            if (i === correctIdx) buttons[i].classList.add('correct');
+            if (i === chosenIdx && chosenIdx !== correctIdx) buttons[i].classList.add('wrong');
+        }
         card.classList.add('answered');
-        document.getElementById(`exp-${q.displayId}`).classList.add('show');
+        document.getElementById('exp-' + q.displayId).classList.add('show');
     }
     return card;
 }
 
 function selectAnswer(displayId, idx, btn) {
     if (submitted) return;
-    const card = document.getElementById(`qcard-${displayId}`);
+    const card = document.getElementById('qcard-' + displayId);
     const buttons = card.querySelectorAll('.option-btn');
-    buttons.forEach(b => b.classList.remove('selected'));
+    for (let i = 0; i < buttons.length; i++) {
+        buttons[i].classList.remove('selected');
+    }
     btn.classList.add('selected');
     const originalId = parseInt(card.dataset.qid);
     const prev = userAnswers[originalId];
@@ -1214,37 +702,45 @@ function selectAnswer(displayId, idx, btn) {
     updateProgress();
     updateLiveScore();
     const correctIdx = parseInt(card.dataset.ans);
-    buttons.forEach((b, i) => {
-        b.disabled = true;
+    for (let i = 0; i < buttons.length; i++) {
+        buttons[i].disabled = true;
         if (i === correctIdx) {
-            b.classList.add('correct');
+            buttons[i].classList.add('correct');
         }
         if (i === idx && idx !== correctIdx) {
-            b.classList.add('wrong');
+            buttons[i].classList.add('wrong');
         }
-    });
+    }
     if (idx !== correctIdx) {
         btn.classList.remove('selected');
     }
-    document.getElementById(`exp-${displayId}`).classList.add('show');
+    document.getElementById('exp-' + displayId).classList.add('show');
 }
 
 function updateProgress() {
     const total = 120;
     const answered = Object.keys(userAnswers).length;
-    document.getElementById('progBar').style.width = (answered/total*100)+'%';
-    document.getElementById('progText').textContent = `${answered} / ${total} answered`;
+    document.getElementById('progBar').style.width = (answered / total * 100) + '%';
+    document.getElementById('progText').textContent = answered + ' / ' + total + ' answered';
 }
 
 function updateLiveScore() {
     let correct = 0, total = 0;
-    data.standalone.forEach(q => {
-        if (userAnswers[q.id] !== undefined) { total++; if (userAnswers[q.id] === q.ans) correct++; }
+    data.standalone.forEach(function(q) {
+        if (userAnswers[q.id] !== undefined) { 
+            total++; 
+            if (userAnswers[q.id] === q.ans) correct++; 
+        }
     });
-    data.cases.forEach(cs => cs.questions.forEach(q => {
-        if (userAnswers[q.id] !== undefined) { total++; if (userAnswers[q.id] === q.ans) correct++; }
-    }));
-    document.getElementById('liveScore').textContent = total > 0 ? `${correct}/${total}` : '0/0';
+    data.cases.forEach(function(cs) { 
+        cs.questions.forEach(function(q) {
+            if (userAnswers[q.id] !== undefined) { 
+                total++; 
+                if (userAnswers[q.id] === q.ans) correct++; 
+            }
+        }); 
+    });
+    document.getElementById('liveScore').textContent = total > 0 ? correct + '/' + total : '0/0';
 }
 
 function submitExam() {
@@ -1252,24 +748,25 @@ function submitExam() {
     if (timerInterval) clearInterval(timerInterval);
     let correct = 0, wrong = 0, unanswered = 0;
     let scCorrect = 0, scTotal = 0, cbCorrect = 0, cbTotal = 0;
-    data.standalone.forEach(q => {
+    data.standalone.forEach(function(q) {
         scTotal++;
         const ua = userAnswers[q.id];
         if (ua === undefined) { unanswered++; }
         else if (ua === q.ans) { correct++; scCorrect++; }
         else { wrong++; }
     });
-    data.cases.forEach(cs => cs.questions.forEach(q => {
-        cbTotal++;
-        const ua = userAnswers[q.id];
-        if (ua === undefined) { unanswered++; }
-        else if (ua === q.ans) { correct++; cbCorrect++; }
-        else { wrong++; }
+    data.cases.forEach(function(cs) { 
+        cs.questions.forEach(function(q) {
+            cbTotal++;
+            const ua = userAnswers[q.id];
+            if (ua === undefined) { unanswered++; }
+            else if (ua === q.ans) { correct++; cbCorrect++; }
+            else { wrong++; }
+        }); 
     });
     const total = 120;
-    const pct = Math.round(correct/total*100);
+    const pct = Math.round(correct / total * 100);
     let grade = '';
-    // ✅ PASSING MARK IS 60%
     if (pct >= 80) grade = '🏆 Excellent — Exam Ready!';
     else if (pct >= 60) grade = '✅ Passed — Good preparation!';
     else if (pct >= 50) grade = '⚠️ Below Passing — Intensive revision needed';
@@ -1279,18 +776,23 @@ function submitExam() {
     document.getElementById('rbCorrect').textContent = correct;
     document.getElementById('rbWrong').textContent = wrong;
     document.getElementById('rbUnanswered').textContent = unanswered;
-    document.getElementById('rbStandaloneScore').textContent = Math.round(scCorrect/scTotal*100) + '%';
-    document.getElementById('rbCaseScore').textContent = Math.round(cbCorrect/cbTotal*100) + '%';
+    document.getElementById('rbStandaloneScore').textContent = Math.round(scCorrect / scTotal * 100) + '%';
+    document.getElementById('rbCaseScore').textContent = Math.round(cbCorrect / cbTotal * 100) + '%';
     document.getElementById('resultsPanel').classList.add('show');
     document.getElementById('submitBtn').style.display = 'none';
-    document.getElementById('liveScore').textContent = `${correct}/120`;
+    document.getElementById('liveScore').textContent = correct + '/120';
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    setTimeout(() => document.getElementById('resultsPanel').scrollIntoView({ behavior: 'smooth', block: 'center' }), 300);
+    setTimeout(function() {
+        document.getElementById('resultsPanel').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 300);
 }
 
 function showSection(type) {
     currentFilter = type;
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    const tabs = document.querySelectorAll('.tab');
+    for (let i = 0; i < tabs.length; i++) {
+        tabs[i].classList.remove('active');
+    }
     event.target.classList.add('active');
     buildQuestions();
 }
