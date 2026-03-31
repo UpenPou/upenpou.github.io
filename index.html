@@ -3,825 +3,909 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NMC Internal Medicine · 120 MCQs | April 2026</title>
+<title>MD Internal Medicine Exit Exam</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: { extend: { colors: { teal: { 400: '#2dd4bf', 500: '#14b8a6', 600: '#0d9488' } } } }
+}
+</script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
-:root {
---bg: #0b0f1a;
---surface: #111827;
---surface2: #1a2235;
---border: #1e2d45;
---accent: #3b82f6;
---accent2: #06b6d4;
---gold: #f59e0b;
---green: #10b981;
---red: #ef4444;
---text: #e2e8f0;
---muted: #64748b;
---soft: #94a3b8;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body {
-background: var(--bg);
-color: var(--text);
-font-family: 'IBM Plex Sans', sans-serif;
-min-height: 100vh;
-background-image:
-radial-gradient(ellipse at 20% 50%, rgba(59,130,246,0.04) 0%, transparent 60%),
-radial-gradient(ellipse at 80% 20%, rgba(6,182,212,0.03) 0%, transparent 50%);
-}
-.header {
-background: linear-gradient(135deg, #0d1b2e 0%, #0b1628 100%);
-border-bottom: 1px solid var(--border);
-padding: 32px 40px 28px;
-position: sticky;
-top: 0;
-z-index: 100;
-backdrop-filter: blur(12px);
-}
-.header-top {
-display: flex;
-align-items: center;
-justify-content: space-between;
-flex-wrap: wrap;
-gap: 16px;
-}
-.header-title {
-font-family: 'Playfair Display', serif;
-font-size: 1.6rem;
-font-weight: 900;
-background: linear-gradient(135deg, #60a5fa, #06b6d4);
--webkit-background-clip: text;
--webkit-text-fill-color: transparent;
-letter-spacing: -0.02em;
-}
-.header-sub {
-font-size: 0.78rem;
-color: var(--muted);
-margin-top: 4px;
-letter-spacing: 0.08em;
-text-transform: uppercase;
-}
-.score-display {
-background: var(--surface2);
-border: 1px solid var(--border);
-border-radius: 12px;
-padding: 10px 20px;
-text-align: center;
-}
-.score-num {
-font-family: 'IBM Plex Mono', monospace;
-font-size: 1.4rem;
-font-weight: 500;
-color: var(--accent2);
-}
-.score-label { font-size: 0.7rem; color: var(--muted); margin-top: 2px; }
-.tabs {
-display: flex;
-gap: 8px;
-margin-top: 20px;
-flex-wrap: wrap;
-}
-.tab {
-padding: 6px 18px;
-border-radius: 8px;
-border: 1px solid var(--border);
-background: transparent;
-color: var(--muted);
-font-size: 0.8rem;
-cursor: pointer;
-font-family: 'IBM Plex Sans', sans-serif;
-transition: all 0.18s;
-font-weight: 500;
-}
-.tab:hover { border-color: var(--accent); color: var(--text); }
-.tab.active {
-background: var(--accent);
-border-color: var(--accent);
-color: #fff;
-}
-.progress-wrap {
-background: var(--surface2);
-border-bottom: 1px solid var(--border);
-padding: 10px 40px;
-display: flex;
-align-items: center;
-gap: 16px;
-}
-.progress-bar-bg {
-flex: 1;
-height: 4px;
-background: var(--border);
-border-radius: 2px;
-overflow: hidden;
-}
-.progress-bar-fill {
-height: 100%;
-background: linear-gradient(90deg, var(--accent), var(--accent2));
-border-radius: 2px;
-transition: width 0.3s ease;
-width: 0%;
-}
-.progress-text {
-font-family: 'IBM Plex Mono', monospace;
-font-size: 0.75rem;
-color: var(--muted);
-white-space: nowrap;
-}
-.main { max-width: 900px; margin: 0 auto; padding: 32px 24px 80px; }
-.q-card {
-background: var(--surface);
-border: 1px solid var(--border);
-border-radius: 14px;
-padding: 20px 22px;
-margin: 10px 0;
-transition: border-color 0.2s;
-}
-.q-card:hover { border-color: #2a3f5f; }
-.q-card.answered { border-color: #1e3a5f; }
-.q-header {
-display: flex;
-align-items: flex-start;
-gap: 12px;
-margin-bottom: 14px;
-}
-.q-num {
-background: rgba(59,130,246,0.12);
-color: var(--accent);
-font-family: 'IBM Plex Mono', monospace;
-font-size: 0.72rem;
-font-weight: 500;
-padding: 3px 9px;
-border-radius: 6px;
-white-space: nowrap;
-margin-top: 2px;
-flex-shrink: 0;
-}
-.q-text {
-font-size: 0.92rem;
-line-height: 1.55;
-color: var(--text);
-font-weight: 400;
-}
-.options { display: flex; flex-direction: column; gap: 7px; }
-.option-btn {
-display: flex;
-align-items: flex-start;
-gap: 10px;
-padding: 10px 14px;
-background: var(--surface2);
-border: 1px solid var(--border);
-border-radius: 9px;
-cursor: pointer;
-text-align: left;
-font-family: 'IBM Plex Sans', sans-serif;
-font-size: 0.87rem;
-color: var(--soft);
-transition: all 0.15s;
-width: 100%;
-}
-.option-btn:hover:not(:disabled) {
-border-color: var(--accent);
-background: rgba(59,130,246,0.06);
-color: var(--text);
-}
-.option-btn:disabled { cursor: default; }
-.option-letter {
-background: rgba(255,255,255,0.06);
-color: var(--muted);
-font-weight: 600;
-font-size: 0.78rem;
-padding: 1px 7px;
-border-radius: 4px;
-flex-shrink: 0;
-font-family: 'IBM Plex Mono', monospace;
-margin-top: 1px;
-}
-.option-btn.correct {
-background: rgba(16,185,129,0.1);
-border-color: var(--green);
-color: #6ee7b7;
-}
-.option-btn.correct .option-letter { background: rgba(16,185,129,0.2); color: var(--green); }
-.option-btn.wrong {
-background: rgba(239,68,68,0.08);
-border-color: var(--red);
-color: #fca5a5;
-}
-.option-btn.wrong .option-letter { background: rgba(239,68,68,0.15); color: var(--red); }
-.explanation {
-display: none;
-margin-top: 12px;
-background: rgba(6,182,212,0.05);
-border: 1px solid rgba(6,182,212,0.2);
-border-radius: 9px;
-padding: 12px 14px;
-font-size: 0.84rem;
-line-height: 1.6;
-color: #7dd3fc;
-}
-.explanation.show { display: block; }
-.explanation strong { color: var(--accent2); }
-.results-panel {
-display: none;
-background: var(--surface2);
-border: 1px solid var(--border);
-border-radius: 16px;
-padding: 32px;
-text-align: center;
-margin: 32px 0;
-}
-.results-panel.show { display: block; }
-.result-score-big {
-font-family: 'Playfair Display', serif;
-font-size: 4rem;
-font-weight: 900;
-background: linear-gradient(135deg, #60a5fa, #06b6d4);
--webkit-background-clip: text;
--webkit-text-fill-color: transparent;
-}
-.result-grade {
-font-size: 1.2rem;
-color: var(--gold);
-font-weight: 600;
-margin: 8px 0;
-}
-.result-breakdown {
-display: flex;
-gap: 16px;
-justify-content: center;
-flex-wrap: wrap;
-margin-top: 20px;
-}
-.rb-item {
-background: var(--surface);
-border: 1px solid var(--border);
-border-radius: 10px;
-padding: 12px 20px;
-text-align: center;
-}
-.rb-num { font-family: 'IBM Plex Mono', monospace; font-size: 1.4rem; color: var(--accent2); }
-.rb-label { font-size: 0.72rem; color: var(--muted); margin-top: 4px; }
-.submit-btn {
-display: inline-block;
-margin: 40px 12px 0 0;
-padding: 14px 48px;
-background: linear-gradient(135deg, var(--accent), var(--accent2));
-color: #fff;
-border: none;
-border-radius: 12px;
-font-size: 1rem;
-font-weight: 600;
-cursor: pointer;
-font-family: 'IBM Plex Sans', sans-serif;
-transition: opacity 0.2s, transform 0.1s;
-letter-spacing: 0.02em;
-}
-.submit-btn:hover { opacity: 0.9; transform: translateY(-1px); }
-.submit-btn:active { transform: translateY(0); }
-.start-screen {
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-min-height: 60vh;
-text-align: center;
-padding: 40px 20px;
-}
-.start-screen h1 {
-font-family: 'Playfair Display', serif;
-font-size: 2.5rem;
-background: linear-gradient(135deg, #60a5fa, #06b6d4);
--webkit-background-clip: text;
--webkit-text-fill-color: transparent;
-margin-bottom: 16px;
-}
-.start-screen p {
-color: var(--muted);
-font-size: 1rem;
-margin-bottom: 32px;
-max-width: 500px;
-line-height: 1.6;
-}
-.start-btn {
-padding: 16px 64px;
-background: linear-gradient(135deg, var(--accent), var(--accent2));
-color: #fff;
-border: none;
-border-radius: 12px;
-font-size: 1.1rem;
-font-weight: 600;
-cursor: pointer;
-font-family: 'IBM Plex Sans', sans-serif;
-transition: opacity 0.2s, transform 0.1s;
-letter-spacing: 0.02em;
-}
-.start-btn:hover { opacity: 0.9; transform: translateY(-1px); }
-.start-btn:active { transform: translateY(0); }
-.case-text {
-background: rgba(59,130,246,0.08);
-border-left: 3px solid var(--accent);
-padding: 12px 16px;
-margin-bottom: 14px;
-font-size: 0.85rem;
-line-height: 1.6;
-color: var(--soft);
-border-radius: 0 8px 8px 0;
-}
-.hidden { display: none !important; }
-@media (max-width: 640px) {
-.header { padding: 20px; }
-.main { padding: 20px 14px 60px; }
-.result-score-big { font-size: 3rem; }
-.start-screen h1 { font-size: 1.8rem; }
-.start-btn { padding: 14px 40px; font-size: 1rem; }
-}
+body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:#0a0f1a;color:#e2e8f0}
+.opt-btn{transition:all .15s;border:2px solid #334155;background:#1e293b}
+.opt-btn:hover{border-color:#14b8a6;background:#1a2e3b}
+.opt-btn.selected{border-color:#3b82f6;background:#1e3a5f}
+.opt-btn.correct{border-color:#10b981!important;background:rgba(16,185,129,.15)!important}
+.opt-btn.wrong{border-color:#f43f5e!important;background:rgba(244,63,94,.12)!important}
+.opt-btn.disabled{pointer-events:none;opacity:.7}
+.case-vignette{background:linear-gradient(135deg,#1a2332,#1e293b);border-left:4px solid #14b8a6}
+.feedback-box{animation:fadeInUp .3s ease-out}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.scroll-smooth{scroll-behavior:smooth}
+.question-card{animation:fadeInUp .25s ease-out}
+.review-correct{border-left:4px solid #10b981}
+.review-wrong{border-left:4px solid #f43f5e}
+::-webkit-scrollbar{width:8px}
+::-webkit-scrollbar-track{background:#0f172a}
+::-webkit-scrollbar-thumb{background:#334155;border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:#475569}
 </style>
 </head>
-<body>
-<div class="header">
-<div class="header-top">
-<div>
-<div class="header-title">NMC Internal Medicine · 120 MCQs</div>
-<div class="header-sub">Nepal Medical Council PG Special Exam · April 3, 2026 · Mudit Khanna Reference</div>
-</div>
-<div class="header-right" style="display:flex; gap:12px; align-items:center;">
-<div class="score-display">
-<div class="score-num" id="timerDisplay">02:00:00</div>
-<div class="score-label">Time Remaining</div>
-</div>
-<div class="score-display" style="border-color:rgba(6,182,212,0.3);">
-<div class="score-num" id="liveScore">0/0</div>
-<div class="score-label">Correct/Answered</div>
-</div>
-</div>
-</div>
-<div class="tabs hidden" id="tabsContainer">
-<button class="tab active" onclick="showSection('all')">All 120</button>
-<button class="tab" onclick="showSection('standalone')">Standalone (1-80)</button>
-<button class="tab" onclick="showSection('case')">Case-Based (81-120)</button>
-</div>
-</div>
-<div class="progress-wrap hidden" id="progressContainer">
-<div class="progress-bar-bg"><div class="progress-bar-fill" id="progBar"></div></div>
-<div class="progress-text" id="progText">0 / 120 answered</div>
-</div>
-<div class="main">
-<div class="start-screen" id="startScreen">
-<h1>NMC Internal Medicine Mock Exam</h1>
-<p>120 MCQs · 2 Hours · Passing Mark: 60%<br>80 Standalone Questions + 40 Case-Based Questions (10 Cases)<br>Immediate feedback after each answer</p>
-<button class="start-btn" onclick="startExam()">Start Exam</button>
-</div>
-<div id="examContent" class="hidden">
-<button class="submit-btn" id="submitBtn" onclick="submitExam()">Submit Exam & See Results</button>
-<div id="questionsContainer"></div>
-<div class="results-panel" id="resultsPanel">
-<div class="result-score-big" id="finalScore">0%</div>
-<div class="result-grade" id="finalGrade"></div>
-<div class="result-breakdown">
-<div class="rb-item"><div class="rb-num" id="rbCorrect">0</div><div class="rb-label">Correct</div></div>
-<div class="rb-item"><div class="rb-num" id="rbWrong">0</div><div class="rb-label">Wrong</div></div>
-<div class="rb-item"><div class="rb-num" id="rbUnanswered">0</div><div class="rb-label">Unanswered</div></div>
-<div class="rb-item"><div class="rb-num" id="rbStandaloneScore">0%</div><div class="rb-label">Standalone</div></div>
-<div class="rb-item"><div class="rb-num" id="rbCaseScore">0%</div><div class="rb-label">Case-Based</div></div>
-</div>
-<p style="margin-top:24px;font-size:0.85rem;color:var(--muted);">Review all answers below — correct ones are highlighted in green, wrong ones in red.</p>
-</div>
-</div>
-</div>
-<script>
-const data = {
-standalone: [
-{ id:1, topic:"Cardiology", q:"Pulsus paradoxus (>10 mmHg fall in systolic BP during inspiration) is characteristically ABSENT in:", opts:["A. Cardiac tamponade","B. Severe bronchial asthma","C. Constrictive pericarditis","D. Tension pneumothorax"], ans:2, exp:"Constrictive pericarditis causes Kussmaul's sign (paradoxical RISE in JVP on inspiration), NOT pulsus paradoxus. The rigid pericardium prevents ventricular interdependence seen in tamponade." },
-{ id:2, topic:"Cardiology", q:"Water-hammer (Corrigan's) pulse is pathognomonic of:", opts:["A. Mitral stenosis","B. Aortic regurgitation","C. Aortic stenosis","D. Tricuspid regurgitation"], ans:1, exp:"Water-hammer pulse = rapidly rising and collapsing pulse due to wide pulse pressure. Classic in Aortic Regurgitation." },
-{ id:3, topic:"Cardiology", q:"Austin Flint murmur is best described as:", opts:["A. Systolic murmur at apex due to mitral regurgitation","B. Mid-diastolic rumble at apex in aortic regurgitation (functional MS)","C. Opening snap followed by diastolic murmur in MS","D. Continuous murmur in PDA"], ans:1, exp:"Austin Flint murmur is a mid-to-late diastolic apical rumble in severe AR. The regurgitant jet partially closes anterior mitral leaflet, causing functional MS." },
-{ id:4, topic:"Cardiology", q:"Saddle-shaped (concave upward) ST elevation in ALL leads EXCEPT aVR and V1 is characteristic of:", opts:["A. Acute STEMI","B. Acute pericarditis","C. Prinzmetal's angina","D. Left ventricular aneurysm"], ans:1, exp:"Acute pericarditis shows diffuse, saddle-shaped ST elevation in virtually all leads except aVR and V1." },
-{ id:5, topic:"Cardiology", q:"Beck's triad in cardiac tamponade consists of all EXCEPT:", opts:["A. Hypotension","B. Raised JVP","C. Muffled heart sounds","D. Pulsus alternans"], ans:3, exp:"Beck's triad: Hypotension, Raised JVP, Muffled heart sounds. Pulsus PARADOXUS (not alternans) is hallmark of tamponade." },
-{ id:6, topic:"Cardiology", q:"Roth spots (oval hemorrhages with pale centre) are seen in:", opts:["A. Hypertensive retinopathy","B. Infective endocarditis","C. Diabetic retinopathy","D. Severe anemia"], ans:1, exp:"Roth spots are retinal hemorrhages with pale center. Classically associated with Infective Endocarditis." },
-{ id:7, topic:"Cardiology", q:"Which cardiac biomarker rises EARLIEST after acute MI?", opts:["A. CK-MB","B. Troponin I","C. Myoglobin","D. LDH"], ans:2, exp:"Myoglobin rises within 1-3 hours (earliest). Troponin is most specific. CK-MB rises 4-6 hrs." },
-{ id:8, topic:"Cardiology", q:"In STEMI, ACC/AHA door-to-balloon time target for primary PCI:", opts:["A. 30 minutes","B. 60 minutes","C. 90 minutes","D. 120 minutes"], ans:2, exp:"Door-to-balloon time ≤90 minutes. Door-to-needle for thrombolysis ≤30 minutes." },
-{ id:9, topic:"Cardiology", q:"Dressler's syndrome (post-MI pericarditis) characteristically occurs:", opts:["A. Within 24-48 hours","B. 3-7 days post-MI","C. 2-10 weeks post-MI","D. Only after cardiac surgery"], ans:2, exp:"Dressler's syndrome occurs 2-10 weeks (classically 4-8 weeks) after MI. Autoimmune pericarditis." },
-{ id:10, topic:"Cardiology", q:"Most common cause of secondary hypertension:", opts:["A. Primary hyperaldosteronism","B. Renal parenchymal disease","C. Pheochromocytoma","D. Coarctation of aorta"], ans:1, exp:"Renal parenchymal disease is MOST COMMON cause of secondary HTN (~75-80%)." },
-{ id:11, topic:"Cardiology", q:"Most common arrhythmia immediately following acute MI:", opts:["A. Atrial fibrillation","B. Ventricular premature beats (PVCs)","C. Ventricular fibrillation","D. Complete heart block"], ans:1, exp:"Ventricular premature beats (PVCs) are MOST COMMON post-MI (>90%). VF is most common cause of death in first hour." },
-{ id:12, topic:"Cardiology", q:"Which statement about Infective Endocarditis is FALSE?", opts:["A. Most common organism in native valve IE is Strep viridans","B. IVDU-associated IE affects tricuspid valve","C. S. aureus most common in prosthetic valve IE <60 days","D. Osler nodes are painless, Janeway lesions are painful"], ans:3, exp:"Osler nodes are PAINFUL; Janeway lesions are PAINLESS. Memory: Osler = Ouch." },
-{ id:13, topic:"Cardiology", q:"In complete heart block, ventricular rate is maintained by:", opts:["A. SA node","B. AV nodal escape rhythm","C. Idioventricular pacemaker","D. Internodal tracts"], ans:2, exp:"Idioventricular (His-Purkinje) pacemaker at 20-40/min with WIDE QRS." },
-{ id:14, topic:"Cardiology", q:"Which murmur increases in intensity on SQUATTING?", opts:["A. HOCM","B. Mitral valve prolapse","C. Valvular aortic stenosis","D. Tricuspid stenosis"], ans:2, exp:"Squatting increases LV volume → DECREASES HOCM and MVP murmurs. AS murmur relatively fixed." },
-{ id:15, topic:"Cardiology", q:"Drug of choice for WPW syndrome with atrial fibrillation:", opts:["A. Digoxin","B. Verapamil","C. Adenosine","D. Procainamide (or DC cardioversion)"], ans:3, exp:"AVOID AV nodal blockers (digoxin, verapamil, adenosine) in WPW+AF. Use Procainamide or DC cardioversion." },
-{ id:16, topic:"Pulmonology", q:"Spirometry in COPD characteristically shows:", opts:["A. FEV1/FVC >0.70","B. FEV1/FVC <0.70, not fully reversible","C. Normal FEV1/FVC","D. Increased FEV1/FVC ratio"], ans:1, exp:"COPD: Post-bronchodilator FEV1/FVC <0.70 (fixed airflow obstruction). Asthma is REVERSIBLE." },
-{ id:17, topic:"Pulmonology", q:"Klebsiella pneumoniae pneumonia classically presents with:", opts:["A. Bilateral interstitial infiltrates","B. Upper lobe consolidation with currant jelly sputum, bulging fissure","C. Pleural effusion only","D. Lower lobe cavitation only"], ans:1, exp:"Klebsiella: Upper lobe, bulging fissure, currant jelly sputum, affects alcoholics/diabetics." },
-{ id:18, topic:"Pulmonology", q:"Light's criteria for exudative pleural effusion - which is sufficient?", opts:["A. Pleural protein/serum protein ratio >0.5","B. Pleural protein >2.5 g/dL only","C. Pleural glucose <60 mg/dL","D. Pleural WBC >1000/mm³"], ans:0, exp:"Light's criteria (any ONE = exudate): Pleural/serum protein >0.5, Pleural/serum LDH >0.6, Pleural LDH >2/3 upper limit serum LDH." },
-{ id:19, topic:"Pulmonology", q:"Golden S sign on chest X-ray is characteristic of:", opts:["A. Pulmonary embolism","B. Right upper lobe collapse due to central obstruction","C. Cardiac tamponade","D. Pleural effusion"], ans:1, exp:"Golden S sign = RUL collapse with central obstruction (lung cancer). S-shaped fissure configuration." },
-{ id:20, topic:"Pulmonology", q:"Drug of choice for PCP in AIDS patient:", opts:["A. Amphotericin B","B. Trimethoprim-sulfamethoxazole","C. Fluconazole","D. Atovaquone"], ans:1, exp:"TMP-SMX is DOC for treatment AND prophylaxis of PCP. Start prophylaxis when CD4 <200." },
-{ id:21, topic:"Pulmonology", q:"Which is NOT a feature of pulmonary embolism on imaging?", opts:["A. Hampton's hump","B. Westermark sign","C. S1Q3T3 pattern on ECG","D. Bat-wing pattern on CXR"], ans:3, exp:"Bat-wing pattern = Pulmonary EDEMA, NOT PE. PE signs: Hampton's hump, Westermark sign, S1Q3T3." },
-{ id:22, topic:"Pulmonology", q:"All are features of OSA EXCEPT:", opts:["A. Loud snoring with witnessed apnea","B. Excessive daytime sleepiness","C. Morning headaches","D. Low BMI and thin neck"], ans:3, exp:"OSA associated with obesity, thick neck. Low BMI is AGAINST OSA diagnosis." },
-{ id:23, topic:"Pulmonology", q:"ABPA is associated with all EXCEPT:", opts:["A. Elevated serum IgE","B. Central bronchiectasis","C. Peripheral eosinophilia","D. Normal or low IgE"], ans:3, exp:"ABPA: Very high IgE (>1000), central bronchiectasis, eosinophilia. In asthma/CF patients." },
-{ id:24, topic:"Pulmonology", q:"In pulmonary TB, which sputum sample for AFB smear is most diagnostic?", opts:["A. Any random sample","B. First morning sputum","C. 24-hour pooled sputum","D. Post-bronchodilator sample"], ans:1, exp:"First morning sputum yields highest bacillary load. WHO recommends 2 spot or 1 morning sample." },
-{ id:25, topic:"Pulmonology", q:"Tension pneumothorax - all true EXCEPT:", opts:["A. Tracheal deviation AWAY from affected side","B. Absent breath sounds on affected side","C. Hypotension and raised JVP","D. CXR must be done before needle decompression"], ans:3, exp:"Tension pneumothorax is CLINICAL diagnosis - do NOT wait for CXR. Immediate needle decompression." },
-{ id:26, topic:"Neurology", q:"Most common site of hypertensive intracerebral hemorrhage:", opts:["A. Pons","B. Putamen/basal ganglia","C. Cerebellum","D. Thalamus"], ans:1, exp:"Putamen/basal ganglia ~50-60% (lenticulostriate arteries)." },
-{ id:27, topic:"Neurology", q:"Bilateral INO in young patient - FIRST suspect:", opts:["A. Myasthenia gravis","B. Multiple sclerosis","C. Wernicke's encephalopathy","D. Brainstem glioma"], ans:1, exp:"Bilateral INO in YOUNG = Multiple Sclerosis. Unilateral INO in elderly = Pontine stroke." },
-{ id:28, topic:"Neurology", q:"Drug of choice for absence seizures:", opts:["A. Phenytoin","B. Carbamazepine","C. Ethosuximide","D. Phenobarbitone"], ans:2, exp:"Ethosuximide (if only absence) or Valproate (if absence + other types). Phenytoin/Carbamazepine can WORSEN absence." },
-{ id:29, topic:"Neurology", q:"Myasthenia gravis - MOST SPECIFIC test:", opts:["A. Tensilon test","B. Anti-AChR antibodies","C. CT thorax","D. Repetitive nerve stimulation"], ans:1, exp:"Anti-AChR antibodies positive in ~85% generalized MG (most specific)." },
-{ id:30, topic:"Neurology", q:"Brown-Séquard syndrome is caused by:", opts:["A. Complete transection","B. Lateral hemisection","C. Central cord syndrome","D. Cauda equina compression"], ans:1, exp:"Hemisection: IPSILATERAL motor/proprioception loss, CONTRALATERAL pain/temp loss." },
-{ id:31, topic:"Neurology", q:"Pathological hallmark of Parkinson's disease:", opts:["A. Neurofibrillary tangles","B. Loss of dopaminergic neurons in substantia nigra with Lewy bodies","C. Prion proteins","D. TDP-43 inclusions"], ans:1, exp:"PD: Substantia nigra pars compacta degeneration, Lewy bodies (α-synuclein)." },
-{ id:32, topic:"Neurology", q:"Drug of first choice for trigeminal neuralgia:", opts:["A. Gabapentin","B. Carbamazepine","C. Amitriptyline","D. Phenytoin"], ans:1, exp:"Carbamazepine is DOC (~70-80% efficacy). Blocks sodium channels." },
-{ id:33, topic:"Neurology", q:"Trousseau's and Chvostek's signs are signs of:", opts:["A. Hyperkalemia","B. Hypocalcemia","C. Hypernatremia","D. Hypermagnesemia"], ans:1, exp:"Hypocalcemia tetany signs. Trousseau = carpal spasm with BP cuff. Chvostek = facial twitch." },
-{ id:34, topic:"Neurology", q:"LP is CONTRAINDICATED in all EXCEPT:", opts:["A. Papilledema with focal deficits","B. Posterior fossa mass","C. Suspected bacterial meningitis WITHOUT papilledema","D. Coagulopathy"], ans:2, exp:"LP NOT contraindicated in meningitis if no papilledema/focal deficits." },
-{ id:35, topic:"Neurology", q:"GCS total minimum and maximum scores:", opts:["A. Min 0, Max 15","B. Min 3, Max 15","C. Min 1, Max 12","D. Min 5, Max 15"], ans:1, exp:"GCS: Eye(1-4) + Verbal(1-5) + Motor(1-6) = 3-15. Minimum is 3, NOT zero." },
-{ id:36, topic:"Neurology", q:"Subacute combined degeneration of spinal cord caused by deficiency of:", opts:["A. Vitamin D","B. Vitamin B12","C. Vitamin B1","D. Vitamin C"], ans:1, exp:"B12 deficiency: Posterior columns + lateral corticospinal tracts + peripheral nerves." },
-{ id:37, topic:"Neurology", q:"Which is TRUE about Guillain-Barré syndrome?", opts:["A. Ascending paralysis, hyperreflexia","B. Descending paralysis","C. Ascending paralysis, AREFLEXIA, albuminocytologic dissociation","D. Purely sensory"], ans:2, exp:"GBS: Ascending weakness, AREFLEXIA, high protein/normal cells in CSF." },
-{ id:38, topic:"Nephrology", q:"Most common cause of nephrotic syndrome in adults (non-diabetic):", opts:["A. MCD","B. Membranous nephropathy","C. FSGS","D. IgA nephropathy"], ans:1, exp:"Adults: Membranous nephropathy. Children: MCD (80%)." },
-{ id:39, topic:"Nephrology", q:"Nephrotic syndrome consists of all EXCEPT:", opts:["A. Proteinuria >3.5 g/day","B. Hypoalbuminemia","C. Gross hematuria","D. Hyperlipidemia"], ans:2, exp:"Nephrotic: Proteinuria, hypoalbuminemia, edema, hyperlipidemia. Hematuria is nephritic." },
-{ id:40, topic:"Nephrology", q:"Urinary cast DIAGNOSTIC of glomerulonephritis:", opts:["A. Hyaline cast","B. Granular cast","C. RBC cast","D. Waxy cast"], ans:2, exp:"RBC casts = pathognomonic of glomerulonephritis." },
-{ id:41, topic:"Nephrology", q:"Distal (Type I) RTA is characterized by all EXCEPT:", opts:["A. Urine pH >5.5","B. Normal anion gap metabolic acidosis","C. Hypokalemia","D. Proximal bicarbonate wasting"], ans:3, exp:"Type I RTA: Cannot acidify urine, normal AG acidosis, hypokalemia. Proximal wasting = Type II." },
-{ id:42, topic:"Nephrology", q:"Best SCREENING test for early diabetic nephropathy:", opts:["A. Serum creatinine","B. Urine dipstick","C. Spot urine ACR (microalbuminuria)","D. 24-hour urine protein"], ans:2, exp:"Microalbuminuria (30-300 mg/g ACR) is earliest marker." },
-{ id:43, topic:"Nephrology", q:"Indications for URGENT dialysis (AEIOU) - all EXCEPT:", opts:["A. Acidosis pH <7.1","B. K+ >6.5 refractory","C. Creatinine >5 without symptoms","D. Uremic pericarditis"], ans:2, exp:"Creatinine ALONE is NOT indication. Must be symptomatic." },
-{ id:44, topic:"Nephrology", q:"ADPKD - which extrarenal complication causes most mortality?", opts:["A. Liver cysts","B. Intracranial aneurysms → SAH","C. MVP","D. Pancreatic cysts"], ans:1, exp:"Intracranial berry aneurysms (10-40%) → SAH is most LETHAL." },
-{ id:45, topic:"Nephrology", q:"In ATN, characteristic urine finding:", opts:["A. RBC casts","B. Muddy-brown granular casts","C. WBC casts","D. Fatty casts"], ans:1, exp:"ATN: Muddy-brown granular casts, RTEC casts." },
-{ id:46, topic:"Nephrology", q:"Hematuria, HTN, mild proteinuria after URTI 1-2 days - diagnosis:", opts:["A. Post-strep GN","B. IgA nephropathy","C. HSP nephritis","D. Membranous"], ans:1, exp:"Synpharyngitic hematuria (within 1-3 days of URTI) = IgA nephropathy." },
-{ id:47, topic:"Nephrology", q:"Corrected calcium formula in hypoalbuminemia:", opts:["A. Add 0.5 per 1 g/dL drop","B. Add 0.8 per 1 g/dL drop below 4","C. Subtract 0.8 per 1 g/dL above 4","D. No correction"], ans:1, exp:"Corrected Ca = Measured Ca + 0.8 × (4 - albumin)." },
-{ id:48, topic:"Gastroenterology", q:"Most common site of peptic ulcer disease:", opts:["A. Gastric body","B. First part of duodenum","C. Pyloric antrum","D. EG junction"], ans:1, exp:"Duodenal ulcers 4× more common than gastric." },
-{ id:49, topic:"Gastroenterology", q:"Standard first-line H. pylori eradication therapy:", opts:["A. PPI + Amoxicillin + Clarithromycin 7-14 days","B. PPI + Metronidazole + Tetracycline + Bismuth","C. H2 blocker + Amoxicillin + Clarithromycin","D. PPI alone"], ans:0, exp:"Triple therapy: PPI + Amoxicillin 1g BD + Clarithromycin 500mg BD for 14 days." },
-{ id:50, topic:"Gastroenterology", q:"Ranson's criteria - assessed at 48 HOURS:", opts:["A. Age >55","B. WBC >16,000","C. Glucose >200","D. Calcium <8 mg/dL"], ans:3, exp:"48 hours: Hct fall >10%, BUN rise >5, Calcium <8, PaO2 <60, Base deficit >4, Fluid sequestration >6L." },
-{ id:51, topic:"Gastroenterology", q:"Feature DIFFERENTIATING Crohn's from UC:", opts:["A. Bloody diarrhea","B. Skip lesions, transmural, rectal sparing, perianal disease","C. Endoscopic ulceration","D. Elevated ESR/CRP"], ans:1, exp:"Crohn's: Skip lesions, transmural, rectal sparing, granulomas." },
-{ id:52, topic:"Gastroenterology", q:"Most common cause of upper GI bleeding:", opts:["A. Esophageal varices","B. Peptic ulcer disease","C. Mallory-Weiss tear","D. Angiodysplasia"], ans:1, exp:"PUD ~40-50% of all UGI bleeds (most common)." },
-{ id:53, topic:"Gastroenterology", q:"Achalasia - GOLD STANDARD investigation:", opts:["A. Barium swallow","B. Upper GI endoscopy","C. Esophageal manometry","D. CT thorax"], ans:2, exp:"Manometry is gold standard. Barium: bird-beak. Endoscopy: exclude pseudoachalasia." },
-{ id:54, topic:"Gastroenterology", q:"Carcinoid syndrome occurs when metastasis to:", opts:["A. Local lymph nodes","B. Liver","C. Lung","D. Bone"], ans:1, exp:"Liver metastases → serotonin enters systemic circulation." },
-{ id:55, topic:"Gastroenterology", q:"TRUE about IBS:", opts:["A. Elevated inflammatory markers","B. Rome IV: pain ≥1 day/week for 3 months","C. Always bloody diarrhea","D. Positive celiac serology"], ans:1, exp:"Rome IV: Recurrent pain ≥1 day/week in last 3 months + 2 of: defecation improvement, frequency change, form change." },
-{ id:56, topic:"Hepatology", q:"Most common cause of cirrhosis in Nepal:", opts:["A. HBV","B. HCV","C. Alcohol","D. NAFLD"], ans:0, exp:"Nepal is HBV endemic. HBV most common cause of cirrhosis/portal HTN in Nepal." },
-{ id:57, topic:"Hepatology", q:"SAAG is calculated as:", opts:["A. Ascites albumin - Serum albumin","B. Serum albumin - Ascites albumin","C. Ascites protein - Serum protein","D. Serum globulin - Ascites globulin"], ans:1, exp:"SAAG = Serum - Ascites albumin. ≥1.1 = portal HTN (97% accuracy)." },
-{ id:58, topic:"Hepatology", q:"Primary prophylaxis for variceal bleeding:", opts:["A. Non-selective beta-blocker or EVL","B. Isosorbide mononitrate","C. Octreotide","D. TIPS"], ans:0, exp:"Propranolol/nadolol OR endoscopic variceal ligation." },
-{ id:59, topic:"Hepatology", q:"SBP diagnosis confirmed by ascitic fluid:", opts:["A. Positive culture only","B. PMN ≥250 cells/mm³","C. Glucose <50","D. Protein <1 g/dL"], ans:1, exp:"PMN ≥250 cells/mm³ sufficient to start antibiotics even if culture negative." },
-{ id:60, topic:"Hepatology", q:"HRS best treated with:", opts:["A. Hemodialysis","B. Norepinephrine + albumin","C. Terlipressin + albumin","D. Furosemide"], ans:2, exp:"Terlipressin + IV albumin preferred." },
-{ id:61, topic:"Hepatology", q:"Ultrasound finding suggestive of NASH:", opts:["A. Homogeneous increased echogenicity","B. Coarse, nodular surface with portal HTN signs","C. Gallbladder polyp","D. HCC"], ans:1, exp:"NASH/cirrhosis = coarse, nodular surface with portal HTN signs." },
-{ id:62, topic:"Hepatology", q:"After large-volume paracentesis (>5L):", opts:["A. IV ceftriaxone","B. IV albumin 6-8 g per liter removed","C. Fluid restrict 1 L/day","D. Propranolol"], ans:1, exp:"Albumin 6-8 g per liter removed prevents post-paracentesis circulatory dysfunction." },
-{ id:63, topic:"Hepatology", q:"Most common extrahepatic manifestation of chronic HBV:", opts:["A. ITP","B. Polyarteritis nodosa","C. Membranous nephropathy","D. Lichen planus"], ans:1, exp:"PAN = classic HBV association." },
-{ id:64, topic:"Hematology", q:"Most specific test for iron deficiency:", opts:["A. Serum ferritin","B. Serum iron","C. TIBC","D. Bone marrow iron"], ans:0, exp:"Ferritin most specific (first to drop)." },
-{ id:65, topic:"Hematology", q:"Peripheral smear finding diagnostic of megaloblastic anemia:", opts:["A. Microcytosis","B. Hypersegmented neutrophils (≥5 lobes)","C. Schistocytes","D. Spherocytes"], ans:1, exp:"Hypersegmented neutrophils diagnostic." },
-{ id:66, topic:"Hematology", q:"Most common acute leukemia in adults:", opts:["A. ALL","B. AML","C. CML","D. CLL"], ans:1, exp:"AML most common acute leukemia in adults (median age 65)." },
-{ id:67, topic:"Hematology", q:"CRAB criteria used to diagnose:", opts:["A. Multiple myeloma","B. Waldenstrom","C. Hodgkin lymphoma","D. Hairy cell leukemia"], ans:0, exp:"CRAB: Calcium elevated, Renal failure, Anemia, Bone lesions (lytic)." },
-{ id:68, topic:"Hematology", q:"ITP treatment with platelets <30,000/µL:", opts:["A. Splenectomy","B. High-dose corticosteroids","C. IVIG or anti-D","D. TPO-RA"], ans:1, exp:"First-line: Prednisone 1mg/kg/day or Dexamethasone 40mg × 4 days." },
-{ id:69, topic:"Hematology", q:"Most common cause of MAHA:", opts:["A. AIHA","B. Thalassemia","C. TTP","D. G6PD deficiency"], ans:2, exp:"MAHA = schistocytes. TTP most classic/tested." },
-{ id:70, topic:"Hematology", q:"Definitive therapy for TTP:", opts:["A. Aspirin","B. Plasma exchange","C. IVIG","D. Rituximab"], ans:1, exp:"PLEX + steroids definitive. Without PLEX mortality >90%." },
-{ id:71, topic:"Hematology", q:"Coagulopathy in DIC:", opts:["A. Isolated thrombocytopenia","B. Prolonged PT/APTT, low fibrinogen, elevated D-dimer","C. Normal PT/APTT","D. Isolated prolonged bleeding time"], ans:1, exp:"DIC: Prolonged PT/APTT, low fibrinogen, elevated D-dimer, thrombocytopenia." },
-{ id:72, topic:"Endocrinology", q:"Single best test for thyroid function:", opts:["A. Free T4","B. Free T3","C. TSH","D. TPO antibodies"], ans:2, exp:"TSH is SINGLE BEST test." },
-{ id:73, topic:"Endocrinology", q:"Most common cause of Cushing's syndrome:", opts:["A. Adrenal adenoma","B. ACTH pituitary adenoma","C. Ectopic ACTH","D. Exogenous glucocorticoids"], ans:3, exp:"Exogenous steroids MOST COMMON (iatrogenic)." },
-{ id:74, topic:"Endocrinology", q:"First-line treatment for toxic multinodular goiter:", opts:["A. RAI ablation","B. PTU","C. Methimazole","D. Thyroidectomy"], ans:0, exp:"RAI preferred for toxic MNG (targets autonomous tissue)." },
-{ id:75, topic:"Endocrinology", q:"Hormone deficiency in adrenal crisis (primary AI):", opts:["A. Aldosterone only","B. Cortisol and aldosterone","C. Cortisol only","D. Androgens"], ans:1, exp:"Primary AI: Both cortisol AND aldosterone impaired." },
-{ id:76, topic:"Endocrinology", q:"DKA management includes all EXCEPT:", opts:["A. IV saline","B. IV insulin","C. Potassium replacement after insulin","D. IV bicarbonate for all pH <7.0"], ans:3, exp:"Bicarbonate only if pH <6.9 (controversial)." },
-{ id:77, topic:"Endocrinology", q:"Best initial test for primary hypoparathyroidism:", opts:["A. Serum calcium","B. Serum phosphate","C. PTH level","D. 25-OH Vitamin D"], ans:2, exp:"Low calcium, high phosphate, LOW/inappropriately normal PTH." },
-{ id:78, topic:"Endocrinology", q:"Test to diagnose GH deficiency in adults:", opts:["A. Random GH","B. Insulin tolerance test","C. OGTT for GH suppression","D. IGF-1 alone"], ans:1, exp:"ITT is gold standard." },
-{ id:79, topic:"Endocrinology", q:"Most common cause of Addison's in DEVELOPING countries:", opts:["A. Autoimmune","B. Tuberculosis","C. Malignancy","D. Antifungal therapy"], ans:1, exp:"Developing world (Nepal): TB destroys adrenal cortex." },
-{ id:80, topic:"Infectious Diseases", q:"Most common cause of community-acquired meningitis in adults:", opts:["A. S. pneumoniae","B. N. meningitidis","C. H. influenzae","D. Listeria"], ans:0, exp:"S. pneumoniae most common in adults." }
-],
-cases: [
-{ id:"C1", title:"Case 1: 45M with Dyspnea and Hypotension", text:"45M, 3 days progressive dyspnea, severe distress. Flu-like illness 2 weeks ago. BP 80/60, HR 118, RR 28, JVP elevated, heart sounds muffled. CXR: globular cardiac silhouette. ECG: alternating QRS amplitude.", questions:[
-{ id:81, q:"MOST likely diagnosis?", opts:["A. Constrictive pericarditis","B. Cardiac tamponade","C. Tension pneumothorax","D. Acute decompensated HF"], ans:1, exp:"Tamponade: Beck's triad + viral illness + globular heart + electrical alternans." },
-{ id:82, q:"ECG finding of alternating QRS amplitude:", opts:["A. Pulsus alternans","B. Electrical alternans","C. Delta wave","D. Epsilon wave"], ans:1, exp:"Electrical alternans = pathognomonic of cardiac tamponade." },
-{ id:83, q:"MOST immediate bedside investigation:", opts:["A. Repeat ECG","B. Bedside echocardiography","C. CT thorax","D. Cardiac catheterization"], ans:1, exp:"Echo fastest/most accurate. Shows effusion, RA/RV diastolic collapse." },
-{ id:84, q:"DEFINITIVE emergency treatment:", opts:["A. IV furosemide","B. Pericardiocentesis","C. IV beta-blockers","D. Steroids alone"], ans:1, exp:"Pericardiocentesis. Diuretics CONTRAINDICATED." }
-]},
-{ id:"C2", title:"Case 2: Fever, Cough, Consolidation", text:"62M diabetic, 4 days fever 39.5°C, rusty sputum, pleuritic pain. BP 110/70, HR 104, RR 30, SpO2 90%. RLL consolidation on CXR.", questions:[
-{ id:85, q:"Most likely organism:", opts:["A. Klebsiella","B. S. pneumoniae","C. Mycoplasma","D. S. aureus"], ans:1, exp:"Rusty sputum + lobar consolidation = S. pneumoniae." },
-{ id:86, q:"Severity scoring system for CAP:", opts:["A. APACHE II","B. CURB-65","C. SOFA","D. PSI/PORT"], ans:3, exp:"CURB-65 and PSI both used for CAP severity." },
-{ id:87, q:"CURB-65 score (Urea↑, RR≥30):", opts:["A. 0 - outpatient","B. 2 - inpatient","C. 3 - ICU","D. 5 - ICU"], ans:1, exp:"U(1) + R(1) = 2. Score 2 = INPATIENT." },
-{ id:88, q:"Empirical antibiotic for hospitalized CAP:", opts:["A. Azithromycin alone","B. Beta-lactam ± macrolide/doxycycline","C. Vanco + Zosyn","D. Oseltamivir"], ans:1, exp:"Beta-lactam + macrolide/doxycycline covers atypicals." }
-]},
-{ id:"C3", title:"Case 3: Crushing Chest Pain", text:"56M HTN, DM, smoker. Crushing chest pain 90 min, diaphoresis, nausea. ECG: ST elevation II, III, aVF with reciprocal depression aVL, V1-V2.", questions:[
-{ id:89, q:"Coronary artery involved:", opts:["A. LAD","B. LCx","C. RCA","D. Left main"], ans:2, exp:"II, III, aVF = INFERIOR STEMI = RCA (85%)." },
-{ id:90, q:"STEMI management includes all EXCEPT:", opts:["A. Aspirin 300mg","B. Clopidogrel loading","C. IV morphine","D. IV beta-blockers ROUTINELY"], ans:3, exp:"IV beta-blockers NOT routine in STEMI." },
-{ id:91, q:"Additional leads for RV infarction:", opts:["A. V1-V6 sufficient","B. V7-V9","C. V3R, V4R","D. Repeat ECG 6 hrs"], ans:2, exp:"Right-sided leads V3R, V4R for RV MI." },
-{ id:92, q:"Most feared complication first 48 hours:", opts:["A. Dressler's","B. Ventricular fibrillation","C. Papillary rupture","D. Free wall rupture"], ans:1, exp:"VF = leading cause of death in FIRST HOUR post-STEMI." }
-]},
-{ id:"C4", title:"Case 4: T1DM with Vomiting", text:"22F T1DM, 2 days vomiting, polyuria, drowsiness. Kussmaul breathing, acetone breath. Glucose 450, urine ++++ glucose, ++ ketones.", questions:[
-{ id:93, q:"Anion Gap:", opts:["A. Normal","B. Elevated","C. Low","D. Cannot calculate"], ans:1, exp:"DKA = high anion gap metabolic acidosis." },
-{ id:94, q:"Corrected sodium:", opts:["A. Lower than measured","B. Higher than measured","C. Same","D. No correction"], ans:1, exp:"Hyperglycemia causes dilutional hyponatremia." },
-{ id:95, q:"Potassium with insulin treatment:", opts:["A. Rise further","B. Drop rapidly","C. Unchanged","D. Fluctuate"], ans:1, exp:"Insulin drives K+ into cells → rapid drop." },
-{ id:96, q:"Switch to dextrose fluids when:", opts:["A. Glucose <250 mg/dL","B. pH >7.2","C. Bicarbonate normal","D. Never"], ans:0, exp:"Switch to D5W when glucose ~200-250." }
-]},
-{ id:"C5", title:"Case 5: Frothy Urine, Edema", text:"34M, 3 weeks periorbital swelling, bilateral edema, frothy urine. BP 120/78. Protein ++++, albumin 1.8, Cr 1.2.", questions:[
-{ id:97, q:"Most likely diagnosis:", opts:["A. MCD","B. Membranous nephropathy","C. FSGS","D. IgA"], ans:1, exp:"Adult nephrotic syndrome = Membranous most common." },
-{ id:98, q:"Biopsy finding (EM):", opts:["A. Foot process effacement","B. Subepithelial immune deposits","C. Mesangial IgA","D. Tram-track"], ans:1, exp:"Membranous: Subepithelial immune deposits." },
-{ id:99, q:"Most feared thromboembolic complication:", opts:["A. DVT","B. Cerebral venous thrombosis","C. PE","D. Renal vein thrombosis"], ans:3, exp:"Renal vein thrombosis most feared in nephrotic syndrome." },
-{ id:100, q:"First-line immunosuppression:", opts:["A. Prednisolone alone","B. Steroids + alkylating agents","C. Rituximab","D. Calcineurin inhibitors"], ans:2, exp:"Rituximab preferred first-line for primary membranous." }
-]},
-{ id:"C6", title:"Case 6: HBsAg+ with Hematemesis", text:"48M chronic liver disease, HBsAg+. Massive hematemesis. BP 90/60, HR 118. Tense ascites. Hb 8.2, Bili 4.2, Alb 2.4, INR 2.1, Cr 1.8.", questions:[
-{ id:101, q:"Child-Pugh class:", opts:["A. Class A","B. Class B","C. Class C","D. Cannot determine"], ans:2, exp:"Bili(3) + Alb(3) + INR(3) + Ascites(2-3) + Enceph(1) = 11-12 → Class C." },
-{ id:102, q:"Immediate management:", opts:["A. Octreotide + ceftriaxone + band ligation","B. TIPS immediately","C. Propranolol","D. FFP only"], ans:0, exp:"Vasoactive + antibiotics + urgent endoscopy (<12h)." },
-{ id:103, q:"Creatinine elevated after paracentesis:", opts:["A. HRS","B. Hypovolemic shock","C. SBP","D. Coagulopathy"], ans:0, exp:"Large-volume paracentesis without albumin → HRS." },
-{ id:104, q:"SAAG 2.4 confirms:", opts:["A. Portal HTN","B. Carcinomatosis","C. TB peritonitis","D. Pancreatitis"], ans:0, exp:"SAAG ≥1.1 = portal HTN (97% accuracy)." }
-]},
-{ id:"C7", title:"Case 7: Fever, Headache, Rash", text:"20M student, 2 days fever, headache, neck stiffness, petechial rash. Temp 39.2°C, HR 110. No focal deficits.", questions:[
-{ id:105, q:"Most likely organism:", opts:["A. N. meningitidis","B. S. pneumoniae","C. H. influenzae","D. Listeria"], ans:0, exp:"Petechial rash = meningococcal sepsis (N. meningitidis)." },
-{ id:106, q:"Correct management sequence:", opts:["A. CT → LP → antibiotics","B. Blood cultures → antibiotics → CT/LP","C. Dexamethasone → antibiotics → LP","D. Antibiotics → LP → CT"], ans:1, exp:"Blood cultures first, then antibiotics within 1 hour." },
-{ id:107, q:"Empirical antibiotic:", opts:["A. Vanco + ceftriaxone","B. Ampicillin + gentamicin","C. Meropenem","D. Penicillin G"], ans:0, exp:"Adults <50: Vanco + 3rd gen cephalosporin." },
-{ id:108, q:"CSF in bacterial meningitis:", opts:["A. High glucose, low protein, lymphocytes","B. Low glucose, high protein, neutrophils","C. Normal all","D. Low glucose, high protein, eosinophils"], ans:1, exp:"Bacterial: Low glucose (<40), high protein (>100), neutrophilic pleocytosis." }
-]},
-{ id:"C8", title:"Case 8: Post-Op Breathlessness", text:"55M, 3 days post-knee replacement. Sudden pleuritic pain, dyspnea, hemoptysis. HR 112, RR 26, SpO2 92%. ECG: S1Q3T3.", questions:[
-{ id:109, q:"Wells score (HR>100, surgery, alternative less likely):", opts:["A. 3.0","B. 4.5","C. 6.0","D. 7.5"], ans:0, exp:"HR>100(1.5) + surgery(1.5) + alternative less likely(3) = 6.0." },
-{ id:110, q:"Gold standard for PE:", opts:["A. D-dimer","B. V/Q scan","C. CTPA","D. Doppler US"], ans:2, exp:"CTPA is gold standard." },
-{ id:111, q:"Treatment (hemodynamically stable):", opts:["A. Wait for imaging","B. Start LMWH immediately","C. tPA","D. IVC filter"], ans:1, exp:"Start anticoagulation immediately if high suspicion." },
-{ id:112, q:"Contraindicated anticoagulant post-op:", opts:["A. UFH","B. LMWH","C. DOAC","D. All equal"], ans:2, exp:"DOACs have higher bleeding risk early post-op." }
-]},
-{ id:"C9", title:"Case 9: Bloody Diarrhea", text:"28F, 6 months bloody diarrhea, cramping, urgency. Colonoscopy: continuous inflammation rectum to descending colon. Crypt abscesses, no granulomas. Arthritis improves with flares.", questions:[
-{ id:113, q:"Most likely diagnosis:", opts:["A. UC","B. Crohn's","C. Infectious colitis","D. Ischemic colitis"], ans:0, exp:"UC: Continuous from rectum, mucosal, crypt abscesses, no granulomas." },
-{ id:114, q:"Joint symptoms represent:", opts:["A. Septic arthritis","B. Peripheral arthropathy - IBD extraintestinal","C. RA","D. Psoriatic arthritis"], ans:1, exp:"IBD arthropathy parallels bowel activity." },
-{ id:115, q:"First-line for mild-moderate UC:", opts:["A. IV steroids","B. Oral 5-ASA","C. Infliximab","D. Colectomy"], ans:1, exp:"5-ASA (mesalamine) ± topical." },
-{ id:116, q:"CRC risk increases after:", opts:["A. 1 year","B. 5 years","C. 8-10 years","D. 20 years"], ans:2, exp:"Surveillance begins 8-10 years after diagnosis." }
-]},
-{ id:"C10", title:"Case 10: Confusion, Petechiae, Renal", text:"38F, 5 days flu-like, now confusion, fever, petechiae. Hb 9.8, Plt 18,000, Cr 2.4, Bili 2.8, LDH 900. PT/APTT normal.", questions:[
-{ id:117, q:"Normal PT/APTT distinguishes from:", opts:["A. ITP","B. DIC","C. Aplastic anemia","D. HIT"], ans:1, exp:"Normal PT/APTT rules out DIC." },
-{ id:118, q:"Most likely diagnosis (pentad):", opts:["A. TTP","B. HUS","C. DIC","D. HELLP"], ans:0, exp:"TTP pentad: MAHA, thrombocytopenia, fever, neuro, renal." },
-{ id:119, q:"Pathophysiology:", opts:["A. Antiphospholipid antibodies","B. ADAMTS13 deficiency → ULvWF → microthrombi","C. Factor VIII antibody","D. Complement activation"], ans:1, exp:"ADAMTS13 deficiency → ultra-large vWF multimers → microthrombi." },
-{ id:120, q:"ABSOLUTELY CONTRAINDICATED:", opts:["A. Plasma exchange","B. Steroids","C. Platelet transfusion","D. Rituximab"], ans:2, exp:"Platelet transfusion contraindicated (fuels microthrombi)." }
-]}
+<body class="min-h-screen scroll-smooth">
+<div id="app" class="min-h-screen"></div>
+
+<script id="questions-data" type="application/json">
+[
+  {
+    "type": "standalone",
+    "questions": [
+      {"id":1,"stem":"A 28-year-old woman presents with exertional dyspnea and palpitations. Exam reveals an opening snap + diastolic rumble at apex. Pulse is irregularly irregular. Most likely?","opts":["A. Mitral stenosis with atrial fibrillation","B. Mitral regurgitation with sinus tachycardia","C. Tricuspid stenosis with sinus rhythm","D. Aortic regurgitation with atrial flutter"],"correct":"A","expl":"Opening snap + diastolic rumble at apex = mitral stenosis; AF common from LA dilation.","ref":"Mudit Khanna Cardiology Valvular + Harrison's Ch. 273","topic":"Cardiology"},
+      {"id":2,"stem":"A 55M with crushing chest pain 2h. ECG: ST↑ in II,III,aVF with reciprocal ST↓ in aVL. Which artery occluded?","opts":["A. Right coronary artery","B. Left anterior descending artery","C. Left circumflex artery","D. Posterior descending artery"],"correct":"A","expl":"Inferior STEMI (II,III,aVF) most commonly RCA.","ref":"Mudit Khanna Cardiology Q89 + Harrison's Ch. 271","topic":"Cardiology"},
+      {"id":3,"stem":"A 30M presents with systolic murmur that increases with Valsalva, decreases with squatting. Most likely?","opts":["A. Hypertrophic obstructive cardiomyopathy","B. Mitral valve prolapse","C. Mitral regurgitation","D. Atrium septal defect"],"correct":"A","expl":"Valsalva decreases preload worsening LVOT obstruction murmur increases; squatting increases preload murmur decreases.","ref":"Mudit Khanna Cardiology Murmur Maneuvers + Harrison's Ch. 268","topic":"Cardiology"},
+      {"id":4,"stem":"A 48F with fever, fatigue, new holosystolic murmur at apex. Blood cultures grow S. aureus. Strongest predictor of embolic events in IE?","opts":["A. Vegetation size >10mm","B. Fever >10 days","C. Elevated CRP level","D. Rheumatoid factor positive"],"correct":"A","expl":"Vegetation >10mm = strongest independent predictor of embolic events.","ref":"Harrison's Ch. 173 + Mudit Khanna Cardiology IE","topic":"Cardiology"},
+      {"id":5,"stem":"A 62M with severe AS presents with syncope on exertion + angina. Definitive management?","opts":["A. Aortic valve replacement surgery","B. Balloon aortic valvuloplasty","C. Medical therapy with nitrates","D. Beta-blocker and diuretic therapy"],"correct":"A","expl":"Symptomatic severe AS (angina, syncope, HF) = Class I indication for AVR.","ref":"Harrison's Ch. 274 + Mudit Khanna Cardiology Valvular","topic":"Cardiology"},
+      {"id":6,"stem":"A 45M with sudden severe dyspnea. BP 180/100, RR 32. Bilateral crackles to mid-zones. S3 gallop. Pulsus alternans. First-line management?","opts":["A. Intravenous furosemide and nitroglycerin","B. Intravenous amiodarone infusion","C. Oral metoprolol and enalapril","D. Sublingual nifedipine and oxygen"],"correct":"A","expl":"Acute pulmonary edema with hypertensive crisis: IV loop diuretics + nitrates for preload/afterload reduction.","ref":"Harrison's Ch. 275 + Mudit Khanna Cardiology Acute HF","topic":"Cardiology"},
+      {"id":7,"stem":"A 28F from rural village with migratory polyarthritis followed by chest pain and dyspnea. Exam: pericardial friction rub + pansystolic murmur at apex. Criteria used?","opts":["A. Jones criteria for ARF","B. Modified Duke criteria for IE","C. Framingham criteria for HF","D. Bethesda criteria for rheumatic disease"],"correct":"A","expl":"Migratory polyarthritis + carditis (pericarditis + MR) = acute rheumatic fever; diagnosed by Jones criteria.","ref":"Mudit Khanna Cardiology Rheumatic Fever + Harrison's Ch. 381","topic":"Cardiology"},
+      {"id":8,"stem":"A 50M on warfarin for AF presents with INR 5.8 without bleeding. Most appropriate management?","opts":["A. Withhold warfarin and resume at lower dose","B. Administer IV vitamin K immediately","C. Give fresh frozen plasma transfusion","D. Continue current warfarin dosage"],"correct":"A","expl":"INR 4.5-10 without bleeding: withhold warfarin, resume at lower dose.","ref":"ACCP guidelines + Harrison's Anticoagulation chapter","topic":"Cardiology"},
+      {"id":9,"stem":"A 40M with chest pain, dyspnea, distended neck veins. BP 80/50. Heart sounds distant. Pulsus paradoxus 18mmHg. Most likely diagnosis?","opts":["A. Cardiac tamponade","B. Constrictive pericarditis","C. Right ventricular infarction","D. Massive pulmonary embolism"],"correct":"A","expl":"Beck's triad (hypotension, JVD, muffled heart sounds) + pulsus paradoxus >10 = tamponade.","ref":"Mudit Khanna Cardiology Q112 + Harrison's Ch. 278","topic":"Cardiology"},
+      {"id":10,"stem":"A 35F with recurrent palpitations 10-15min. ECG: narrow complex tachycardia 180bpm regular. Vagal maneuvers failed. Drug of choice?","opts":["A. Intravenous adenosine 6mg rapid bolus","B. Intravenous amiodarone loading dose","C. Oral propranolol 40mg stat","D. Intravenous atropine 0.5mg"],"correct":"A","expl":"IV adenosine = drug of choice for acute SVT termination; rapid IV push + saline flush.","ref":"Mudit Khanna Arrhythmias + Harrison's Ch. 263","topic":"Cardiology"},
+      {"id":11,"stem":"Which medication reduces mortality in HFrEF?","opts":["A. Spironolactone","B. Digoxin","C. Furosemide","D. Isosorbide dinitrate alone"],"correct":"A","expl":"Aldosterone antagonists (spironolactone) reduce mortality in HFrEF per RALES trial; ACEi/ARB/ARNI + BB + MRA = pillar therapy.","ref":"Harrison's Ch. 276","topic":"Cardiology"},
+      {"id":12,"stem":"A 22M presents with fixed split S2 + SEM at LUSB. ECG: incomplete RBBB. Most likely?","opts":["A. Ostium secundum atrial septal defect","B. Tetralogy of Fallot","C. Ventricular septal defect","D. Patent ductus arteriosus"],"correct":"A","expl":"Fixed split S2 + SEM at LUSB + RBBB = ASD (secundum).","ref":"Mudit Khanna Cardiology Congenital + Harrison's Ch. 280","topic":"Cardiology"},
+      {"id":13,"stem":"A 58M presents 4.5h after crushing chest pain. ECG: ST↑ V1-V6. Troponin unavailable. BP 100/60. Most appropriate management?","opts":["A. Streptokinase 1.5 million units IV over 60 minutes","B. Aspirin and transfer for primary PCI","C. Sublingual nitroglycerin only","D. Morphine and wait for troponin results"],"correct":"A","expl":"Where PCI not available within 120min, thrombolysis with streptokinase indicated for STEMI within 12h.","ref":"Harrison's Ch. 272 + regional ACS guidelines","topic":"Cardiology"},
+      {"id":14,"stem":"A 38M presents with cough, low-grade fever, night sweats 6wks, 5kg weight loss. CXR: cavitary lesion RUL. Sputum GeneXpert: MTB+, rifampicin-sensitive. Initial treatment?","opts":["A. 2HRZE + 4HR (6 months total)","B. 2HRZES + 1HRZE + 5HRE","C. Isoniazid monotherapy for 9 months","D. 2 months levofloxacin + ethambutol"],"correct":"A","expl":"Drug-susceptible pulmonary TB: 2HRZE (intensive) + 4HR (continuation) = 6 months total.","ref":"WHO + Regional TB Guidelines + Harrison's Ch. 206","topic":"Pulmonology"},
+      {"id":15,"stem":"A 65M with COPD presents with increased dyspnea, cough, purulent sputum 3d. RR 24. ABG: pH 7.32, PaCO2 58, PaO2 55, HCO3 28. Type of respiratory failure?","opts":["A. Type II acute-on-chronic hypercapnic","B. Type I hypoxemic failure only","C. Type III perioperative failure","D. Type IV shock-related failure"],"correct":"A","expl":"Elevated PaCO2 >45 + acidemia (pH <7.35) + hypoxemia = Type II (hypercapnic) respiratory failure in COPD exacerbation.","ref":"Harrison's Ch. 329 + Mudit Khanna Pulmonology","topic":"Pulmonology"},
+      {"id":16,"stem":"A 30F with sudden-onset right-sided chest pain + dyspnea. Exam: absent breath sounds, hyper-resonant percussion right side, tracheal deviation to left. Most appropriate immediate step?","opts":["A. Immediate chest tube thoracostomy","B. Needle thoracostomy at 2nd intercostal space","C. High-flow oxygen and observation","D. CT chest for confirmation before intervention"],"correct":"B","expl":"Tension pneumothorax: immediate needle decompression at 2nd ICS MCL is life-saving; do NOT wait for imaging.","ref":"Harrison's Ch. 322 + ATLS","topic":"Pulmonology"},
+      {"id":17,"stem":"A 50F with progressive bilateral exertional dyspnea 1yr. CT: bilateral reticulonodular opacities with honeycombing. PFTs most likely show?","opts":["A. Restrictive pattern with low DLCO","B. Obstructive pattern with low DLCO","C. Restrictive pattern with normal DLCO","D. Mixed pattern with increased DLCO"],"correct":"A","expl":"IPF: restrictive PFTs (decreased FVC, decreased TLC, increased FEV1/FVC) + reduced DLCO.","ref":"Harrison's Ch. 325 + Mudit Khanna Pulmonology ILD","topic":"Pulmonology"},
+      {"id":18,"stem":"A 45F evaluated for left-sided pleural effusion. Thoracentesis: pleural protein 3.8 (serum 5.8), pleural LDH 180 (serum 240), WBC 2500 with 70% lymphs, ADA 58. Most consistent with?","opts":["A. Tuberculous pleuritis","B. Heart failure effusion","C. Parapneumonic effusion","D. Malignant pleural effusion"],"correct":"A","expl":"Exudative (protein PS 0.66 >0.5), lymphocyte-predominant + ADA >40 = TB pleuritis in endemic areas.","ref":"Mudit Khanna Pulmonology Q205 + Harrison's Ch. 318","topic":"Pulmonology"},
+      {"id":19,"stem":"A 32M with HIV (CD4 180) presents with progressive dyspnea, dry cough, fever 2wks. CXR: bilateral perihilar infiltrates. Most likely organism?","opts":["A. Pneumocystis jirovecii","B. Mycobacterium tuberculosis","C. Streptococcus pneumoniae","D. Cryptococcus neoformans"],"correct":"A","expl":"PJP classically: subacute dyspnea, dry cough, bilateral perihilar infiltrates in HIV with CD4 <200.","ref":"Harrison's Ch. 227 + Mudit Khanna Pulmonology","topic":"Pulmonology"},
+      {"id":20,"stem":"A 70F on post-op day 5 after hip replacement develops sudden dyspnea, tachycardia, pleuritic chest pain. Wells score = 6. Most appropriate next step?","opts":["A. CT pulmonary angiography","B. D-dimer testing to rule out","C. Bilateral lower limb venous Doppler only","D. Empiric antibiotic therapy"],"correct":"A","expl":"Wells >4 = PE likely; proceed directly to CTPA not D-dimer.","ref":"Harrison's Ch. 310 + Mudit Khanna Pulmonology PE","topic":"Pulmonology"},
+      {"id":21,"stem":"A 25M with recurrent wheezing + breathlessness 3-4x/wk, worse at night. Uses salbutamol daily. Spirometry: FEV1/FVC 0.69, reversible >12%. GINA step therapy?","opts":["A. Step 3: low-dose ICS-formoterol maintenance","B. Step 1: SABA as needed only","C. Step 5: high-dose ICS-LABA + oral steroids","D. Step 2: daily oral leukotriene modifier"],"correct":"A","expl":"Daily symptoms + night symptoms >1x/wk + reduced FEV1 = moderate persistent asthma = GINA Step 3.","ref":"Mudit Khanna Pulmonology Asthma + GINA 2025","topic":"Pulmonology"},
+      {"id":22,"stem":"Which ABG indicates primary metabolic acidosis with appropriate respiratory compensation?","opts":["A. pH 7.28, PaCO2 28, HCO3 14","B. pH 7.32, PaCO2 50, HCO3 26","C. pH 7.48, PaCO2 30, HCO3 22","D. pH 7.30, PaCO2 44, HCO3 18"],"correct":"A","expl":"Primary met acidosis: low pH + low HCO3; expected PaCO2 = 1.5(HCO3)+8 plus/minus 2 = 29 plus/minus 2 -- measured 28 confirms appropriate compensation.","ref":"Harrison's Acid-Base chapter + Mudit Khanna Q240","topic":"Pulmonology"},
+      {"id":23,"stem":"A 55M with 30 pack-year smoking history presents with chronic productive cough 5mo/yr over 3yrs. PFTs: FEV1/FVC 0.61, FEV1 55% pred. GOLD staging?","opts":["A. GOLD 2B or 2E depending on symptoms/exacerbations","B. GOLD 1A with mild obstruction only","C. GOLD 3 with severe airflow limitation","D. GOLD 4 with respiratory failure"],"correct":"A","expl":"FEV1 50-79% = GOLD 2 (moderate); symptomatic with chronic productive cough = group B or E depending on exacerbations.","ref":"Harrison's Ch. 302 + Mudit Khanna Pulmonology COPD","topic":"Pulmonology"},
+      {"id":24,"stem":"A 40M with hemoptysis, fever, cavitary lung lesions. Works as farmer. Most important initial investigation?","opts":["A. Sputum examination for acid-fast bacilli","B. Bronchoscopy with biopsy","C. High-resolution CT of thorax","D. Serum galactomannan antigen"],"correct":"A","expl":"In TB-endemic settings: hemoptysis + cavity + fever = pulmonary TB until proven otherwise; sputum AFB/GeneXpert first-line.","ref":"Mudit Khanna Pulmonology TB + Harrison's Ch. 206","topic":"Pulmonology"},
+      {"id":25,"stem":"A 60M presents ARDS secondary to severe pneumonia. Mechanical ventilation initiated. Which strategy improves survival?","opts":["A. Low tidal volume (6 mL/kg ideal body weight)","B. High tidal volume (12 mL/kg ideal body weight)","C. Pressure-controlled inverse ratio ventilation","D. High PEEP with normal tidal volume"],"correct":"A","expl":"Low tidal volume (6 mL/kg IBW) reduces mortality in ARDS per ARDSNet trial.","ref":"Harrison's Ch. 321 + Mudit Khanna Pulmonology ARDS","topic":"Pulmonology"},
+      {"id":26,"stem":"A 50M with clubbing, central cyanosis, dyspnea. O2 sat 88% on room air, does NOT improve with 100% O2. Mechanism of hypoxemia?","opts":["A. Right-to-left intracardiac shunt","B. Hypoventilation at alveolar level","C. Mild V/Q mismatch","D. High altitude-induced hypoxemia"],"correct":"A","expl":"Failure of hypoxemia to correct with 100% O2 = anatomic right-to-left shunt (e.g. Eisenmenger).","ref":"Harrison's Ch. 329 + Mudit Khanna Pulmonology","topic":"Pulmonology"},
+      {"id":27,"stem":"A 68M with sudden-onset right-sided weakness + aphasia. Last known well 2h ago. CT head: no hemorrhage. BP 160/90. Glucose 110. Most appropriate next step?","opts":["A. Intravenous alteplase thrombolysis","B. Aspirin and clopidogrel dual therapy","C. CT angiography before any treatment","D. Supportive care only and observe"],"correct":"A","expl":"Acute ischemic stroke within 4.5h window, no hemorrhage on CT: IV alteplase (0.9 mg/kg) indicated.","ref":"Mudit Khanna Neurology Stroke + Harrison's Ch. 427","topic":"Neurology"},
+      {"id":28,"stem":"A 22F with fever, headache, neck stiffness 2d. Mildly confused. CSF: protein 180, glucose 25, WBC 350 with lymph predominance. Most likely?","opts":["A. Tuberculous meningitis","B. Bacterial (pneumococcal) meningitis","C. Viral (enteroviral) meningitis","D. Cryptococcal meningitis"],"correct":"A","expl":"Subacute onset + moderate pleocytosis with lymph predominance + very high protein + very low glucose = classic TB meningitis CSF.","ref":"Mudit Khanna Neurology TB meningitis + Harrison's Ch. 433","topic":"Neurology"},
+      {"id":29,"stem":"A 55M presents with recurrent right-sided temporal headache, watering and redness of right eye, nasal congestion. Each episode 45min, same time nightly. Most effective acute treatment?","opts":["A. High-flow oxygen by non-rebreathing mask","B. Sumatriptan oral tablet 50mg stat","C. Paracetamol 1g with codeine","D. Flunarizine preventive tablet daily"],"correct":"A","expl":"Cluster headache: acute treatment = 100% O2 at 12L/min via non-rebreathing mask.","ref":"Mudit Khanna Neurology Headache + Harrison's Ch. 430","topic":"Neurology"},
+      {"id":30,"stem":"A 30F with fluctuating ptosis + diplopia worse in evenings and after prolonged talking. Repetitive nerve stimulation shows decremental response. Initial pharmacotherapy?","opts":["A. Pyridostigmine 60mg orally","B. Prednisone 60mg orally","C. Intravenous immunoglobulin","D. Thymectomy referral alone"],"correct":"A","expl":"Myasthenia gravis: initial symptomatic tx = acetylcholinesterase inhibitor (pyridostigmine); immunosuppression for refractory cases.","ref":"Mudit Khanna Neurology MG + Harrison's Ch. 450","topic":"Neurology"},
+      {"id":31,"stem":"A 25M on carbamazepine for 2yrs presents with hyponatremia (Na 125). Mechanism?","opts":["A. SIADH from carbamazepine effect","B. Primary adrenal insufficiency","C. Excessive free water intake","D. Cerebral salt wasting syndrome"],"correct":"A","expl":"Carbamazepine is well-known cause of SIADH leading to euvolemic hyponatremia.","ref":"Harrison's Ch. 360 + Mudit Khanna Neurology AEDs","topic":"Neurology"},
+      {"id":32,"stem":"A 45M with ascending weakness 4d following URI. DTRs absent. CSF protein 95, WBC 5. NCS shows demyelinating polyneuropathy. Most likely?","opts":["A. Guillain-Barre syndrome (AIDP)","B. Acute intermittent porphyria","C. Heavy metal poisoning","D. Tick paralysis ascending variant"],"correct":"A","expl":"Ascending weakness + areflexia + albuminocytologic dissociation + post-infectious + demyelinating = AIDP-GBS.","ref":"Mudit Khanna Neurology GBS + Harrison's Ch. 452","topic":"Neurology"},
+      {"id":33,"stem":"A 72M with 6-mo history progressive memory loss, visual hallucinations, fluctuating alertness. Also has asymmetric rigidity + bradykinesia. Most likely?","opts":["A. Dementia with Lewy bodies","B. Alzheimer's disease with late psychosis","C. Vascular dementia with pseudoparkinsonism","D. Normal pressure hydrocephalus triad"],"correct":"A","expl":"Dementia + visual hallucinations + fluctuating cognition + parkinsonian features = DLB per revised criteria; no significant motor features before dementia.","ref":"Mudit Khanna Neurology Dementia + Harrison's Ch. 442","topic":"Neurology"},
+      {"id":34,"stem":"A 40F with sudden-onset 'thunderclap' headache 'worst of my life.' CT head negative. Most appropriate next investigation?","opts":["A. Lumbar puncture for xanthochromia","B. CT angiography of cerebral vessels","C. MRI brain with DWI","D. Routine EEG for seizure exclusion"],"correct":"A","expl":"Thunderclap headache = SAH until proven otherwise; if CT negative, LP for xanthochromia mandatory to rule out SAH.","ref":"Mudit Khanna Neurology Q290 + Harrison's Ch. 430","topic":"Neurology"},
+      {"id":35,"stem":"A 60M with DM2 presents with symmetric stocking-glove sensory loss, absent ankle reflexes, burning pain in feet worse at night. NCS: absent sural sensory response. First-line symptomatic treatment?","opts":["A. Pregabalin 75mg orally twice daily","B. Tramadol 50mg as needed for pain","C. Amitriptyline 10mg at night","D. Vitamin B12 supplementation alone"],"correct":"A","expl":"Pregabalin, gabapentin, or duloxetine = first-line for painful diabetic neuropathy; pregabalin often preferred for tolerability.","ref":"Harrison's Ch. 453 + Mudit Khanna Neuropathy","topic":"Neurology"},
+      {"id":36,"stem":"A 50M with DM presents with 3d oliguria. Creatinine rose from 1.2 to 3.8 over 72h. FeNa 3.2%. UA: muddy brown granular casts. Most likely?","opts":["A. Acute tubular necrosis","B. Prerenal","C. Acute interstitial nephritis","D. Post-renal obstruction"],"correct":"A","expl":"FeNa >2% + muddy brown casts + rising Cr = ATN (intrinsic AKI).","ref":"Mudit Khanna Nephrology Q220 + Harrison's Ch. 312","topic":"Nephrology"},
+      {"id":37,"stem":"A 45M presents with severe muscle weakness + palpitations. ECG: tall peaked T-waves, widened QRS, absent P-waves. K+ 7.2. Most appropriate first step?","opts":["A. Intravenous calcium gluconate","B. Intravenous regular insulin with glucose","C. Nebulized salbutamol 10mg","D. Sodium polystyrene sulfonate orally"],"correct":"A","expl":"Severe hyperkalemia with ECG changes: IV calcium gluconate FIRST to stabilize cardiac membrane; prevents arrhythmia.","ref":"Mudit Khanna Nephrology Q270 + Harrison's Ch. 60","topic":"Nephrology"},
+      {"id":38,"stem":"A 70M with CKD stage 3 presents with fatigue, bone pain, anorexia. Hb 8.5 with normocytic normochromic anemia. What causes his anemia?","opts":["A. Decreased erythropoietin production","B. Chronic blood loss from GI tract","C. Folic acid deficiency in diet","D. Hemolysis from uremic toxins"],"correct":"A","expl":"EPO deficiency = primary cause of anemia of CKD; other contributors: shortened RBC survival, iron deficiency, uremia.","ref":"Mudit Khanna Nephrology CKD + Harrison's Ch. 315","topic":"Nephrology"},
+      {"id":39,"stem":"A 20M presents 3d after sore throat with cola-colored urine, periorbital edema, BP 155/95. UA: RBC casts + proteinuria. ASO elevated, C3 low. Most likely?","opts":["A. Post-streptococcal glomerulonephritis","B. IgA nephropathy Berger disease","C. RPGN","D. Lupus nephritis WHO class IV"],"correct":"A","expl":"Post-infectious GN: 1-3wks after strep + nephritic syndrome + low C3 + elevated ASO.","ref":"Mudit Khanna Nephrology GN + Harrison's Ch. 315","topic":"Nephrology"},
+      {"id":40,"stem":"A 35F with polyuria, polydipsia, profound weakness. Na 152, urine osm 210. After 6h water deprivation, urine osm stays at 200. After DDAVP, urine osm rises to 450. Most likely?","opts":["A. Central diabetes insipidus","B. Nephrogenic diabetes insipidus","C. Primary psychogenic polydipsia","D. Osmotic diuresis glucosuria"],"correct":"A","expl":"Failure to concentrate with water deprivation + significant rise after DDAVP = central DI (renal responds to exogenous ADH).","ref":"Harrison's Ch. 382","topic":"Nephrology"},
+      {"id":41,"stem":"A 50M with CKD stage 4 presents with bone pain + fractures. Ca 8.8, Phos 5.8, PTH 620, AlkPhos 480. Management includes all EXCEPT:","opts":["A. Calcium and vitamin D analogs","B. Phosphate binders and dietary restriction","C. Sevelamer for control of serum","D. Immediate parathyroidectomy surgery"],"correct":"D","expl":"Initial management = medical: phosphate binders, vitamin D analogs, calcimimetics; surgery for refractory severe cases.","ref":"Mudit Khanna Nephrology CKD-Bone Mineral + Harrison's Ch. 315","topic":"Nephrology"},
+      {"id":42,"stem":"A 28F with metabolic acidosis. ABG: pH 7.28, PaCO2 30, HCO3 14. Serum: Na 140, K 4.0, Cl 114, HCO3 14. AG 12. Urine AG positive. Most likely?","opts":["A. Distal (type 1) renal tubular acidosis","B. Proximal (type 2) RTA","C. Diarrhea-induced normal AG acidosis","D. Lactic acidosis from sepsis"],"correct":"A","expl":"Normal AG met acidosis + positive urine AG (impaired NH4+ excretion) = distal RTA (type 1): urine pH >5.5.","ref":"Mudit Khanna Nephrology Acid-Base RTA + Harrison's Ch. 320","topic":"Nephrology"},
+      {"id":43,"stem":"A 42M DM with nephrotic syndrome. Biopsy most characteristic of diabetic nephropathy?","opts":["A. Kimmelstiel-Wilson nodular glomerulosclerosis","B. IgA deposits with mesangial proliferation","C. Subepithelial humps on dense deposits","D. Crescents with capsular rupture"],"correct":"A","expl":"K-W nodules = pathognomonic lesion of diabetic nephropathy (nodular glomerulosclerosis).","ref":"Mudit Khanna Nephrology DM nephropathy + Harrison's Ch. 315","topic":"Nephrology"},
+      {"id":44,"stem":"A 55F with nephrotic syndrome presents with sudden right flank pain + macroscopic hematuria. Urine protein 8g/day. Which complication most likely?","opts":["A. Renal vein thrombosis","B. Acute pyelonephritis ascending","C. Ruptured renal cyst hemorrhage","D. Transitional cell carcinoma"],"correct":"A","expl":"Nephrotic syndrome (esp. membranous) leading to renal vein thrombosis (hypercoagulable from loss of AT-III).","ref":"Mudit Khanna Nephrology Nephrotic + Harrison's Ch. 315","topic":"Nephrology"},
+      {"id":45,"stem":"A 50M with cirrhosis presents with hematemesis. BP 85/50, HR 120/min. After IV fluids, most appropriate pharmacological therapy?","opts":["A. Intravenous terlipressin","B. Oral propranolol maintenance dose","C. Intravenous ranitidine infusion","D. Oral sucralfate suspension"],"correct":"A","expl":"Acute variceal bleed: IV vasoactive drugs (terlipressin/somatostatin/octreotide) immediately + IV ceftriaxone for prophylaxis + urgent endoscopic banding.","ref":"Harrison's Ch. 333 + Mudit Khanna Gastro UGIB","topic":"Gastroenterology"},
+      {"id":46,"stem":"A 40M with epigastric pain worse on empty stomach, relieved by food. Endoscopy: duodenal ulcer. H. pylori+ on biopsy. Recommended first-line eradication?","opts":["A. PPI + clarithromycin + amoxicillin x 14 days","B. PPI monotherapy for total 8 weeks","C. Bismuth subsalicylate alone for 2 weeks","D. Sucralfate + famotidine for 6 weeks"],"correct":"A","expl":"First-line: PPI-based triple therapy (PPI + clarithro + amox/metronidazole) x14d; bismuth quadruple in high clarithro resistance areas.","ref":"Mudit Khanna Gastro UGIB + Harrison's Ch. 333","topic":"Gastroenterology"},
+      {"id":47,"stem":"A 55M with acute severe epigastric pain radiating to back, nausea, vomiting. Lipase 800. Ranson's criterion at admission?","opts":["A. Age >55 years","B. Blood glucose >200 mg/dL","C. Serum calcium <8 mg/dL","D. Hematocrit fall of >10%"],"correct":"A","expl":"Ranson's at admission: GA LAW (Glucose>200, Age>55, LDH>350, AST>250, WBC>16K). Others measured at 48h.","ref":"Mudit Khanna Gastro Pancreatitis + Harrison's Ch. 328","topic":"Gastroenterology"},
+      {"id":48,"stem":"A 65M with cirrhosis presents with increasing abdominal distension. Paracentesis: total protein 1.2, SAAG 1.8, PMN 450. Most appropriate next step?","opts":["A. Start cefotaxime 2g IV q8h","B. Schedule therapeutic paracentesis","C. Start oral spironolactone + furosemide","D. Wait for culture results before antibiotics"],"correct":"A","expl":"SBP diagnosed when PMN >250; start empirical cefotaxime/ceftriaxone immediately + IV albumin (1.5g/kg day 1, 1g/kg day 3).","ref":"Mudit Khanna Gastro SBP Q230 + Harrison's Ch. 331","topic":"Gastroenterology"},
+      {"id":49,"stem":"A 35M with 4-month history bloody diarrhea, abdominal pain, tenesmus. Colonoscopy: continuous mucosal inflammation from rectum to sigmoid. Biopsy: crypt abscesses. Most likely?","opts":["A. Ulcerative colitis","B. Crohn's disease terminal ileum","C. Bacillary dysentery Shigella","D. Intestinal tuberculosis"],"correct":"A","expl":"Continuous colonic inflammation from rectum + crypt abscesses + bloody diarrhea = ulcerative colitis.","ref":"Mudit Khanna Gastro IBD + Harrison's Ch. 336","topic":"Gastroenterology"},
+      {"id":50,"stem":"A 45F with painless jaundice, pruritus, fatigue. Labs: ALP 480, bili 2.5, AST/ALT normal. AMA strongly positive 1:640. Most likely?","opts":["A. Primary biliary cholangitis","B. Primary sclerosing cholangitis","C. Autoimmune hepatitis type I","D. Choledocholithiasis"],"correct":"A","expl":"Middle-aged woman + cholestatic pattern + AMA+ = primary biliary cholangitis.","ref":"Mudit Khanna Hepatology Cholestatic + Harrison's Ch. 337","topic":"Gastroenterology"},
+      {"id":51,"stem":"A 28M for HBV screening. Serology: HBsAg+, anti-HBc(tot)+, anti-HBs-, HBeAg+, anti-HBe-. Pattern consistent with?","opts":["A. Chronic hepatitis B with active replication","B. Acute hepatitis B early window phase","C. Resolved natural infection with immunity","D. Vaccinated individual without infection"],"correct":"A","expl":"HBsAg+ + total anti-HBc+ + HBeAg+ = chronic HBV with active viral replication; anti-HBs- = non-resolved.","ref":"Mudit Khanna Hep B serology table + Harrison's Ch. 341","topic":"Gastroenterology"},
+      {"id":52,"stem":"A 60M with painless progressive jaundice 6wks + palpable gallbladder. Courvoisier's sign indicates?","opts":["A. Malignant obstruction of common bile duct","B. Gallstone in common bile duct","C. Stricture of intrahepatic bile ducts","D. Acute inflammation of gallbladder"],"correct":"A","expl":"Painless jaundice + palpable gallbladder (Courvoisier's) = malignant biliary obstruction (typically pancreatic head CA) vs gallstone (fibrotic gallbladder, not palpable).","ref":"Harrison's Ch. 38","topic":"Gastroenterology"},
+      {"id":53,"stem":"A 40M with hematemesis after binge alcohol vomiting began AFTER vomiting episodes. Most likely?","opts":["A. Mallory-Weiss tear","B. Esophageal variceal rupture","C. Peptic ulcer with perforation","D. Dieulafoy's lesion bleeding"],"correct":"A","expl":"Hematemesis AFTER episodes of forceful vomiting (classically post-alcohol) = Mallory-Weiss tear (longitudinal mucosal tear at GE junction).","ref":"Mudit Khanna Gastro UGIB + Harrison's Ch. 337","topic":"Gastroenterology"},
+      {"id":54,"stem":"A 25F with severe fatigue and pallor. Hb 6.8, MCV 68, ferritin 8, TIBC 420. PS: microcytic hypochromic with pencil cells. Most likely?","opts":["A. Iron deficiency anemia","B. Thalassemia minor trait","C. Anemia of chronic disease","D. Sideroblastic anemia acquired"],"correct":"A","expl":"Microcytic anemia + low ferritin + high TIBC + pencil cells = IDA; ferritin most sensitive single indicator of iron stores.","ref":"Mudit Khanna Heme Anemia + Harrison's Ch. 115","topic":"Hematology"},
+      {"id":55,"stem":"A 10M boy from malaria-endemic region presents with jaundice + dark urine 2d after starting antimalarial. PS: bite cells + Heinz bodies. G6PD low. Type of hemolysis?","opts":["A. G6PD deficiency with oxidative stress","B. Sickle cell anemia vaso-occlusive crisis","C. Autoimmune hemolytic anemia warm type","D. Hereditary spherocytosis with fragility"],"correct":"A","expl":"Bite cells + Heinz bodies + hemolysis after oxidative drug (antimalarials) = acute hemolysis in G6PD deficiency.","ref":"Mudit Khanna Heme Hemolytic + Harrison's Ch. 122","topic":"Hematology"},
+      {"id":56,"stem":"A 30F with petechiae + easy bruising. Platelets 15K. PT/aPTT normal. PS: isolated decreased platelets normal morphology. No hepatosplenomegaly. Most likely?","opts":["A. ITP","B. DIC","C. TTP","D. Acute promyelocytic leukemia"],"correct":"A","expl":"Isolated thrombocytopenia + normal PT/aPTT + no other findings = ITP (diagnosis of exclusion).","ref":"Mudit Khanna Heme Q245 + Harrison's Ch. 125","topic":"Hematology"},
+      {"id":57,"stem":"A 40M with fatigue + splenomegaly. WBC 180K with full spectrum of myeloid cells + basophilia. BCR-ABL+. Most likely?","opts":["A. Chronic myeloid leukemia (CML)","B. Acute myeloid leukemia","C. Leukemoid reaction","D. Primary myelofibrosis"],"correct":"A","expl":"Markedly increased WBC + full granulocytic spectrum + basophilia + splenomegaly + BCR-ABL = CML chronic phase.","ref":"Mudit Khanna Heme Leukemia + Harrison's Ch. 118","topic":"Hematology"},
+      {"id":58,"stem":"A 65M with bone pain, recurrent infections, renal failure. Hb 8.2, Ca 11.8, Cr 2.8. SPEP: M-spike 3.2g/dL. UBPJ+. Diagnosis?","opts":["A. Multiple myeloma","B. Chronic lymphocytic leukemia","C. Waldenstrom's macroglobulinemia","D. MGUS"],"correct":"A","expl":"CRAB (increased Ca, renal failure, anemia, bone lesions) + M-spike >3.0 + BJ proteinuria = MM.","ref":"Mudit Khanna Heme MM + Harrison's Ch. 123","topic":"Hematology"},
+      {"id":59,"stem":"A 50F with prolonged aPTT 58sec that corrects to normal on 1:1 mixing immediately but prolongs again after 2h incubation. Indicates?","opts":["A. Factor VIII inhibitor (acquired hemophilia)","B. Heparin contamination of specimen","C. Severe liver synthetic dysfunction","D. Vitamin K antagonist oral effect"],"correct":"A","expl":"Delayed prolongation after 2h incubation = factor VIII inhibitor (acquired hemophilia A).","ref":"Mudit Khanna Heme Coagulation mixing + Harrison's Ch. 125","topic":"Hematology"},
+      {"id":60,"stem":"A 20F with polyuria, polydipsia, weight loss 2wks. Drowsy, tachypneic with Kussmaul breathing. Glucose 480, pH 7.15, HCO3 8, urine ketones 3+. First step in management?","opts":["A. Aggressive IV isotonic saline resuscitation","B. IV regular insulin bolus + infusion","C. IV sodium bicarbonate infusion","D. IV potassium chloride supplementation"],"correct":"A","expl":"In DKA: IV fluid resuscitation with NS is FIRST step (before insulin); fluids alone lower glucose significantly and restore perfusion.","ref":"Harrison's Ch. 401 + Mudit Khanna Endocrinology DKA","topic":"Endocrinology"},
+      {"id":61,"stem":"A 28F with heat intolerance, weight loss, palpitations, tremor. Diffuse goiter + bruit + mild exophthalmos. TSH <0.01, free T4 3.8. Most appropriate initial treatment?","opts":["A. Methimazole 20mg daily","B. Radioactive iodine ablation","C. Total thyroidectomy","D. Propranolol monotherapy only"],"correct":"A","expl":"Graves' disease: methimazole (carbimazole) preferred initial (less teratogenic than PTU except 1st trimester).","ref":"Harrison's Ch. 404 + Mudit Khanna Endocrinology","topic":"Endocrinology"},
+      {"id":62,"stem":"A 45M T2DM on metformin 1g BID + glimepiride 4mg has HbA1c 8.2%. BMI 32. Add which medication next?","opts":["A. Empagliflozin 10mg once daily","B. Basal insulin glargine at bedtime","C. Repaglinide before each meal","D. Sitagliptin 100mg daily with food"],"correct":"A","expl":"T2DM with obesity + ASCVD risk: SGLT2i preferred 2nd line (weight loss + cardiorenal benefit).","ref":"ADA 2025 + Harrison's Ch. 410 + Mudit Khanna Endocrinology T2DM","topic":"Endocrinology"},
+      {"id":63,"stem":"A 45F with progressive proximal weakness, central obesity, purple striae, new DM. AM cortisol 22, ACTH 85, overnight DST: no suppression. Next step?","opts":["A. 8mg overnight DST","B. MRI of the pituitary gland","C. CT of adrenal glands","D. Late-night salivary cortisol"],"correct":"A","expl":"ACTH-dependent Cushing's (ACTH 85 + high cortisol): 8mg DST differentiates pituitary (suppresses) from ectopic (doesn't suppress).","ref":"Harrison's Ch. 407 + Mudit Khanna Endocrinology","topic":"Endocrinology"},
+      {"id":64,"stem":"A 30F with secondary amenorrhea, galactorrhea, bitemporal hemianopia. Prolactin 280 (nl <25). MRI: 1.5cm pituitary adenoma. First-line treatment?","opts":["A. Cabergoline 0.5mg twice weekly","B. Transsphenoidal surgical resection","C. Stereotactic radiation therapy","D. Bromocriptine 2.5mg TID"],"correct":"A","expl":"Prolactinoma (any size): dopamine agonist first-line (cabergoline preferred - efficacy/tolerability over bromocriptine) can shrink tumor + normalize prolactin.","ref":"Harrison's Ch. 383","topic":"Endocrinology"},
+      {"id":65,"stem":"A 25M with progressive hand/foot/jaw enlargement over 3yrs + excessive sweating. IGF-1 680. OGTT: GH fails to suppress. First-line treatment?","opts":["A. Transsphenoidal resection of pituitary","B. Octreotide long-acting monthly","C. Radiation therapy stereotactic","D. Pegvisomant daily SQ injection"],"correct":"A","expl":"Acromegaly from GH-secreting pituitary adenoma: transsphenoidal surgery = first-line; medical therapy as adjunct when surgery contraindicated.","ref":"Harrison's Ch. 383","topic":"Endocrinology"},
+      {"id":66,"stem":"A 40M with epigastric pain worse on empty stomach, relieved by food. Endoscopy: duodenal ulcer. H. pylori+ on biopsy. Recommended first-line eradication?","opts":["A. PPI + clarithromycin + amoxicillin x 14 days","B. PPI monotherapy for 8 weeks total","C. Bismuth subsalicylate alone for 2 weeks","D. Sucralfate + famotidine for 6 weeks"],"correct":"A","expl":"First-line: PPI-based triple therapy (PPI + clarithro + amox/metronidazole) x14d; bismuth quadruple in high clarithro resistance areas.","ref":"Mudit Khanna Gastro H pylori + Harrison's Ch. 337","topic":"Gastroenterology"},
+      {"id":67,"stem":"A 50M with epigastric pain 4h post heavy meal. Lipase 1200. Ranson's criteria at admission include all EXCEPT:","opts":["A. Age >55 years","B. Blood glucose >200 mg/dL","C. Serum calcium <8 mg/dL","D. AST >250 IU/L level"],"correct":"C","expl":"Ranson's at admission: GA LAW (Glucose>200, Age>55, LDH>350, AST>250, WBC>16K). Calcium <8 measured at 48h, not admission.","ref":"Mudit Khanna Gastro Pancreatitis + Harrison's Ch. 328","topic":"Gastroenterology"},
+      {"id":68,"stem":"A 65M with cirrhosis presents with increasing abdominal distension. Paracentesis: total protein 1.2, SAAG 1.8, PMN 450. Most appropriate next step?","opts":["A. Start cefotaxime 2g IV q8h","B. Schedule elective therapeutic paracentesis","C. Start oral spironolactone + furosemide","D. Wait for culture results before starting antibiotic"],"correct":"A","expl":"SBP diagnosed when PMN >250; start cefotaxime immediately + IV albumin (1.5g/kg d1, 1g/kg d3).","ref":"Mudit Khanna Gastro SBP Q230 + Harrison's Ch. 331","topic":"Gastroenterology"},
+      {"id":69,"stem":"A 35M with 4mo history bloody diarrhea, abdominal pain, tenesmus. Colonoscopy: continuous colonic mucosal inflammation from rectum to sigmoid. Biopsy: crypt abscesses. Most likely?","opts":["A. Ulcerative colitis","B. Crohn's disease terminal ileum","C. Bacillary dysentery Shigella","D. Intestinal tuberculosis"],"correct":"A","expl":"Continuous colonic inflammation from rectum + crypt abscesses + bloody diarrhea = ulcerative colitis.","ref":"Mudit Khanna Gastro IBD + Harrison's Ch. 336","topic":"Gastroenterology"},
+      {"id":70,"stem":"A 45F with painless jaundice, pruritus, fatigue. Labs: ALP 480, bili 2.5, AST/ALT normal. AMA strongly positive 1:640. Most likely?","opts":["A. Primary biliary cholangitis","B. Primary sclerosing cholangitis","C. Autoimmune hepatitis type I","D. Choledocholithiasis"],"correct":"A","expl":"Middle-aged woman + cholestatic pattern + AMA+ = primary biliary cholangitis.","ref":"Mudit Khanna Hepatology Cholestatic + Harrison's Ch. 337","topic":"Gastroenterology"},
+      {"id":71,"stem":"A 28M HBV screening. Serology: HBsAg+, anti-HBc tot+, anti-HBs-, HBeAg+, anti-HBe-. Consistent with?","opts":["A. Chronic hepatitis B with active replication","B. Acute hepatitis B early window phase","C. Resolved natural infection immunity","D. Vaccinated individual without infection"],"correct":"A","expl":"HBsAg+ + total anti-HBc+ + HBeAg+ = chronic HBV active replication; anti-HBs- = non-resolved.","ref":"Mudit Khanna Hep B serology table + Harrison's Ch. 341","topic":"Gastroenterology"},
+      {"id":72,"stem":"A 60M with painless progressive jaundice 6wks + palpable gallbladder. Courvoisier's sign indicates?","opts":["A. Malignant obstruction of CBD","B. Gallstone impacted in the CBD","C. Stricture of the intrahepatic bile ducts","D. Acute inflammation of gallbladder"],"correct":"A","expl":"Painless jaundice + palpable gallbladder (Courvoisier's sign) = malignant biliary obstruction (typically pancreatic head CA) not gallstone (fibrotic/non-palpable gallbladder in gallstone obstructive jaundice).","ref":"Harrison's Ch. 38","topic":"Gastroenterology"},
+      {"id":73,"stem":"A 40M with hematemesis AFTER binge alcohol vomiting. Most likely?","opts":["A. Mallory-Weiss mucosal tear","B. Esophageal variceal rupture","C. Peptic ulcer with perforation","D. Dieulafoy's lesion submucosal vessel"],"correct":"A","expl":"Hematemesis AFTER episodes of forceful vomiting (classically post-binge) = Mallory-Weiss tear (longitudinal mucosal laceration at GE junction).","ref":"Mudit Khanna Gastro UGIB + Harrison's Ch. 337","topic":"Gastroenterology"},
+      {"id":74,"stem":"A 25F with severe fatigue, pallor. Hb 6.8, MCV 68, ferritin 8, TIBC 420. PS: microcytic hypochromic + pencil cells. Most likely?","opts":["A. Iron deficiency anemia","B. Thalassemia minor trait","C. Anemia of chronic disease","D. Sideroblastic anemia acquired"],"correct":"A","expl":"Microcytic anemia + low ferritin + high TIBC + pencil cells = IDA; ferritin most sensitive single indicator of iron stores.","ref":"Mudit Khanna Heme Anemia + Harrison's Ch. 115","topic":"Hematology"},
+      {"id":75,"stem":"A 10M boy from malaria-endemic region presents with jaundice + dark urine 2d after starting antimalarial. PS: bite cells + Heinz bodies. G6PD low. Type?","opts":["A. G6PD deficiency with oxidative stress","B. Sickle cell anemia vaso-occlusive crisis","C. Autoimmune hemolytic anemia warm type","D. Hereditary spherocytosis fragile"],"correct":"A","expl":"Bite cells + Heinz bodies + hemolysis after oxidative drug (antimalarials) = acute hemolysis in G6PD deficiency.","ref":"Mudit Khanna Heme Hemolytic + Harrison's Ch. 122","topic":"Hematology"},
+      {"id":76,"stem":"A 30F with petechiae + easy bruising. Platelets 15K. PT/aPTT normal. PS: isolated decreased platelets normal morphology. No HSM. Most likely?","opts":["A. ITP","B. DIC","C. TTP","D. APL leukemia"],"correct":"A","expl":"Isolated thrombocytopenia (15K) + normal PT/aPTT + no HSM + normal PS morphology except decreased platelets = ITP (diagnosis of exclusion; smear shows decreased platelets without clumping).","ref":"Mudit Khanna Heme ITP Q245 + Harrison's Ch. 125","topic":"Hematology"},
+      {"id":77,"stem":"A 40M with fatigue + splenomegaly. WBC 180K with full spectrum myeloid cells including myelocytes, metamyelocytes, basophilia. BCR-ABL+. Most likely?","opts":["A. Chronic myeloid leukemia","B. Acute myeloid leukemia","C. Leukemoid physiological response","D. Primary myelofibrosis with fibrosis"],"correct":"A","expl":"Markedly increased WBC + full myeloid spectrum + basophilia + splenomegaly + BCR-ABL = CML chronic phase.","ref":"Mudit Khanna Heme Leuk + Harrison's Ch. 122","topic":"Hematology"},
+      {"id":78,"stem":"A 65M with bone pain, recurrent infections, renal failure. Hb 8.2, Ca 11.8, Cr 2.8. SPEP: M-spike 3.2g/dL. UBJ+. Diagnosis?","opts":["A. Multiple myeloma","B. CLL","C. Waldenstrom's macroglobulinemia","D. MGUS"],"correct":"A","expl":"CRAB (increased Ca, renal failure, anemia, Bone lesions) + M-spike >3.0 + BJ + = MM.","ref":"Mudit Khanna Heme MM + Harrison's Ch. 123","topic":"Hematology"},
+      {"id":79,"stem":"A 50F with increased aPTT 58sec that corrects on 1:1 mixing immediately but prolongs again after 2h incubation. Indicates?","opts":["A. Factor VIII inhibitor (acquired hemophilia)","B. Heparin contamination specimen","C. Severe liver synthetic dysfunction","D. Vitamin K antagonist oral effect"],"correct":"A","expl":"Delayed prolongation after 2h incubation = factor VIII inhibitor (acquired hemophilia A).","ref":"Mudit Khanna Heme Coagulation mixing + Harrison's Ch. 125","topic":"Hematology"},
+      {"id":80,"stem":"A 45M with fever, weight loss 6wks + night sweats. Exam: HSM + generalized lymphadenopathy. Blood cultures sterile. Most diagnostic investigation?","opts":["A. Lymph node excisional biopsy","B. Serial repeat blood cultures","C. CT scan of entire abdomen","D. Bone marrow aspirate + trephine"],"correct":"A","expl":"For FUO with lymphadenopathy: excisional LN biopsy preserves architecture for histopathology (lymphoma, TB, sarcoidosis).","ref":"Harrison's Ch. 41 + Mudit Khanna FUO approach","topic":"Infectious Disease"}
+    ]
+  },
+  {
+    "type": "case",
+    "id": 1,
+    "title": "RHD with IE, Stroke, HF",
+    "vignette": "A 26F from rural village presents with high-grade fever, progressive SOB, right-sided weakness 2d. Murmur since childhood, never evaluated. 3wks low-grade fever treated with OTC antibiotics. Exam: febrile 39.1 C, tachycardic 110, tachypneic 28, BP 110/70. Mild pallor, splinter hemorrhages, Osler's nodes. Irregularly irregular pulse + grade 4/6 holosystolic murmur at apex radiating to axilla. Right-sided weakness MRC 3/5. Hb 9.2, WBC 14.5K, Plt 220K. ECG: AF with RVR. CXR: cardiomegaly + bilateral pulmonary venous congestion. CT head not available immediately.",
+    "questions": [
+      {"id":81,"stem":"Most likely diagnosis?","opts":["A. Infective endocarditis with systemic embolization","B. Rheumatic fever with carditis only","C. Atrial myxoma with constitutional symptoms","D. SLE with Libman-Sacks"],"correct":"A","expl":"Fever + murmur + emboli (stroke, splinter hemorrhages, Osler nodes) = Modified Duke criteria for IE in setting of pre-existing RHD (2 major + minor).","ref":"Harrison's Ch. 173 + Mudit Khanna IE","topic":"Cardiology"},
+      {"id":82,"stem":"Most appropriate blood culture collection?","opts":["A. 3 sets from separate venipuncture sites","B. 1 set drawn automatically from indwelling","C. 2 sets drawn after starting antibiotics","D. 4 sets at 24-hour intervals"],"correct":"A","expl":"At least 3 sets blood cultures from separate venipuncture sites before antibiotics; timing less critical in subacute but ALL before antibiotics.","ref":"Harrison's Ch. 173","topic":"Cardiology"},
+      {"id":83,"stem":"What does right-sided weakness most likely represent?","opts":["A. Left MCA embolus","B. Right cerebral hemorrhage","C. Left ACA ischemia","D. Right brainstem lacunar infarct"],"correct":"A","expl":"Embolus from left-sided (mitral valve) vegetation going to left MCA territory leading to right hemiparesis; embolization common in IE esp. Staph + MV.","ref":"Harrison's Ch. 173 + Mudit Khanna IE Complications stroke","topic":"Cardiology"},
+      {"id":84,"stem":"Most appropriate immediate management?","opts":["A. Blood cultures + empirical IV ceftriaxone + gentamicin","B. IV heparin infusion immediately for stroke prevention","C. Oral amoxicillin and outpatient follow-up in 48h","D. Thrombolysis tPA for acute ischemic stroke"],"correct":"A","expl":"Blood cultures then start ceftriaxone+gentamicin. Heparin/thrombolysis CONTRAINDICATED in septic embolic stroke (hemorrhage risk high).","ref":"Harrison's Ch. 173 + Mudit Khanna Neurology stroke contraindications","topic":"Cardiology"},
+      {"id":85,"stem":"Finding most indicative of severe MR?","opts":["A. Holosystolic murmur radiating to axilla","B. Early diastolic murmur at right sternal border","C. Pansystolic murmur at lower sternal border","D. Mid-diastolic rumble with opening snap only"],"correct":"A","expl":"Holosystolic murmur at apex radiating to axilla = MR; severity suggested by loud murmur+signs HF (pulmonary congestion CXR).","ref":"Mudit Khanna Cardiology murmurs + Harrison's Ch. 273","topic":"Cardiology"}
+    ]
+  },
+  {
+    "type": "case",
+    "id": 2,
+    "title": "TB + HIV",
+    "vignette": "A 34M with 2mo cough productive, night sweats, weight loss. Known HIV+ on ART (zidovudine, lamivudine, nevirapine) 8mo. CD4 120 6wks ago. Adherent to ART. Exam: cachectic (BMI 16.2), febrile 38.5, breath sounds decreased upper bilateral zones. CXR: bilateral upper zone cavitary lesions. GeneXpert: MTB+. Viral load detectable. LFTs normal.",
+    "questions": [
+      {"id":86,"stem":"Most appropriate immediate step?","opts":["A. Start ATT with appropriate ART adjustments","B. Stop ART immediately wait for TB culture","C. Start ATT only delay ART for 3 months","D. Start ART only delay ATT for 2 months"],"correct":"A","expl":"Start ATT immediately (HRZE); rifampicin interacts with ART (esp. NNRTIs); ART continued but may need adjustment (switch NVP to efavirenz compatible rifampicin).","ref":"Harrison's Ch. 260 + WHO guidelines","topic":"Infectious Disease"},
+      {"id":87,"stem":"Which ATT drug has most significant interaction with ART?","opts":["A. Rifampicin","B. Isoniazid","C. Ethambutol","D. Streptomycin"],"correct":"A","expl":"Rifampicin = potent CYP450 inducer leading to increased metabolism of ART and subtherapeutic levels; may require ART modification (efavirenz+RIF compatible; NVP levels decreased).","ref":"Harrison's Ch. 260 + WHO TB/HIV guidelines","topic":"Infectious Disease"},
+      {"id":88,"stem":"Two weeks after starting ATT: fever increases, lymphadenopathy, worsening respiratory despite TB improvement. Consistent with?","opts":["A. Immune reconstitution inflammatory syndrome (IRIS)","B. TB treatment failure","C. Drug hypersensitivity reaction","D. Nosocomial pneumonia"],"correct":"A","expl":"IRIS (paradoxical): paradoxical worsening after ATT/ART as immune system recovers mounts inflammatory response to TB antigens; treat with continue ATT+symptomatic management; steroids for severe cases.","ref":"Harrison's Ch. 260 + WHO TB/IRIS guidelines 2025","topic":"Infectious Disease"},
+      {"id":89,"stem":"Most important monitoring during ATT in this patient?","opts":["A. Monthly LFTs (hepatotoxicity)","B. Serial CD4 every 2wks","C. Monthly CXR","D. Serial GeneXpert weekly"],"correct":"A","expl":"ATT can cause hepatotoxicity; esp. HIV coinfected. Check LFTs monthly+clinical monitoring for jaundice, abdominal pain, nausea; stop ATT if ALT >3xULN symptomatic or >5xULN asymptomatic.","ref":"Harrison's Ch. 260 + Mudit Khanna TB monitoring","topic":"Infectious Disease"},
+      {"id":90,"stem":"How long should TB treatment continue in HIV+ patient?","opts":["A. 6 months total standard regimen","B. 9-12 months recommended standard","C. 12 months minimum HIV+ patients","D. 4 months intensive phase only"],"correct":"A","expl":"Standard 6mo (2HRZE+4HR) effective for TB in HIV+ pts; extended only if: cavitary disease+positive culture at 3 months, or TB meningitis, bone/joint TB, MDR-TB.","ref":"WHO TB/HIV Co-Treatment Guidelines 2025","topic":"Infectious Disease"}
+    ]
+  },
+  {
+    "type": "case",
+    "id": 3,
+    "title": "Sepsis with AKI, Hyperkalemia, Dialysis",
+    "vignette": "A 48M brought to ER with confusion, decreasing urine output, fever 2d. Recently treated for pneumonia with oral antibiotics + NSAIDs. Exam: febrile 38.8 C, BP 88/55, HR 130, RR 24, SpO2 92%. JVP not raised, clear lungs, no edema. Urine output less than 200mL in 8h. Labs: Na 128, K 6.8, Cl 102, HCO3 15, BUN 98, Cr 5.4, glucose 92, WBC 18.5K, Hb 11.2, plts 180K. ABG: pH 7.24, PaCO2 30, PaO2 58. ECG: tall peaked T-waves. Urine: dark brown granular casts.",
+    "questions": [
+      {"id":91,"stem":"Most likely cause of AKI in this patient?","opts":["A. Acute tubular necrosis (ATN)","B. Prerenal azotemia dehydration shock","C. Acute interstitial nephritis from NSAIDs","D. Postrenal ureteral obstructive stone"],"correct":"A","expl":"Sepsis (fever 38.8 C, hypotension 88/55, HR 130) + muddy brown casts + oliguria = ATN (intrinsic AKI); NSAID-cause AIN typically WBC casts, eosinophiluria; prerenal typically FeNa <1%, no casts.","ref":"Mudit Khanna Nephrology AKI differentiation table Q220-230","topic":"Nephrology"},
+      {"id":92,"stem":"First intervention for hyperkalemia?","opts":["A. IV calcium gluconate","B. IV insulin+dextrose infusion","C. Oral sodium polystyrene sulfonate resin","D. Nebulized salbutamol 10mg dose"],"correct":"A","expl":"Hyperkalemia+ECG changes (peaked T-waves, widened QRS)+K+ 6.8: IV calcium gluconate FIRST to stabilize cardiac membrane; then insulin+glucose to lower K+ levels. Hemodialysis definitive for refractory cases.","ref":"Mudit Khanna Nephrology Q270 Emergency protocol + Harrison's Ch. 60","topic":"Nephrology"},
+      {"id":93,"stem":"Which is indication for emergency dialysis in this patient?","opts":["A. Refractory hyperkalemia + ECG changes","B. BUN >50 mg/dL only","C. Urine output <40mL/day alone","D. Metabolic acidosis pH<7.40 mild"],"correct":"A","expl":"Emergency dialysis: AEIOU (Acidosis refractory, Electrolyte abnormalities (hyperkalemia refractory), Intoxications, fluid Overload refractory, Uremia complications). K+ 6.8+ECG: hemodialysis (if refractory).","ref":"Mudit Khanna Dialysis Indications Q265 + Harrison's Ch. 320","topic":"Nephrology"},
+      {"id":94,"stem":"Most important initial hemodynamic intervention in septic shock?","opts":["A. IV crystalloid fluid resuscitation 30mL/kg","B. IV dopamine infusion only for BP support","C. Immediate broad-spectrum antibiotics alone","D. IV hydrocortisone low-dose stress dose"],"correct":"A","expl":"Septic shock: aggressive IV crystalloid (30mL/kg NS) within 1st 3h then vasopressor (NE first-line) if MAP persistently <65 despite fluids. Antibiotics within 1h but fluids start simultaneously.","ref":"SSC 2025 Guidelines + Harrison's Ch. 323","topic":"Critical Care"},
+      {"id":95,"stem":"Which finding best distinguishes ATN from prerenal AKI?","opts":["A. Muddy brown granular casts urinalysis","B. FeNa <1% (indicating prerenal state)","C. Urine osmolality >500 mOsm/kg (concentrated)","D. BUN:creatinine ratio >20:1"],"correct":"A","expl":"Muddy brown granular casts = ATN; FeNa >2%, UOsm <350 differentiate ATN from prerenal (FeNa <1%, UOsm >500, BUN:Cr >20:1).","ref":"Mudit Khanna Q225 + Harrison's Ch. 312","topic":"Nephrology"}
+    ]
+  },
+  {
+    "type": "case",
+    "id": 4,
+    "title": "GI Bleed in Cirrhosis",
+    "vignette": "A 52M with 20 yrs known cirrhosis presents with hematemesis+melen increasing abdominal distension. Exam: pale, jaundiced, encephalopathic (GCS 12). VS: BP 85/50, HR 125, SpO2 93% RA. Abdomen distended shifting dullness+, firm liver edge 2cm BCM, splenomegaly+. Spider naevi+. NG tube: 400mL frank blood. Labs: Hb 6.5, plts 85K, PT (INR 2.8), bili 4.2, alb 2.5, Cr 1.8, NH3 120.",
+    "questions": [
+      {"id":96,"stem":"Most likely source of bleeding?","opts":["A. Esophageal varices","B. Peptic ulcer of duodenum","C. Erosive gastritis severe","D. Mallory-Weiss tear"],"correct":"A","expl":"Cirrhosis+hematemesis+melen+portal HTN signs (splenomegaly, ascites, decreased plts) = Esophageal variceal hemorrhage most likely source; varices approximately 60% of UGIB in cirrhotic patients.","ref":"Mudit Khanna Gastro UGIB + Harrison's Ch. 333","topic":"Gastroenterology"},
+      {"id":97,"stem":"Most appropriate immediate management?","opts":["A. 2 large-bore IVs, crystalloids, blood, octreotide, ceftriaxone","B. Emergency endoscopy within 30 minutes","C. Balloon tamponade as first-line therapy","D. TIPS procedure immediate first-line"],"correct":"A","expl":"Acute variceal bleed protocol: 1) Resuscitation (2LBIV, crystalloid to packed RBCs), 2) IV octreotide (50mcg bolus +400mcg/h), 3) IV ceftriaxone 1g SBP prophylaxis, 4) PPI, endoscopy within 12h for banding. Tamponade rescue therapy only; TIPS failure rescue therapy.","ref":"Harrison's Ch. 333 + Mudit Khanna Gastro UGIB variceal bleed protocol","topic":"Gastroenterology"},
+      {"id":98,"stem":"After stabilization most appropriate management for hepatic encephalopathy?","opts":["A. Oral lactulose titration to effect","B. Oral neomycin antibiotic monotherapy","C. IV mannitol osmotic cerebral edema therapy","D. IV sodium phenylbutyrate infusion therapy"],"correct":"A","expl":"Hepatic encephalopathy: oral lactulose (30-60mL q1-2h until BM then 2-3 BM/d); rifaximin added if no response. IV mannitol only for cerebral edema in acute liver failure, not cirrhotic HE.","ref":"Mudit Khanna Gastro Hepatic Encephalopathy + Harrison's Ch. 339","topic":"Gastroenterology"},
+      {"id":99,"stem":"Which finding in ascitic fluid suggests SBP in this patient?","opts":["A. PMN count >250/microliter","B. pH consistently >7.35","C. Glucose level >60 mg/dL","D. LDH < serum LDH level"],"correct":"A","expl":"Diagnosis SBP: ascitic PMN >250 cells/mm3, even before culture results. Cirrhotics with UGIB high risk SBP (20-30%); prophylactic abx (IV ceftriaxone 1g/d x 7d) indicated.","ref":"Mudit Khanna Gastro SBP Q230 + Harrison's Ch. 331","topic":"Gastroenterology"},
+      {"id":100,"stem":"If develops worsening AKI oliguria despite fluid ascitic fluid normal US no obstruction most likely?","opts":["A. Hepatorenal syndrome (HRS) type 1","B. Acute tubular necrosis from ischemia","C. Prerenal azotemia dehydration","D. IgA nephropathy cirrhosis-associated"],"correct":"A","expl":"HRS type 1: rapidly progressive renal dysfunction (Cr >2.5 in <2wks) in cirrhotics with ascites, absence of shock, no structural renal disease; precipitated by UGIB, SBP; diagnosis of exclusion; management: vasoconstrictors+albumin.","ref":"Mudit Khanna Gastro HRS Q235 + Harrison's Ch. 331","topic":"Gastroenterology"}
+    ]
+  },
+  {
+    "type": "case",
+    "id": 5,
+    "title": "Hypertensive Stroke",
+    "vignette": "A 50F with no medical history presents with sudden headache, vomiting, right-sided weakness, drowsiness. Exam: BP 220/130, HR 88. GCS 11. Left Babinski+, right hemiplegia. Neck stiff? no. CT head (after 2h referral delay): large left putaminal hemorrhage with intraventricular extension. ECG: LVH strain only. UA: 2+ protein.",
+    "questions": [
+      {"id":101,"stem":"Most likely risk factor for this stroke?","opts":["A. Chronic severe hypertension","B. Undiagnosed RHD with AF","C. Malignant primary brain tumor","D. Cerebral amyloid angiopathy"],"correct":"A","expl":"Long-standing uncontrolled HTN + putamen hemorrhage (classic location hypertensive ICH) = hypertensive hemorrhage. Basal ganglia hemorrhage 50-60% of hypertensive ICH. LVH strain, proteinureia all indicate target organ damage from chronic HTN.","ref":"Harrison's Ch. 429 + Mudit Khanna Neurology stroke ICH","topic":"Neurology"},
+      {"id":102,"stem":"Most appropriate immediate intervention?","opts":["A. IV labetalol to lower BP <180/105 safely","B. Emergency surgical evacuation hematoma immediately","C. IV mannitol reduce ICP only alone first-line","D. Nimodipine prevent cerebral vasospasm only agent"],"correct":"A","expl":"ICH with BP >220/120 or potential for expansion, lowers BP to <180/105 safely (not too rapidly) using IV labetalol/nicardipine. No surgery for deep (basal ganglia) hemorrhage.","ref":"AHA/ASA ICH Guidelines 2015 + Harrison's Ch. 429 + Mudit Khanna Neurology stroke ICH","topic":"Neurology"},
+      {"id":103,"stem":"Most common location hypertensive ICH?","opts":["A. Putamen (basal ganglia)","B. Cerebellar hemisphere vermis","C. Lobar cortical frontal white matter","D. Pons"],"correct":"A","expl":"Putamen (basal ganglia) most common (approximately 50%), then thalamus (15%), cerebellum (10%), pons (10%), lobar (10-20%).","ref":"Harrison's Ch. 429 Table","topic":"Neurology"},
+      {"id":104,"stem":"Role of nimodipine in this patient?","opts":["A. Not indicated; for aneurysmal SAH prevention only","B. First-line BP lowering for intracranial pressure","C. Hematoma expansion reduction proven benefit","D. Prevents recurrent hemorrhagic stroke events"],"correct":"A","expl":"Nimodipine indicated for vasospasm prevention in aneurysmal SAH, NOT ICH HTN. BP lowering in ICH: labetalol, nicardipine, nitroprusside if needed.","ref":"Mudit Khanna Neurology Nimodipine indications + Harrison's Ch. 429","topic":"Neurology"},
+      {"id":105,"stem":"After 48h, condition worsens GCS 8. Repeat CT shows: hematoma enlargement midline shift uncal herniation same side. Most appropriate?","opts":["A. Neurosurgical consultation for decompressive craniectomy","B. Continue IV labetalol increase fluid challenge","C. IV thrombolysis tPA to dissolve immediately","D. IV dexamethasone reduce vasogenic edema brain swelling"],"correct":"A","expl":"Worsening with significant neurological deterioration, midline shift + herniation = neurosurgical emergency; decompressive hemicraniectomy life-saving option. Corticosteroids are NOT beneficial in ICH (may worsen outcomes per STITCH trials).","ref":"Harrison's Ch. 429 + Neurosurgical Emergency Guidelines","topic":"Neurology"}
+    ]
+  },
+  {
+    "type": "case",
+    "id": 6,
+    "title": "Diabetic Ketoacidosis",
+    "vignette": "A 20F college student brought by roommates for increasing lethargy, excessive thirst, frequent urination 3d. T1DM at age 15 on insulin but stopped 2wks ago 'afraid of needles.' Exam: confused arousable, tachypneic Kussmaul, dry mucous membranes, sunken eyes. VS: BP 95/60, HR 120, RR 28, T 37.2. Glucose: 450 mg/dL. Urinalysis: glucose 4+, ketones 3+.",
+    "questions": [
+      {"id":106,"stem":"Most appropriate initial diagnostic test?","opts":["A. Arterial blood gas analysis with basic electrolytes","B. CT head altered mental status evaluation","C. CT chest infectious source search","D. Lumbar puncture rule out meningitis"],"correct":"A","expl":"Suspected DKA: ABG (pH), serum electrolytes (K+, esp.), glucose, BUN, Cr, ketones, osmolality initial workup before initiating treatment.","ref":"Harrison's Ch. 401 + Mudit Khanna Endocrinology DKA protocol","topic":"Endocrinology"},
+      {"id":107,"stem":"Initial ABG: pH 7.12, PaCO2 22, HCO3 8. Serum Na 142, K 4.2, Cl 105. Anion gap?","opts":["A. 29 mEq/L","B. 35 mEq/L","C. 18 mEq/L","D. 40 mEq/L"],"correct":"A","expl":"AG = Na - (Cl + HCO3) = 142 - (105 + 8) = 29 mEq/L (increased) = high AG met acidosis DKA expected.","ref":"Harrison's Acid-Base + Mudit Khanna Nephrology ABG Q240","topic":"Nephrology"},
+      {"id":108,"stem":"Most important initial treatment step?","opts":["A. IV normal saline bolus 1-2 L","B. IV regular insulin bolus 10U stat","C. IV sodium bicarbonate bolus infusion therapy","D. IV potassium chloride supplementation immediately"],"correct":"A","expl":"DKA management: ALWAYS start with fluid resuscitation (1-2 L NS 1st h). Fluids significantly lower glucose. Insulin started AFTER initial fluid resuscitation. Bicarbonate NOT indicated (no proven benefit may harm). K+ replacement depends level.","ref":"Harrison's Ch. 401 + Mudit Khanna Endocrinology DKA","topic":"Endocrinology"},
+      {"id":109,"stem":"After 2h: glucose 280, K+ 3.2. Next step?","opts":["A. Add dextrose + K+ to IV fluids continue insulin","B. Discontinue insulin start sliding scale subQ injections","C. Add bicarbonate IV fluids continue insulin unchanged","D. Increase insulin infusion rate maximum to lower rapid glucose"],"correct":"A","expl":"Glucose approaches 250 switch fluids D5-0.45% NS prevent overcorrection hypoglycemia; add K+ fluids (3.2 requires replenishment per DKA protocol). Insulin infusion continues until AG closes. Maintain K+ 4-5 mEq/L.","ref":"Harrison's Ch. 401 + Mudit Khanna Endocrinology DKA","topic":"Endocrinology"},
+      {"id":110,"stem":"Best monitoring parameter indicates resolution of DKA?","opts":["A. Closure of anion gap completely","B. Blood glucose <200 mg/dL","C. Serum glucose <200 alone only indicator","D. Blood pH normalizes single marker"],"correct":"A","expl":"Resolution defined closure of anion gap (less than or equal to 12 mEq/L) reflecting resolution ketoacidosis. While glucose may normalize early, gap may persist indicating continued acidosis present ongoing ketolysis. pH + bicarb normalize more slowly.","ref":"Harrison's Ch. 401 + Mudit Khanna DKA resolution","topic":"Endocrinology"}
+    ]
+  },
+  {
+    "type": "case",
+    "id": 7,
+    "title": "Interstitial Lung Disease / IPF",
+    "vignette": "A 50F never-smoker teacher, progressive dyspnea 8mo, dry persistent cough. Exam: fine bilateral inspiratory crackles to mid-zones+no wheezing. Clubbing+. SpO2 90% RA to 94% on 2L/min. CXR: bilateral reticulonodular opacities lower zones predominantly. HRCT: bilateral reticular changes subpleural honeycombing+traction bronchiectasis. PFTs: FEV1 55%, FVC 50%, FEV1/FVC 0.82, DLCO 40%. Echo estimated PASP 45 mmHg.",
+    "questions": [
+      {"id":111,"stem":"Most likely diagnosis?","opts":["A. Idiopathic pulmonary fibrosis (UIP pattern)","B. Sarcoidosis with pulmonary involvement","C. Hypersensitivity pneumonitis chronic","D. Bronchiectasis diffuse"],"correct":"A","expl":"Restrictive PFTs (decreased FVC, decreased FEV1, ratio preserved/increased)+decreased DLCO+subpleural honeycombing on HRCT = UIP pattern most likely IPF. Age>60, no smoking, subpleural=consistent UIP. Sarcoid typically upper lobe perihilar. HP: exposure history needed.","ref":"Harrison's Ch. 325 + Mudit Khanna ILD","topic":"Pulmonology"},
+      {"id":112,"stem":"Most appropriate pharmacologic treatment option?","opts":["A. Pirfenidone slow disease progression","B. High-dose oral corticosteroids indefinitely","C. Acetylcysteine monotherapy+steroids combination","D. Azathioprine with prednisone combination therapy"],"correct":"A","expl":"Pirfenidone or nintedanib slow decline FVC IPF; triple therapy (pred+AZA+NAC) associated with increased mortality (PANTHER-IPF trial) showed harm; not recommended. Immunosuppression is contraindicated in IPF.","ref":"Harrison's Ch. 325 (PANTHER-IPF) + ATS/ERS IPF 2025","topic":"Pulmonology"},
+      {"id":113,"stem":"What does FEV1/FVC ratio 0.82 indicate?","opts":["A. Restrictive pattern (ratio preserved)","B. Obstructive pattern (ratio decreased)","C. Mixed pattern (ratio partially abnormal)","D. Normal pattern (no obstruction)"],"correct":"A","expl":"FEV1/FVC >0.80 + reduced FVC = restrictive pattern; both FEV1+FVC reduced FVC more affected; preserved FEV1/FVC ratio normal/high DLCO reduction confirms disease pattern parenchymal vs airway.","ref":"Harrison's PFT interpretation + Mudit Khanna Pulmonology PFT patterns","topic":"Pulmonology"},
+      {"id":114,"stem":"Complication suggested PASP 45 mmHg?","opts":["A. Secondary pulmonary arterial hypertension ILD","B. Primary PAH idiopathic","C. Left heart failure secondary","D. Chronic thromboembolic pulmonary HTN"],"correct":"A","expl":"Estimated PASP 45 moderate PH secondary to diffuse lung disease Group 3 WHO classification. Common complication advanced ILD/IPF and carries poor prognosis.","ref":"Harrison's Ch. 325 (PH in ILD) + WHO PH 2025","topic":"Pulmonology"},
+      {"id":115,"stem":"Poor prognostic indicator?","opts":["A. Honeycombing HRCT reticular changes","B. FEV1 <60% predicted","C. O2 sat >90% indicates no hypoxemia","D. Dry cough predominant symptom only"],"correct":"A","expl":"Honeycombing HRCT (definite UIP)=single most important adverse radiologic predictor survival IPF. Other poor prognosis: male, older age, decreased DLCO baseline, increased O2 requirements progressive decline FVC.","ref":"Mudit Khanna ILD Prognosis;ATS/ERS IPF Guidelines 2025","topic":"Pulmonology"}
+    ]
+  },
+  {
+    "type": "case",
+    "id": 8,
+    "title": "Sepsis / MODS",
+    "vignette": "55M known diabetic presents 3d fever+chills. Found non-healing ulcer left foot. On arrival: T 39.5 C, HR 130, BP 85/45 after 1 L NS. RR 28, SpO2 90% RA. Exam: ulcer with necrotic base surrounding erythema plantar aspect L1MT. Labs: WBC 24K (90% neutrophils), plts 80K, INR 1.8, Cr 2.9 (baseline 0.9), bili 2.8, lactate 6.8, glucose 320. ABG: pH 7.22, PaCO2 35, HCO3 14. UOP 15mL/h.",
+    "questions": [
+      {"id":116,"stem":"Most likely source sepsis?","opts":["A. Infected diabetic foot ulcer","B. SBP in undiagnosed ascites","C. Nosocomial ventilator pneumonia","D. Central venous catheter bloodstream"],"correct":"A","expl":"Necrotic diabetic foot ulcer+surrounding cellulitis+profound shock = diabetic foot sepsis. Diabetics poor glycemic control+foot care susceptible limb-threatening infections.","ref":"Harrison's Ch. 323 (sepsis) + Mudit Khanna foot DFI","topic":"Infectious Disease"},
+      {"id":117,"stem":"Most appropriate immediate BP support?","opts":["A. IV norepinephrine infusion shock","B. IV dobutamine infusion only","C. IV dopamine infusion first-line shock","D. IV hydrocortisone stress dose shock therapy"],"correct":"A","expl":"NE = first-line vasopressor septic shock; start if MAP persistently <65 despite adequate fluid resuscitation 30 mL/kg NS. Target MAP >=65. Dopamine not preferred (arrhythmias NE).","ref":"SSC 2025 + Harrison's Ch. 323 + ICU vasopressor guidelines","topic":"Critical Care"},
+      {"id":118,"stem":"This patient's presentation consistent with?","opts":["A. Septic shock+MODS present","B. Sepsis without organ dysfunction only","C. Severe sepsis without shock present","D. Septic shock isolated organ dysfunction"],"correct":"A","expl":"Septic shock: hypotension requires vasopressor (MAP>=65) despite fluids+lactate >2 despite fluids. This patient: hypotension (85/45), lactate 6.8, AKI (Cr 2.9 from 0.9), plts 80K, bili 2.8: MODS. qSOFA: altered MS, RR>=22, SBP<=100. SOFA >=2+. This patient septic shock with MODS.","ref":"SSC 2025 Guidelines + Harrison's Ch. 323","topic":"Critical Care"},
+      {"id":119,"stem":"Most appropriate initial antibiotic strategy?","opts":["A. Piperacillin-tazobactam+vancomycin+clindamycin","B. Ceftriaxone monotherapy only","C. Oral linzolid+metronidazole oral","D. Ciprofloxacin monotherapy fluoroquinolone"],"correct":"A","expl":"Septic shock from DFI source: broad-spectrum coverage pip-tazo (G-neg incl Pseudomonas)+vanco (MRSA)+clinda (anaerobes). Broadest empirical+local antibiogram de-escalation when cx results available. Oral antibiotics not for septic shock.","ref":"SSC 2025+IDSA DFI 2025 guidelines","topic":"Infectious Disease"},
+      {"id":120,"stem":"Most important diagnostic workup?","opts":["A. Blood wound cultures before antibiotics","B. CTA foot vessels immediately first-line","C. MRI foot before any intervention start","D. Plain X-ray foot only imaging study"],"correct":"A","expl":"Always cultures (at least 2 blood, wound deep tissue samples) BEFORE antibiotics. Imaging (X-ray exclude bone, CT/MRI extent) important but cultures first before antibiotics. Source control (debridement/amputation) equally important.","ref":"Harrison's Ch. 323 (source in sepsis)+IDSA DFI 2025","topic":"Infectious Disease"}
+    ]
+  }
 ]
+</script>
+
+<script>
+const topicColors = {
+  'Cardiology': '#14b8a6',
+  'Pulmonology': '#06b6d4',
+  'Neurology': '#a78bfa',
+  'Nephrology': '#f97316',
+  'Gastroenterology': '#eab308',
+  'Hematology': '#ec4899',
+  'Endocrinology': '#22d3ee',
+  'Infectious Disease': '#34d399',
+  'Critical Care': '#f43f5e'
 };
 
-// ✅ ALL VARIABLES PROPERLY INITIALIZED
-let userAnswers = {};
-let submitted = false;
-let examStarted = false;
-let currentFilter = 'all';
-let timeRemaining = 7200;
-let timerInterval = null;
-let shuffledQuestions = [];
+const topicEmojis = {
+  'Cardiology': '\uD83E\uDEC0',
+  'Pulmonology': '\uD83E\uDEC1',
+  'Neurology': '\uD83E\uDDE0',
+  'Nephrology': '\uD83E\uDDD1',
+  'Gastroenterology': '\uD83E\uDDA0',
+  'Hematology': '\uD83E\uDE78',
+  'Endocrinology': '\u2696\uFE0F',
+  'Infectious Disease': '\uD83E\uDDA0',
+  'Critical Care': '\uD83D\uDE91'
+};
 
-// ✅ START EXAM FUNCTION
-function startExam() {
-    examStarted = true;
-    document.getElementById('startScreen').classList.add('hidden');
-    document.getElementById('examContent').classList.remove('hidden');
-    document.getElementById('tabsContainer').classList.remove('hidden');
-    document.getElementById('progressContainer').classList.remove('hidden');
-    prepareShuffledQuestions();
-    startTimer();
-    buildQuestions();
+let currentMode = 'start';
+
+let examState = {
+  currentTab: 'standalone',
+  currentIndex: 0,
+  answers: {},
+  submitted: {},
+  timeLeft: 7200,
+  timerRunning: false,
+  finished: false,
+  reviewMode: false
+};
+
+function loadState() {
+  try {
+    const saved = localStorage.getItem('md-exam-state');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      examState = { ...examState, ...parsed };
+    }
+  } catch (e) {}
 }
+
+function saveState() {
+  try {
+    localStorage.setItem('md-exam-state', JSON.stringify(examState));
+  } catch (e) {}
+}
+
+function getAllQuestions() {
+  const data = JSON.parse(document.getElementById('questions-data').textContent);
+  const all = [];
+  data.forEach(section => {
+    if (section.type === 'standalone') {
+      section.questions.forEach(q => all.push({ ...q, caseId: null }));
+    } else {
+      section.questions.forEach(q => all.push({ ...q, caseId: section.id, caseTitle: section.title, vignette: section.vignette }));
+    }
+  });
+  return all;
+}
+
+function getStandaloneQuestions() {
+  const data = JSON.parse(document.getElementById('questions-data').textContent);
+  return data[0].questions;
+}
+
+function getCases() {
+  const data = JSON.parse(document.getElementById('questions-data').textContent);
+  return data.filter(s => s.type === 'case');
+}
+
+function formatTime(seconds) {
+  const h = Math.floor(seconds / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  const s = seconds % 60;
+  return `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+}
+
+function render() {
+  const app = document.getElementById('app');
+  if (currentMode === 'start') {
+    app.innerHTML = renderStartScreen();
+  } else if (currentMode === 'exam') {
+    app.innerHTML = renderExamScreen();
+    if (examState.timerRunning && !examState.finished) {
+      startTimer();
+    }
+  } else if (currentMode === 'results') {
+    app.innerHTML = renderResultsScreen();
+  }
+}
+
+function renderStartScreen() {
+  return `
+<div class="min-h-screen flex flex-col items-center justify-center p-6">
+  <div class="text-center max-w-2xl mx-auto">
+    <div class="text-6xl mb-6">\uD83E\uDE7A</div>
+    <h1 class="text-4xl md:text-5xl font-bold text-white mb-3 tracking-tight">MD INTERNAL MEDICINE</h1>
+    <h2 class="text-2xl md:text-3xl font-semibold text-teal-400 mb-4">EXIT EXAM</h2>
+    <div class="bg-slate-800/60 rounded-xl p-4 mb-6 inline-block">
+      <p class="text-sm text-teal-300 font-semibold">120 High-Yield Questions &bull; 120 Minutes &bull; Tertiary Care Level</p>
+    </div>
+    <div class="bg-emerald-900/30 border border-emerald-700/50 rounded-lg px-4 py-2 inline-block mb-6">
+      <span class="text-emerald-400 text-sm font-medium">Grounded in Mudit Khanna (Core) + Harrison's 21e</span>
+    </div>
+    <div class="text-left bg-slate-800/40 rounded-xl p-6 mb-8 space-y-2 text-slate-300">
+      <ul class="list-none space-y-2">
+        <li class="flex items-center gap-2"><span class="text-teal-400">\u2022</span> Simulated real exit exam conditions</li>
+        <li class="flex items-center gap-2"><span class="text-teal-400">\u2022</span> 80 standalone MCQs + 8 clinical cases (40questions)</li>
+        <li class="flex items-center gap-2"><span class="text-teal-400">\u2022</span> Immediate feedback with Harrison's/Khanna-based explanations</li>
+        <li class="flex items-center gap-2"><span class="text-teal-400">\u2022</span> Reference citations for every answer</li>
+        <li class="flex items-center gap-2"><span class="text-teal-400">\u2022</span> Auto-saves progress in browser storage</li>
+        <li class="flex items-center gap-2"><span class="text-teal-400">\u2022</span> Results breakdown by topic with study plan</li>
+      </ul>
+    </div>
+    <div class="flex flex-col md:flex-row gap-4 justify-center">
+      <button onclick="startExam(false)" class="bg-teal-600 hover:bg-teal-500 text-white px-8 py-3 rounded-lg font-semibold transition-colors">Start Fresh Exam</button>
+      <button onclick="startExam(true)" class="bg-slate-700 hover:bg-slate-600 text-teal-400 px-8 py-3 rounded-lg font-semibold transition-colors">Resume Saved Session</button>
+    </div>
+  </div>
+</div>`;
+}
+
+function startExam(restore) {
+  if (restore) {
+    loadState();
+    currentMode = 'exam';
+    examState.finished = false;
+  } else {
+    examState = {
+      currentTab: 'standalone',
+      currentIndex: 0,
+      answers: {},
+      submitted: {},
+      timeLeft: 7200,
+      timerRunning: true,
+      finished: false,
+      reviewMode: false
+    };
+    localStorage.removeItem('md-exam-state');
+    currentMode = 'exam';
+  }
+  render();
+}
+
+let timerInterval = null;
 
 function startTimer() {
-    updateTimerDisplay();
-    timerInterval = setInterval(function() {
-        timeRemaining--;
-        updateTimerDisplay();
-        if (timeRemaining <= 900) {
-            document.getElementById('timerDisplay').style.color = '#ef4444';
-        }
-        if (timeRemaining <= 60) {
-            document.getElementById('timerDisplay').style.color = '#ef4444';
-            document.getElementById('timerDisplay').style.fontWeight = '700';
-            if (timeRemaining === 60) {
-                alert('⚠️ Final warning: 1 minute remaining! Exam will auto-submit.');
-            }
-        }
-        if (timeRemaining <= 0) {
-            clearInterval(timerInterval);
-            alert('⏰ Time is up! The exam will now be submitted automatically.');
-            submitExam();
-        }
-    }, 1000);
-}
-
-function updateTimerDisplay() {
-    const hrs = Math.floor(timeRemaining / 3600);
-    const mins = Math.floor((timeRemaining % 3600) / 60);
-    const secs = timeRemaining % 60;
-    const hStr = hrs.toString().padStart(2, '0');
-    const mStr = mins.toString().padStart(2, '0');
-    const sStr = secs.toString().padStart(2, '0');
-    document.getElementById('timerDisplay').textContent = hStr + ':' + mStr + ':' + sStr;
-}
-
-function prepareShuffledQuestions() {
-    const all = [];
-    // Add standalone questions (1-80)
-    data.standalone.forEach(function(q) {
-        all.push({ 
-            id: q.id, 
-            topic: q.topic, 
-            q: q.q, 
-            opts: q.opts, 
-            ans: q.ans, 
-            exp: q.exp, 
-            isCase: false, 
-            originalId: q.id 
-        });
-    });
-    // Add case questions (81-120)
-    data.cases.forEach(function(cs) {
-        cs.questions.forEach(function(q) {
-            all.push({ 
-                id: q.id, 
-                q: q.q, 
-                opts: q.opts, 
-                ans: q.ans, 
-                exp: q.exp, 
-                isCase: true, 
-                originalId: q.id,
-                caseTitle: cs.title,
-                caseText: cs.text
-            });
-        });
-    });
-    // Fisher-Yates shuffle
-    for (let i = all.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        const temp = all[i];
-        all[i] = all[j];
-        all[j] = temp;
+  if (timerInterval) clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    examState.timeLeft--;
+    if (examState.timeLeft <= 0) {
+      examState.timeLeft = 0;
+      examState.timerRunning = false;
+      clearInterval(timerInterval);
+      finishExam();
+      return;
     }
-    // Assign display IDs
-    shuffledQuestions = all.map(function(q, idx) {
-        return {
-            id: q.id,
-            topic: q.topic,
-            q: q.q,
-            opts: q.opts,
-            ans: q.ans,
-            exp: q.exp,
-            isCase: q.isCase,
-            originalId: q.originalId,
-            caseTitle: q.caseTitle,
-            caseText: q.caseText,
-            displayId: idx + 1
-        };
-    });
+    const el = document.getElementById('timer-display');
+    if (el) {
+      el.textContent = formatTime(examState.timeLeft);
+      if (examState.timeLeft < 300) {
+        el.classList.add('text-red-400');
+        el.classList.remove('text-white');
+      } else if (examState.timeLeft < 600) {
+        el.classList.add('text-yellow-400');
+        el.classList.remove('text-white');
+      }
+    }
+    if (examState.timeLeft % 30 === 0) saveState();
+  }, 1000);
 }
 
-function buildQuestions() {
-    const container = document.getElementById('questionsContainer');
-    container.innerHTML = '';
-    const questionsToShow = shuffledQuestions.filter(function(q) {
-        if (currentFilter === 'all') return true;
-        if (currentFilter === 'standalone') return !q.isCase;
-        if (currentFilter === 'case') return q.isCase;
-        return true;
-    });
-    questionsToShow.forEach(function(q) {
-        const card = createQCard(q);
-        container.appendChild(card);
-    });
-    updateProgress();
+function renderExamScreen() {
+  const allQuestions = getAllQuestions();
+  const answered = Object.keys(examState.answers).length;
+  const progressPct = Math.round((answered / allQuestions.length) * 100);
+
+  return `
+<div class="min-h-screen pb-8">
+  <!-- Sticky Header -->
+  <div class="sticky top-0 z-50 bg-slate-950/95 backdrop-blur-sm border-b border-slate-800">
+    <div class="max-w-6xl mx-auto px-4 py-2 flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <span class="text-lg font-bold text-white">MD Exit Exam</span>
+        <span class="text-sm text-slate-400 hidden sm:inline">${answered}/120 answered</span>
+      </div>
+      <div id="timer-display" class="text-xl font-mono font-semibold text-white">${formatTime(examState.timeLeft)}</div>
+      <div class="flex items-center gap-2">
+        <span class="text-sm text-slate-400 hidden sm:inline">${progressPct}%</span>
+        <button onclick="finishExam()" class="bg-red-600/80 hover:bg-red-500 text-white px-4 py-1.5 rounded text-sm font-medium transition-colors">Finish Exam</button>
+      </div>
+    </div>
+    <!-- Progress bar -->
+    <div class="h-1 bg-slate-800">
+      <div class="h-full bg-teal-500 transition-all duration-300" style="width:${progressPct}%"></div>
+    </div>
+  </div>
+
+  <div class="max-w-3xl mx-auto px-4 mt-6">
+    <!-- Tabs -->
+    <div class="flex gap-2 mb-6">
+      <button onclick="switchTab('standalone')" class="flex-1 py-2.5 px-4 rounded-lg font-semibold text-sm transition-colors ${examState.currentTab === 'standalone' ? 'bg-teal-600 text-white' : 'bg-slate-800 text-slate-400 hover:text-white'}">
+        Standalone Q1-Q80
+      </button>
+      <button onclick="switchTab('case')" class="flex-1 py-2.5 px-4 rounded-lg font-semibold text-sm transition-colors ${examState.currentTab === 'case' ? 'bg-teal-600 text-white' : 'bg-slate-800 text-slate-400 hover:text-white'}">
+        Case-Based Q81-Q120
+      </button>
+    </div>
+
+    <!-- Case selector (when case tab active) -->
+    ${examState.currentTab === 'case' ? renderCaseSelector(allQuestions) : ''}
+
+    <!-- Question Card -->
+    <div id="question-area" class="question-card">
+      ${examState.currentTab === 'standalone' ? renderStandaloneQuestion(allQuestions) : renderCaseQuestion(allQuestions)}
+    </div>
+  </div>
+</div>`;
 }
 
-function createQCard(q) {
-    const card = document.createElement('div');
-    card.className = 'q-card';
-    card.id = 'qcard-' + q.displayId;
-    card.dataset.qid = q.originalId;
-    card.dataset.ans = q.ans;
-    
-    // Add case text for case-based questions
-    let caseHtml = '';
-    if (q.isCase && q.caseText) {
-        caseHtml = '<div class="case-text"><strong>' + q.caseTitle + '</strong><br>' + q.caseText + '</div>';
-    }
-    
-    let optionsHtml = '';
-    for (let i = 0; i < q.opts.length; i++) {
-        const optText = q.opts[i].substring(q.opts[i].indexOf('.') + 1).trim();
-        const letter = String.fromCharCode(65 + i);
-        optionsHtml += '<button class="option-btn" onclick="selectAnswer(' + q.displayId + ', ' + i + ', this)" data-idx="' + i + '">' +
-            '<span class="option-letter">' + letter + '</span>' +
-            '<span>' + optText + '</span>' +
-            '</button>';
-    }
-    
-    card.innerHTML = caseHtml + '<div class="q-header">' +
-        '<span class="q-num">Q' + q.displayId + '</span>' +
-        '<p class="q-text">' + q.q + '</p>' +
-        '</div>' +
-        '<div class="options" id="opts-' + q.displayId + '">' + optionsHtml + '</div>' +
-        '<div class="explanation" id="exp-' + q.displayId + '"><strong>✓ Explanation:</strong> ' + q.exp + '</div>';
-    
-    const originalId = q.originalId;
-    if (userAnswers[originalId] !== undefined) {
-        const chosenIdx = userAnswers[originalId];
-        const buttons = card.querySelectorAll('.option-btn');
-        if (buttons[chosenIdx]) {
-            buttons[chosenIdx].classList.add('selected');
-        }
-        const correctIdx = q.ans;
-        for (let i = 0; i < buttons.length; i++) {
-            buttons[i].disabled = true;
-            if (i === correctIdx) buttons[i].classList.add('correct');
-            if (i === chosenIdx && chosenIdx !== correctIdx) buttons[i].classList.add('wrong');
-        }
-        card.classList.add('answered');
-        document.getElementById('exp-' + q.displayId).classList.add('show');
-    }
-    return card;
+function renderCaseSelector(allQuestions) {
+  const cases = getCases();
+  let html = '<div class="flex flex-wrap gap-2 mb-4">';
+  cases.forEach((c, i) => {
+    const isCurrent = examState.caseIndex === i;
+    html += `<button onclick="selectCase(${i})" class="px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${isCurrent ? 'bg-teal-600 text-white' : 'bg-slate-800 text-slate-400 hover:text-teal-400'}">
+      Case ${c.id}: Q${c.questions[0].id}-Q${c.questions[c.questions.length-1].id}
+    </button>`;
+  });
+  html += '</div>';
+  return html;
 }
 
-function selectAnswer(displayId, idx, btn) {
-    if (submitted) return;
-    const card = document.getElementById('qcard-' + displayId);
-    const buttons = card.querySelectorAll('.option-btn');
-    for (let i = 0; i < buttons.length; i++) {
-        buttons[i].classList.remove('selected');
-    }
-    btn.classList.add('selected');
-    const originalId = parseInt(card.dataset.qid);
-    const prev = userAnswers[originalId];
-    userAnswers[originalId] = idx;
-    if (prev === undefined) card.classList.add('answered');
-    updateProgress();
-    updateLiveScore();
-    const correctIdx = parseInt(card.dataset.ans);
-    for (let i = 0; i < buttons.length; i++) {
-        buttons[i].disabled = true;
-        if (i === correctIdx) {
-            buttons[i].classList.add('correct');
-        }
-        if (i === idx && idx !== correctIdx) {
-            buttons[i].classList.add('wrong');
-        }
-    }
-    if (idx !== correctIdx) {
-        btn.classList.remove('selected');
-    }
-    document.getElementById('exp-' + displayId).classList.add('show');
+function renderStandaloneQuestion(allQuestions) {
+  const standalone = allQuestions.filter(q => q.caseId === null);
+  const q = standalone[examState.currentIndex];
+  if (!q) return '<div class="text-center text-slate-400 py-12">No question found.</div>';
+
+  const optLetters = ['A', 'B', 'C', 'D'];
+  const selected = examState.answers[q.id];
+  const isSubmitted = examState.submitted[q.id];
+
+  return `
+    <!-- Question header -->
+    <div class="flex items-center justify-between mb-4">
+      <span class="inline-flex items-center gap-2">
+        <span class="bg-slate-700 text-white px-3 py-1 rounded-full text-sm font-semibold">Q${q.id}</span>
+        <span class="text-sm text-slate-400">${q.topic}</span>
+      </span>
+      <span class="text-sm text-slate-500">${examState.currentIndex + 1} of ${standalone.length}</span>
+    </div>
+
+    <!-- Question stem -->
+    <div class="bg-slate-800/60 rounded-xl p-5 mb-5">
+      <p class="text-white text-lg leading-relaxed">${q.stem}</p>
+    </div>
+
+    <!-- Options -->
+    <div class="space-y-3 mb-5">
+      ${q.opts.map((opt, i) => `
+        <button onclick="${isSubmitted ? '' : `selectOption(${q.id}, '${optLetters[i]}', ${i})`}"
+          class="opt-btn w-full text-left px-4 py-3.5 rounded-lg flex items-center gap-3 ${getOptionClass(q.id, optLetters[i], i, isSubmitted, q.correct)}">
+          <span class="text-sm font-semibold ${getOptionTextColor(optLetters[i], isSubmitted, q.correct)}">${optLetters[i]}.</span>
+          <span class="${getOptionTextColor(optLetters[i], isSubmitted, q.correct)}">${opt.slice(3)}</span>
+          ${isSubmitted && optLetters[i] === q.correct ? '<span class="ml-auto text-green-400">\u2705</span>' : ''}
+          ${isSubmitted && optLetters[i] === selected && selected !== q.correct ? '<span class="ml-auto text-red-400">\u274C</span>' : ''}
+        </button>
+      `).join('')}
+    </div>
+
+    ${isSubmitted ? renderFeedback(q) : renderSubmitButton(q.id)}
+
+    <!-- Navigation -->
+    <div class="flex justify-between mt-6">
+      <button onclick="navigate(${examState.currentIndex - 1}, 'standalone')"
+        class="px-4 py-2 rounded-lg font-medium transition-colors ${examState.currentIndex === 0 ? 'bg-slate-800 text-slate-600 cursor-not-allowed' : 'bg-slate-700 text-white hover:bg-slate-600'}"
+        ${examState.currentIndex === 0 ? 'disabled' : ''}>
+        \u2190 Previous
+      </button>
+      <button onclick="navigate(${examState.currentIndex + 1}, 'standalone')"
+        class="px-4 py-2 rounded-lg font-medium transition-colors ${examState.currentIndex >= standalone.length - 1 ? 'bg-slate-800 text-slate-600 cursor-not-allowed' : 'bg-slate-700 text-white hover:bg-slate-600'}"
+        ${examState.currentIndex >= standalone.length - 1 ? 'disabled' : ''}>
+        Next \u2192
+      </button>
+    </div>`;
 }
 
-function updateProgress() {
-    const total = 120;
-    const answered = Object.keys(userAnswers).length;
-    document.getElementById('progBar').style.width = (answered / total * 100) + '%';
-    document.getElementById('progText').textContent = answered + ' / ' + total + ' answered';
+function renderCaseQuestion(allQuestions) {
+  const cases = getCases();
+  const ci = examState.caseIndex || 0;
+  const c = cases[ci];
+  if (!c) return '<div class="text-center text-slate-400 py-12">No case found.</div>';
+
+  const qi = examState.currentCaseQIndex || 0;
+  const q = c.questions[qi];
+  if (!q) return '<div class="text-center text-slate-400 py-12">No question found.</div>';
+
+  q.caseTitle = c.title;
+  q.vignette = c.vignette;
+  q.caseId = c.id;
+
+  const optLetters = ['A', 'B', 'C', 'D'];
+  const selected = examState.answers[q.id];
+  const isSubmitted = examState.submitted[q.id];
+
+  return `
+    <!-- Case vignette -->
+    <div class="case-vignette rounded-xl p-5 mb-4">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="text-teal-400 font-bold text-sm">CASE ${c.id}: ${c.title}</span>
+        <span class="text-slate-400 text-sm">Q${q.id} of ${c.questions[q ? qi : 0] ? c.questions.length : 0}</span>
+      </div>
+      <p class="text-slate-200 text-sm leading-relaxed">${c.vignette}</p>
+    </div>
+
+    <!-- Question stem -->
+    <div class="bg-slate-800/60 rounded-xl p-5 mb-5">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="bg-slate-700 text-white px-2 py-0.5 rounded-full text-xs font-semibold">Q${q.id}</span>
+        <span class="text-xs text-slate-400">${q.topic}</span>
+      </div>
+      <p class="text-white text-sm leading-relaxed">${q.stem}</p>
+    </div>
+
+    <!-- Options -->
+    <div class="space-y-3 mb-5">
+      ${q.opts.map((opt, i) => `
+        <button onclick="${isSubmitted ? '' : `selectOption(${q.id}, '${optLetters[i]}', ${i})`}"
+          class="opt-btn w-full text-left px-4 py-3.5 rounded-lg flex items-center gap-3 ${getOptionClass(q.id, optLetters[i], i, isSubmitted, q.correct)}">
+          <span class="text-sm font-semibold ${getOptionTextColor(optLetters[i], isSubmitted, q.correct)}">${optLetters[i]}.</span>
+          <span class="${getOptionTextColor(optLetters[i], isSubmitted, q.correct)}">${opt.slice(3)}</span>
+          ${isSubmitted && optLetters[i] === q.correct ? '<span class="ml-auto text-green-400">\u2705</span>' : ''}
+          ${isSubmitted && optLetters[i] === selected && selected !== q.correct ? '<span class="ml-auto text-red-400">\u274C</span>' : ''}
+        </button>
+      `).join('')}
+    </div>
+
+    ${isSubmitted ? renderFeedback(q) : renderSubmitButton(q.id)}
+
+    <!-- Navigation -->
+    <div class="flex justify-between mt-6">
+      <button onclick="navigate(${qi - 1}, 'case')"
+        class="px-4 py-2 rounded-lg font-medium transition-colors ${qi === 0 ? 'bg-slate-800 text-slate-600 cursor-not-allowed' : 'bg-slate-700 text-white hover:bg-slate-600'}"
+        ${qi === 0 ? 'disabled' : ''}>
+        \u2190 Previous
+      </button>
+      <button onclick="navigate(${qi + 1}, 'case')"
+        class="px-4 py-2 rounded-lg font-medium transition-colors ${qi >= c.questions.length - 1 ? 'bg-slate-800 text-slate-600 cursor-not-allowed' : 'bg-slate-700 text-white hover:bg-slate-600'}"
+        ${qi >= c.questions.length - 1 ? 'disabled' : ''}>
+        Next \u2192
+      </button>
+    </div>`;
 }
 
-function updateLiveScore() {
-    let correct = 0, total = 0;
-    data.standalone.forEach(function(q) {
-        if (userAnswers[q.id] !== undefined) { 
-            total++; 
-            if (userAnswers[q.id] === q.ans) correct++; 
-        }
-    });
-    data.cases.forEach(function(cs) { 
-        cs.questions.forEach(function(q) {
-            if (userAnswers[q.id] !== undefined) { 
-                total++; 
-                if (userAnswers[q.id] === q.ans) correct++; 
-            }
-        }); 
-    });
-    document.getElementById('liveScore').textContent = total > 0 ? correct + '/' + total : '0/0';
+function renderSubmitButton(qId) {
+  return `
+    <div class="text-center pb-2">
+      <button onclick="submitAnswer(${qId})" class="bg-teal-600 hover:bg-teal-500 text-white px-6 py-2 rounded-lg font-semibold transition-colors">
+        Submit Answer
+      </button>
+    </div>`;
 }
 
-function submitExam() {
-    submitted = true;
-    if (timerInterval) clearInterval(timerInterval);
-    let correct = 0, wrong = 0, unanswered = 0;
-    let scCorrect = 0, scTotal = 0, cbCorrect = 0, cbTotal = 0;
-    data.standalone.forEach(function(q) {
-        scTotal++;
-        const ua = userAnswers[q.id];
-        if (ua === undefined) { unanswered++; }
-        else if (ua === q.ans) { correct++; scCorrect++; }
-        else { wrong++; }
-    });
-    data.cases.forEach(function(cs) { 
-        cs.questions.forEach(function(q) {
-            cbTotal++;
-            const ua = userAnswers[q.id];
-            if (ua === undefined) { unanswered++; }
-            else if (ua === q.ans) { correct++; cbCorrect++; }
-            else { wrong++; }
-        }); 
-    });
-    const total = 120;
-    const pct = Math.round(correct / total * 100);
-    let grade = '';
-    if (pct >= 80) grade = '🏆 Excellent — Exam Ready!';
-    else if (pct >= 60) grade = '✅ Passed — Good preparation!';
-    else if (pct >= 50) grade = '⚠️ Below Passing — Intensive revision needed';
-    else grade = '❌ Below Passing — Systematic review required';
-    document.getElementById('finalScore').textContent = pct + '%';
-    document.getElementById('finalGrade').textContent = grade;
-    document.getElementById('rbCorrect').textContent = correct;
-    document.getElementById('rbWrong').textContent = wrong;
-    document.getElementById('rbUnanswered').textContent = unanswered;
-    document.getElementById('rbStandaloneScore').textContent = Math.round(scCorrect / scTotal * 100) + '%';
-    document.getElementById('rbCaseScore').textContent = Math.round(cbCorrect / cbTotal * 100) + '%';
-    document.getElementById('resultsPanel').classList.add('show');
-    document.getElementById('submitBtn').style.display = 'none';
-    document.getElementById('liveScore').textContent = correct + '/120';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    setTimeout(function() {
-        document.getElementById('resultsPanel').scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }, 300);
+function renderFeedback(q) {
+  const isCorrect = examState.answers[q.id] === q.correct;
+  const borderColor = isCorrect ? 'border-green-500' : 'border-red-500';
+  const icon = isCorrect ? '\u2705' : '\u274C';
+  const statusColor = isCorrect ? 'text-green-400' : 'text-red-400';
+
+  return `
+    <div class="feedback-box border ${borderColor} rounded-xl p-4 mt-4">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="text-lg">${icon}</span>
+        <span class="font-semibold ${statusColor}">${isCorrect ? 'Correct!' : `Incorrect — Correct answer: ${q.correct}`}</span>
+      </div>
+      <p class="text-slate-300 text-sm mb-3">${q.expl}</p>
+      <p class="text-teal-400/80 text-xs font-mono">${q.ref}</p>
+    </div>`;
 }
 
-function showSection(type) {
-    currentFilter = type;
-    const tabs = document.querySelectorAll('.tab');
-    for (let i = 0; i < tabs.length; i++) {
-        tabs[i].classList.remove('active');
+function getOptionClass(qId, letter, index, isSubmitted, correct) {
+  const selected = examState.answers[qId];
+  if (!isSubmitted) {
+    if (selected === letter) return 'selected';
+    return '';
+  }
+  if (letter === correct) return 'correct';
+  if (letter === selected && selected !== correct) return 'wrong';
+  return 'disabled';
+}
+
+function getOptionTextColor(letter, isSubmitted, correct) {
+  if (!isSubmitted) return 'text-white';
+  if (letter === correct) return 'text-green-400';
+  return 'text-slate-500';
+}
+
+function selectOption(qId, letter, index) {
+  examState.answers[qId] = letter;
+  saveState();
+  render();
+}
+
+function submitAnswer(qId) {
+  if (!examState.answers[qId]) return;
+  examState.submitted[qId] = true;
+  saveState();
+  render();
+}
+
+function navigate(newIndex, mode) {
+  const standalone = getStandaloneQuestions();
+  const cases = getCases();
+
+  if (mode === 'standalone') {
+    examState.currentIndex = newIndex;
+    examState.currentTab = 'standalone';
+    scrollToTop();
+  } else {
+    const ci = examState.caseIndex || 0;
+    const c = cases[ci];
+    if (newIndex < 0) {
+      if (ci > 0) {
+        examState.caseIndex = ci - 1;
+        examState.currentCaseQIndex = cases[ci - 1].questions.length - 1;
+      } else {
+        return;
+      }
+    } else if (newIndex >= c.questions.length) {
+      if (ci < cases.length - 1) {
+        examState.caseIndex = ci + 1;
+        examState.currentCaseQIndex = 0;
+      } else {
+        return;
+      }
+    } else {
+      examState.currentCaseQIndex = newIndex;
     }
-    event.target.classList.add('active');
-    buildQuestions();
+    examState.currentTab = 'case';
+    scrollToTop();
+  }
+  render();
 }
+
+function switchTab(tab) {
+  examState.currentTab = tab;
+  if (tab === 'standalone') {
+    examState.currentIndex = 0;
+  } else {
+    examState.caseIndex = 0;
+    examState.currentCaseQIndex = 0;
+  }
+  scrollToTop();
+  render();
+}
+
+function selectCase(index) {
+  examState.caseIndex = index;
+  examState.currentCaseQIndex = 0;
+  scrollToTop();
+  render();
+}
+
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function finishExam() {
+  if (examState.finished) return;
+  examState.finished = true;
+  examState.timerRunning = false;
+  examState.reviewMode = true;
+  if (timerInterval) clearInterval(timerInterval);
+  saveState();
+  currentMode = 'results';
+  render();
+}
+
+function renderResultsScreen() {
+  const allQuestions = getAllQuestions();
+  let correct = 0;
+  let total = allQuestions.length;
+  const answered = Object.keys(examState.answers).length;
+
+  const topicStats = {};
+
+  allQuestions.forEach(q => {
+    const topic = q.topic;
+    if (!topicStats[topic]) {
+      topicStats[topic] = { correct: 0, total: 0, answered: 0 };
+    }
+    topicStats[topic].total++;
+    topicStats[topic].answered++;
+    if (examState.answers[q.id] === q.correct) {
+      topicStats[topic].correct++;
+      correct++;
+    }
+  });
+
+  const pct = Math.round((correct / total) * 100);
+  const unanswered = total - answered;
+
+  let grade = '';
+  let gradeColor = '';
+  if (pct >= 80) { grade = 'Excellent'; gradeColor = 'text-green-400'; }
+  else if (pct >= 70) { grade = 'Good'; gradeColor = 'text-teal-400'; }
+  else if (pct >= 60) { grade = 'Pass'; gradeColor = 'text-yellow-400'; }
+  else if (pct >= 50) { grade = 'Borderline'; gradeColor = 'text-orange-400'; }
+  else { grade = 'Needs Work'; gradeColor = 'text-red-400'; }
+
+  const weakTopics = Object.entries(topicStats)
+    .filter(([_, stats]) => stats.total > 0)
+    .map(([name, stats]) => ({
+      name,
+      pct: Math.round((stats.correct / stats.total) * 100)
+    }))
+    .sort((a, b) => a.pct - b.pct)
+    .slice(0, 3);
+
+  return `
+<div class="min-h-screen pb-8">
+  <!-- Results Header -->
+  <div class="bg-slate-900 border-b border-slate-800">
+    <div class="max-w-4xl mx-auto px-4 py-8 text-center">
+      <h1 class="text-3xl font-bold text-white mb-2">Exam Complete</h1>
+      <div class="text-7xl font-bold ${gradeColor} mb-3">${pct}%</div>
+      <p class="text-xl text-slate-300 mb-1">${correct} out of ${total} correct</p>
+      <p class="text-lg font-semibold ${gradeColor} mb-4">${grade}</p>
+      ${unanswered > 0 ? `<p class="text-yellow-400 text-sm mb-4">${unanswered} unanswered questions marked incorrect</p>` : ''}
+      <div class="flex gap-3 justify-center">
+        <button onclick="toggleReview()" class="bg-teal-600 hover:bg-teal-500 text-white px-6 py-2 rounded-lg font-semibold transition-colors">Review All Answers</button>
+        <button onclick="currentMode='start';render();" class="bg-slate-700 hover:bg-slate-600 text-white px-6 py-2 rounded-lg font-semibold transition-colors">Back to Start</button>
+      </div>
+    </div>
+  </div>
+
+  ${examState.reviewMode ? renderReview(allQuestions) : ''}
+
+  <!-- Topic Breakdown -->
+  <div class="max-w-4xl mx-auto px-4 mt-8">
+    <h2 class="text-xl font-bold text-white mb-4">Performance by Topic</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+      ${Object.entries(topicStats).map(([name, stats]) => {
+        const pct2 = Math.round((stats.correct / stats.total) * 100);
+        const color = topicColors[name] || '#94a3b8';
+        const emoji = topicEmojis[name] || '';
+        return `
+        <div class="bg-slate-800/60 rounded-lg p-4">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-sm font-semibold text-white">${emoji} ${name}</span>
+            <span class="text-sm font-mono" style="color:${color}">${stats.correct}/${stats.total} (${pct2}%)</span>
+          </div>
+          <div class="h-2 bg-slate-700 rounded-full overflow-hidden">
+            <div class="h-full rounded-full" style="width:${pct2}%;background:${color}"></div>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+
+    <!-- Study Plan -->
+    <div class="mt-8 bg-slate-800/40 rounded-xl p-6">
+      <h3 class="text-lg font-bold text-white mb-4">Suggested Study Plan</h3>
+      ${weakTopics.length > 0 ? `
+        <p class="text-slate-300 text-sm mb-3">Focus extra time on these weaker areas:</p>
+        <ol class="space-y-2">
+          ${weakTopics.map((w, i) => {
+            const color = topicColors[w.name] || '#94a3b8';
+            const emoji = topicEmojis[w.name] || '';
+            return `<li class="flex items-center gap-2 text-sm">
+              <span class="font-bold" style="color:${color}">${i + 1}.</span>
+              <span class="text-white">${emoji} ${w.name}</span>
+              <span class="text-slate-400">(${w.pct}% correct)</span>
+              <span class="text-slate-500">— Review Harrison's + Mudit Khanna questions for this topic</span>
+            </li>`;
+          }).join('')}
+        </ol>
+      ` : `<p class="text-green-400 text-sm">Great job! All topics performed well. Do a final review pass before the actual exam.</p>`}
+      <div class="mt-4 pt-4 border-t border-slate-700">
+        <p class="text-slate-400 text-xs">
+          General recommendations: Read Harrison's relevant chapters thoroughly. Practice with Mudit Khanna MCQs. Review incorrect answers above. Time yourself on practice sets.
+        </p>
+      </div>
+    </div>
+
+    <!-- Export -->
+    <div class="mt-6 text-center">
+      <button onclick="exportResults()" class="text-teal-400 hover:text-teal-300 text-sm font-medium transition-colors">
+        Export Results to Clipboard
+      </button>
+    </div>
+  </div>
+</div>`;
+}
+
+function renderReview(allQuestions) {
+  let html = `
+    <div class="max-w-4xl mx-auto px-4 mt-8">
+      <h2 class="text-xl font-bold text-white mb-6">Review All Answers (${allQuestions.length} questions)</h2>`;
+
+  allQuestions.forEach((q, idx) => {
+    const userAnswer = examState.answers[q.id];
+    const isCorrect = userAnswer === q.correct;
+    const borderColor = isCorrect ? 'review-correct' : 'review-wrong';
+    const bgClass = userAnswer ? 'bg-slate-800/60' : 'bg-slate-800/30';
+
+    html += `
+    <div class="rounded-xl p-5 mb-4 ${bgClass} ${borderColor}">
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center gap-2">
+          <span class="bg-slate-700 text-white px-2 py-0.5 rounded text-xs font-semibold">${q.caseId ? 'Case ' + q.caseId + ' - ' : ''}Q${q.id}</span>
+          <span class="text-xs text-slate-400">${q.topic}</span>
+        </div>
+        <span class="text-lg">${isCorrect ? '\u2705' : (userAnswer ? '\u274C' : '\u26A0\uFE0F')}</span>
+      </div>
+      <p class="text-white text-sm mb-3 leading-relaxed">${q.stem}</p>
+      <div class="space-y-1.5 mb-3">
+        ${q.opts.map((opt, i) => {
+          const letter = ['A','B','C','D'][i];
+          const optBg = letter === q.correct ? 'bg-green-900/30 border-green-500' : (letter === userAnswer && userAnswer !== q.correct ? 'bg-red-900/30 border-red-500' : 'border-transparent');
+          const optColor = letter === q.correct ? 'text-green-400' : (letter === userAnswer && userAnswer !== q.correct ? 'text-red-400' : 'text-slate-400');
+          return `<div class="text-sm px-3 py-1.5 rounded border ${optBg} ${optColor}">${opt}</div>`;
+        }).join('')}
+      </div>
+      <div class="text-xs text-slate-400">
+        <span class="text-green-400/80 font-semibold">Your answer: ${userAnswer || '—'} | Correct: ${q.correct}</span>
+      </div>
+      <div class="mt-2 pt-2 border-t border-slate-700/50">
+        <p class="text-slate-300 text-xs leading-relaxed">${q.expl}</p>
+        <p class="text-teal-400/70 text-xs font-mono mt-1">${q.ref}</p>
+      </div>
+    </div>`;
+  });
+
+  html += '</div>';
+  return html;
+}
+
+function toggleReview() {
+  examState.reviewMode = !examState.reviewMode;
+  render();
+}
+
+function exportResults() {
+  const allQuestions = getAllQuestions();
+  let correct = 0;
+  let text = `MD Internal Medicine Exit Exam Results\n=====================================\n\n`;
+  allQuestions.forEach(q => {
+    const userAnswer = examState.answers[q.id] || '—';
+    const isCorrect = userAnswer === q.correct;
+    if (isCorrect) correct++;
+    text += `Q${q.id} ${isCorrect ? '✓' : '✗'} | Your: ${userAnswer} | Correct: ${q.correct} | ${q.topic}\n`;
+  });
+
+  text += `\nScore: ${correct}/${allQuestions.length} (${Math.round(correct/allQuestions.length*100)}%)\n`;
+
+  navigator.clipboard.writeText(text).then(() => {
+    alert('Results exported to clipboard!');
+  }).catch(() => {
+    prompt('Copy your results:', text);
+  });
+}
+
+// Initialize
+loadState();
+if (examState.answers && Object.keys(examState.answers).length > 0 && !examState.finished) {
+  currentMode = 'start';
+} else {
+  currentMode = 'start';
+}
+render();
+
 </script>
 </body>
 </html>
